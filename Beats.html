@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Kerim Music+ · Lista musical · Galería fluida</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      line-height: 1.4;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    /* BARRA SUPERIOR RESPONSIVE */
+    .top-bar {
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 0.7rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      border-bottom: 1px solid #222;
+      flex-wrap: wrap;
+    }
+
+    .top-bar h1 {
+      font-weight: 700;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+      margin-left: 3rem;
+      white-space: nowrap;
+    }
+
+    .hamburger-btn {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      position: absolute;
+      left: 1rem;
+      top: 0.7rem;
+      transition: 0.2s;
+      z-index: 110;
+    }
+    .hamburger-btn span { width: 20px; height: 2px; background: white; border-radius: 2px; }
+    .hamburger-btn:hover { background: #fff; }
+    .hamburger-btn:hover span { background: #000; }
+
+    /* search container flexible */
+    .search-container {
+      display: flex;
+      align-items: center;
+      background: #0c0c0c;
+      border: 1px solid #2a2a2a;
+      border-radius: 60px;
+      padding: 0.2rem 0.2rem 0.2rem 1rem;
+      flex: 1;
+      min-width: 140px;
+      max-width: 260px;
+      transition: all 0.2s;
+    }
+    .search-container input {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 0.85rem;
+      padding: 0.5rem 0;
+      width: 100%;
+      outline: none;
+    }
+    .search-container button {
+      background: #1f1f1f;
+      border: none;
+      border-radius: 50px;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      color: #ccc;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .search-container button:hover { background: white; color: black; }
+
+    /* SIDEMENU */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: #050505;
+      border-right: 1px solid #222;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      z-index: 200;
+      padding: 2rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      overflow-y: auto;
+    }
+    .side-menu.open { transform: translateX(0); }
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 150;
+      opacity: 0;
+      visibility: hidden;
+      backdrop-filter: blur(4px);
+      transition: 0.2s;
+    }
+    .menu-overlay.show { opacity: 1; visibility: visible; }
+    .filter-vert-btn {
+      background: transparent;
+      border: 1px solid #333;
+      color: #ccc;
+      padding: 0.8rem;
+      border-radius: 100px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s;
+      width: 100%;
+    }
+    .filter-vert-btn.active, .filter-vert-btn:hover { background: white; color: black; border-color: white; }
+    .fav-list-container {
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+    .fav-list-item {
+      background: #111;
+      border: 1px solid #2c2c2c;
+      border-radius: 40px;
+      padding: 0.5rem 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .fav-remove { background: none; border: none; color: #aa5555; font-size: 1.2rem; cursor: pointer; padding: 0 5px; }
+    .play-fav-btn {
+      background: #181818;
+      border: 1px solid #444;
+      border-radius: 60px;
+      padding: 0.7rem;
+      text-align: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      color: #ffcc88;
+    }
+    .close-menu-btn { background: #111; border: 1px solid #333; border-radius: 60px; padding: 0.7rem; margin-top: auto; cursor: pointer; }
+
+    /* SECCIÓN PRINCIPAL */
+    .gallery-section {
+      max-width: 1400px;
+      margin: 1rem auto;
+      padding: 0 0.75rem 6rem;
+      position: relative;
+      border-radius: 32px;
+      transition: background-color 0.4s ease;
+    }
+    
+    /* FONDO MATE ALEATORIO */
+    .random-matte-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      transition: background-color 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      pointer-events: none;
+    }
+    .random-matte-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 40%, rgba(255,255,240,0.03) 0%, rgba(0,0,0,0.25) 100%);
+      pointer-events: none;
+    }
+    
+    /* GALERÍA GRID (para All / búsquedas) */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+      opacity: 0;
+      animation: fadeUp 0.4s forwards;
+    }
+    
+    /* MODO LISTA EXCLUSIVO PARA MÚSICA (formato clean vertical) */
+    .music-list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      width: 100%;
+    }
+    .music-list-item {
+      background: rgba(10, 10, 14, 0.8);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.6rem 1rem 0.6rem 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .music-list-item:hover {
+      background: rgba(30, 30, 40, 0.9);
+      border-color: rgba(255,255,200,0.3);
+      transform: scale(1.01);
+    }
+    .music-list-item img {
+      width: 52px;
+      height: 52px;
+      border-radius: 52px;
+      object-fit: cover;
+      border: 1px solid #444;
+      flex-shrink: 0;
+    }
+    .music-list-info {
+      flex: 1;
+    }
+    .music-list-title {
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: -0.2px;
+      color: #fff;
+    }
+    .music-list-cat {
+      font-size: 0.7rem;
+      color: #bbb;
+      margin-top: 2px;
+    }
+    .music-list-play-icon {
+      font-size: 1.6rem;
+      opacity: 0.7;
+      margin-right: 0.5rem;
+    }
+    
+    /* VISTA DE LISTA PARA RESULTADOS DE BÚSQUEDA (otros estilos opcionales) */
+    .gallery-grid.list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .gallery-grid.list-view .image-card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem;
+      border-radius: 60px;
+    }
+    .gallery-grid.list-view .image-card img {
+      width: 52px;
+      height: 52px;
+      border-radius: 52px;
+      aspect-ratio: 1/1;
+      flex-shrink: 0;
+    }
+    .gallery-grid.list-view .card-title {
+      flex: 1;
+      text-align: left;
+      white-space: normal;
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    /* SECCIÓN DE SUGERENCIAS - TEMAS MENOS ESCUCHADOS */
+    .suggestions-section {
+      margin-bottom: 2rem;
+      padding: 0 0.5rem;
+    }
+    .suggestions-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      color: #ffcc88;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-left: 3px solid #ffcc88;
+      padding-left: 12px;
+    }
+    .suggestions-title span {
+      background: rgba(255,204,136,0.15);
+      border-radius: 40px;
+      padding: 3px 10px;
+      font-size: 0.7rem;
+      font-weight: normal;
+      color: #ffcc88;
+    }
+    .suggestions-horizontal {
+      display: flex;
+      gap: 0.8rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      padding-bottom: 0.75rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .suggestions-horizontal::-webkit-scrollbar {
+      height: 3px;
+    }
+    .suggestion-card {
+      flex: 0 0 160px;
+      background: rgba(10, 10, 14, 0.75);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,200,0.2);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .suggestion-card:hover {
+      transform: translateY(-4px);
+      border-color: #ffcc88;
+      background: rgba(25, 25, 32, 0.9);
+    }
+    .suggestion-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+    .suggestion-info {
+      padding: 0.6rem 0.5rem;
+      text-align: center;
+    }
+    .suggestion-title {
+      font-size: 0.7rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #f0f0f0;
+      margin-bottom: 4px;
+    }
+    .suggestion-badge {
+      font-size: 0.55rem;
+      color: #ffaa66;
+      background: rgba(0,0,0,0.5);
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .suggestion-invite {
+      font-size: 0.6rem;
+      color: #aaa;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .suggestion-invite .play-icon-small {
+      font-size: 0.7rem;
+    }
+    
+    @media (min-width: 500px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+      .suggestion-card { flex: 0 0 180px; }
+    }
+    @media (min-width: 640px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 1200px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(6, 1fr); }
+    }
+    
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .image-card {
+      background: rgba(8, 8, 12, 0.85);
+      backdrop-filter: blur(2px);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255,255,245,0.15);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+    }
+    .image-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      filter: grayscale(0.15);
+      display: block;
+    }
+    .image-card:hover img { transform: scale(1.03); filter: grayscale(0); }
+    .card-title {
+      padding: 0.5rem 0.3rem;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #f0f0f0;
+      background: rgba(0,0,0,0.6);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: #ddd;
+      background: rgba(0,0,0,0.4);
+      border-radius: 32px;
+      backdrop-filter: blur(8px);
+    }
+    .search-badge {
+      font-size: 0.75rem;
+      color: #e0e0e0;
+      margin-bottom: 0.8rem;
+      padding-left: 0.5rem;
+      text-shadow: 0 0 4px black;
+    }
+
+    /* REPRODUCTOR MODERNO */
+    .fullscreen-player {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(24px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .fullscreen-player.show { opacity: 1; visibility: visible; }
+    .player-card {
+      background: rgba(12, 12, 16, 0.9);
+      border-radius: 2rem;
+      padding: 1.8rem;
+      max-width: 500px;
+      width: 90%;
+      border: 1px solid #3a3a3a;
+      box-shadow: 0 25px 40px rgba(0,0,0,0.6);
+    }
+    .player-cover {
+      width: 100%;
+      max-width: 260px;
+      margin: 0 auto 1.2rem;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 25px -5px black;
+    }
+    .player-cover img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+    .song-details { text-align: center; margin-bottom: 1rem; }
+    .song-details h2 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.3px; word-break: break-word; }
+    .song-category { color: #aaa; font-size: 0.8rem; margin-top: 4px; }
+    .fav-btn-player {
+      background: #1f1f1f;
+      border: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: 0.2s;
+      color: #ccc;
+    }
+    .fav-btn-player.active { color: #ff3b6f; background: #271a22; border: 1px solid #ff3b6f; }
+    .progress-area { width: 100%; margin: 1.2rem 0; }
+    .time-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: #aaa; margin-bottom: 6px; }
+    .progress-bar-bg {
+      width: 100%;
+      height: 5px;
+      background: #2a2a2a;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .progress-fill { width: 0%; height: 100%; background: white; border-radius: 10px; }
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.2rem 0 0.8rem;
+    }
+    .ctrl-btn {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .ctrl-btn.play-pause { width: 75px; height: 75px; background: white; color: black; border: none; font-size: 2.2rem; }
+    .ctrl-btn:hover { background: white; color: black; border-color: white; transform: scale(1.02); }
+    .close-player {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #1a1a1a;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      cursor: pointer;
+      border: 1px solid #333;
+    }
+
+    /* MINI PLAYER */
+    .mini-player {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: rgba(12, 12, 16, 0.96);
+      backdrop-filter: blur(20px);
+      border-radius: 60px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #444;
+      transform: translateY(120%);
+      transition: transform 0.3s ease;
+      z-index: 1200;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      cursor: pointer;
+    }
+    .mini-player.show { transform: translateY(0); }
+    .mini-cover { width: 44px; height: 44px; border-radius: 44px; overflow: hidden; flex-shrink: 0; border: 1px solid #666; }
+    .mini-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .mini-info { flex: 1; min-width: 0; }
+    .mini-title { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mini-controls { display: flex; gap: 6px; flex-shrink: 0; }
+    .mini-btn {
+      background: #1f1f1f;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      color: white;
+    }
+    .mini-progress-bg {
+      position: absolute;
+      bottom: -2px;
+      left: 12px;
+      right: 12px;
+      height: 2px;
+      background: #2a2a2a;
+      border-radius: 2px;
+    }
+    .mini-progress-fill { width: 0%; height: 100%; background: white; border-radius: 2px; }
+
+    .welcome-modal {
+      position: fixed;
+      inset: 0;
+      background: #000000dd;
+      backdrop-filter: blur(8px);
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+    }
+    .welcome-modal.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .welcome-card {
+      background: #0f0f0f;
+      border: 1px solid #333;
+      border-radius: 2rem;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      max-width: 320px;
+      width: 85%;
+    }
+    .accept-btn { background: white; color: black; border: none; padding: 0.8rem 2rem; border-radius: 60px; font-weight: bold; margin-top: 1rem; cursor: pointer; }
+
+    @media (max-width: 480px) {
+      .top-bar h1 { font-size: 1.1rem; margin-left: 2.8rem; }
+      .hamburger-btn { width: 40px; height: 40px; left: 0.8rem; top: 0.65rem; }
+      .search-container { max-width: 150px; }
+      .controls { gap: 1rem; }
+      .ctrl-btn { width: 48px; height: 48px; font-size: 1.4rem; }
+      .ctrl-btn.play-pause { width: 65px; height: 65px; font-size: 2rem; }
+      .music-list-item img { width: 44px; height: 44px; }
+      .music-list-title { font-size: 0.85rem; }
+      .suggestion-card { flex: 0 0 140px; }
+    }
+    .attribution { text-align: center; margin-top: 2rem; font-size: 0.65rem; color: #aaa; background: rgba(0,0,0,0.4); display: inline-block; width: auto; margin-left: auto; margin-right: auto; border-radius: 20px; padding: 0.3rem 1rem; backdrop-filter: blur(4px);}
+  </style>
+</head>
+<body>
+<div class="random-matte-bg" id="randomMatteBg"></div>
+
+<div class="welcome-modal" id="welcomeModal">
+  <div class="welcome-card"><h2>Kerim Music+</h2><p>· Música → Formato lista · Fondos mates aleatorios</p><button class="accept-btn" id="acceptWelcomeBtn">ACEPTAR</button></div>
+</div>
+
+<header class="top-bar">
+  <div class="hamburger-btn" id="hamburgerBtn"><span></span><span></span><span></span></div>
+  <h1>Kerim Music+</h1>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Buscar canción...">
+    <button id="searchButton">🔍</button>
+  </div>
+</header>
+<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="side-menu" id="sideMenu">
+  <h2 style="font-size:1.3rem;">Kerim Music+</h2>
+  <div class="filter-container-vertical">
+    <button class="filter-vert-btn active" data-filter="all">Todo</button>
+    <button class="filter-vert-btn" data-filter="Musica">Música</button>
+  </div>
+  <div><h3 style="font-size:1rem; margin-bottom:0.5rem;">❤️ Favoritos</h3><div id="favListContainer"></div><div class="play-fav-btn" id="playOnlyFavoritesBtn">▶ REPRODUCIR SOLO FAVORITOS</div></div>
+  <button class="close-menu-btn" id="closeMenuBtn">Cerrar ✕</button>
+</nav>
+
+<main class="gallery-section">
+  <div id="searchBadge" class="search-badge"></div>
+  <div id="suggestionsContainer" class="suggestions-section"></div>
+  <div id="contentContainer"></div>
+  <div class="attribution">Kerim Music+ · Lista para Música</div>
+</main>
+
+<!-- FULLSCREEN PLAYER -->
+<div class="fullscreen-player" id="fullscreenPlayer">
+  <div class="close-player" id="closePlayerBtn">✕</div>
+  <div class="player-card">
+    <div class="player-cover"><img id="fullCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg" alt="cover"></div>
+    <div class="song-details">
+      <h2 id="fullSongTitle">Kerim Music</h2>
+      <div class="song-category" id="fullSongCategory"></div>
+      <button class="fav-btn-player" id="favoriteBtnMain">♡</button>
+    </div>
+    <div class="progress-area">
+      <div class="time-row"><span id="currentTime">0:00</span><span id="durationTime">0:00</span></div>
+      <div class="progress-bar-bg" id="progressBarBg"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="controls">
+      <button class="ctrl-btn" id="fullPrevBtn">⏮</button>
+      <button class="ctrl-btn play-pause" id="fullPlayPauseBtn">▶</button>
+      <button class="ctrl-btn" id="fullNextBtn">⏭</button>
+    </div>
+  </div>
+</div>
+
+<!-- MINI PLAYER -->
+<div class="mini-player" id="miniPlayer">
+  <div class="mini-cover"><img id="miniCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg"></div>
+  <div class="mini-info"><div class="mini-title" id="miniTitle">Selecciona</div></div>
+  <div class="mini-controls">
+    <button class="mini-btn" id="miniPrevBtn">⏮</button>
+    <button class="mini-btn" id="miniPlayPauseBtn">▶</button>
+    <button class="mini-btn" id="miniNextBtn">⏭</button>
+  </div>
+  <div class="mini-progress-bg"><div class="mini-progress-fill" id="miniProgressFill"></div></div>
+</div>
+
+<script>
+  (function(){
+    // Catálogo de ejemplo (solo con categoría Musica)
+    const originalSongs = [
+      {id:46, url:'https://www.dropbox.com/scl/fi/r3j4k5zodxuwi3k3s6kph/Respira-con-migo.jpg?rlkey=tu6xddzy5tkls4gh225ytl6wi&st=qz9i3ofo&raw=1', category:'Musica', title:'Respira Conmigo', music:'https://www.dropbox.com/scl/fi/gyinwhotnt8na2n8pj44e/Respira-Conmigo-M-sica-Original-De-Valentina-Mi-Amor-Especial-cKSAjq7GBDg.mp3?rlkey=efbdmjzthwm6i936z0oxr4tog&st=brqrojib&raw=1'},
+      {id:45, url:'https://www.dropbox.com/scl/fi/b4swlyyadqaq7xfislmoj/ed.jpg?rlkey=owfelgd6j814lzdm7kedqq4tc&st=ss8oqq5c&raw=1', category:'Musica', title:'Grupo Firme - El Beneficio De La Duda', music:'https://www.dropbox.com/scl/fi/gt52jimdiizaiuob70pkm/Grupo-Firme-El-Beneficio-De-La-Duda-Video-Oficial.mp3?rlkey=e1f0b5g1f67nprw8hesdo3csp&st=m2tmv539&raw=1'},
+      {id:44, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman De todos modos me encanta', music:'https://www.dropbox.com/scl/fi/umaokxdp1rc8ldjegsdt0/arpetman-Anyway-I-Love-It.mp3?rlkey=dok3qxbftfpdkxm5z09meyn1j&st=8qh3hda9&raw=1'},
+      {id:43, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Dejalo asrdes', music:'https://www.dropbox.com/scl/fi/u98aqxcjbeiki95gzu7yk/Carpetman-Black-Soil-Let-It-Burn.mp3?rlkey=j96s1i2aqikb5qs0emerw49fh&st=ayeo5xoq&raw=1'},
+      {id:42, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Callejones de tierra negra de mi mente', music:'https://www.dropbox.com/scl/fi/513rqor4s9wxjiysqcthi/Carpetman-Black-Soil-Alleys-of-My-Mind.mp3?rlkey=9o3fg87q8ig365r1fzkjjs494&st=lfojlcfb&raw=1'},
+      {id:41, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Tonos de gris', music:'https://www.dropbox.com/scl/fi/cs3nvcf762dlt9dpsnteh/Carpetman-x-Scott-Rill-Shades-Of-Gray.mp3?rlkey=z5qtx1xdyq3yily2i8npc3stf&st=piamv9j3&raw=1'},
+      {id:40, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Isla temblorosa', music:'https://www.dropbox.com/scl/fi/nehjomplov69gpfp3r8x4/Carpetman-Theo-Remme-Trembling-Island.mp3?rlkey=hr9epqxudkz2w7si4lab7humg&st=tvrpc13o&raw=1'},
+      {id:39, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Mano Cristo', music:'https://www.dropbox.com/scl/fi/uqq936vjma6rzl1il49y3/Carpetman-Manuscript.mp3?rlkey=zkfoscwiyc4oudt8wmsxgw1y1&st=no8b0xur&raw=1'},
+      {id:38, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Nunca lo sabras', music:'https://www.dropbox.com/scl/fi/hzfvilgsmlc0yctskippv/Carpetman-You-Will-Never-Know-it.mp3?rlkey=885vs38mrc81jvikxkk21xe06&st=an32fpzu&raw=1'},
+      {id:37, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Que se inifica para ti', music:'https://www.dropbox.com/scl/fi/b73vj8y8ei28aiwt1t6ew/Carpetman-What-Does-It-Mean-To-You.mp3?rlkey=i90y7s1kwh3trab6q5nxeyull&st=d9nmao1a&raw=1'},
+      {id:36, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Caminando a traves del codigo', music:'https://www.dropbox.com/scl/fi/nxh48m6c5e40hj5gjmefx/Carpetman-WalKing-Through-the-Code-Official-Lyric-Video.mp3?rlkey=tgo6sy0s9fhnds3xzb6237t6y&st=sulu485w&raw=1'},
+      {id:35, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Fumando Ceresa', music:'https://www.dropbox.com/scl/fi/zycn3iolzc08uffcjs7dd/Carpetman-Smoking-Cherry.mp3?rlkey=x1c0bqdiz3y0oc42vmxl9094m&st=v6v8ncdc&raw=1'},
+      {id:34, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Mi amor', music:'https://www.dropbox.com/scl/fi/m7vs3sb7tomdwwu12ge90/Carpetman-My-honey.mp3?rlkey=oz6bsaw0b63khqvv7yrqc1gek&st=16iwfrcq&raw=1'},
+      {id:33, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Haslo mas bajo', music:'https://www.dropbox.com/scl/fi/af60q5l91qdz39f4qt0cv/Carpetman-Make-It-Lower.mp3?rlkey=005dg9cbz35uewzuigedm83yj&st=9r93qphy&raw=1'},
+      {id:32, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Vive sin sistema', music:'https://www.dropbox.com/scl/fi/rb4a6nl0p6m565ubjfwne/Carpetman-Live-without-a-system.mp3?rlkey=06lg8m93aju5dk3x8hke9cogy&st=5ay4xkmp&raw=1'},
+      {id:31, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman siente mucho frio', music:'https://www.dropbox.com/scl/fi/5gdrzob2h6f4joslpjnqt/Carpetman-Feel-so-cold.mp3?rlkey=pi39mv9hhju1hlv8y1romc8zz&st=ssoiejo6&raw=1'},
+      {id:30, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Lucha sin fin', music:'https://www.dropbox.com/scl/fi/w965tg951gr5lfjrvm82s/Carpetman-Endless-fight.mp3?rlkey=9hz13if98wvxapte9l2frqa5p&st=idgsopbw&raw=1'},
+      {id:29, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman No puedo perder mas', music:'https://www.dropbox.com/scl/fi/o5qcwey48575qnpssd2g8/Carpetman-Can-t-lose-more.mp3?rlkey=m65lieaalt8cmrknb70aclow2&st=6ost6xfy&raw=1'},
+      {id:28, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Me llama loco', music:'https://www.dropbox.com/scl/fi/ocbe68gjm8x4ljo2kxlxq/Carpetman-Call-Me-Insane.mp3?rlkey=g4sbgjtgctchkkm0g0jqem9qm&st=o15rwz87&raw=1'},
+      {id:27, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman & Vanek Foundation & Clear Man - What’s goin’ 0n', music:'https://www.dropbox.com/scl/fi/lfrztfgjjeiu0hi66yijz/Carpetman-Vanek-Foundation-Clear-Man-Whats-goin-0n.mp3?rlkey=xwq4d9d09tdya5igc1u6jaxwk&st=mhqoravr&raw=1'},
+      {id:26, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Lagrimas doradas', music:'https://www.dropbox.com/scl/fi/ko47idlbamy91358v4ssx/Carpetman-Golden-Tears.mp3?rlkey=j9aetqzvc0y8rw24h2s8dimrx&st=4omp4t3s&raw=1'},
+      {id:25, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman No tienes que sentir dolor', music:'https://www.dropbox.com/scl/fi/4lndjg5gjnk2byx64jjj1/Carpetman-Ain-tgottafeelthatpain.mp3?rlkey=lyadgkl1e03st5j9lxhhiwtfi&st=l2i3qcwv&raw=1'},
+      {id:24, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman – Feel so cold', music:'https://www.dropbox.com/scl/fi/5gdrzob2h6f4joslpjnqt/Carpetman-Feel-so-cold.mp3?rlkey=pi39mv9hhju1hlv8y1romc8zz&st=9jzs5fav&raw=1'},
+      {id:23, url:'https://www.dropbox.com/scl/fi/drndovq7yh4l4zqqi4tvw/429191430254406.avif?rlkey=rkg5ohi30my6b7gkza6ddo2jk&st=5fodfn51&raw=1', category:'Musica', title:'Besos mojados Wisin y Yandel', music:'https://www.dropbox.com/scl/fi/uyccnv37der36tby65ze2/Wisin-Yandel-Besos-Mojados-Visualizer.mp3?rlkey=twjpgo8p0afzlzaq26v3thcm4&st=c9wdkbp8&raw=1'},
+      {id:22, url:'https://www.dropbox.com/scl/fi/u451cfrep8ohfcdrepmxq/483488957_122195212382093529_2576876991791910487_n.jpg?rlkey=gnrgw1i2tkspyxg2de03ffma8&st=175922oz&raw=1', category:'Musica', title:'Me estoy mueirdo Clave 462', music:'https://www.dropbox.com/scl/fi/n66wxeygxd8ddchrls1kv/Me-estoy-muriendo-clave-462.wav?rlkey=hfkc487fwb71ziploobu8duqi&st=5nca4wns&raw=1'},
+      {id:21, url:'https://www.dropbox.com/scl/fi/zixsk3wr4r62bb9x6ea1g/Picsart_26-04-25_18-14-14-639.jpg?rlkey=kzujxp5xzvxtp38sbd3y6oz68&st=x25iex9q&raw=1', category:'Musica', title:'Ella mueve el tootoo J Vazquez ft Prii Ramirez', music:'https://www.dropbox.com/scl/fi/vw9p5zadrjyki5by39mmd/TootootooJ_VazquezBarrio_Bajo_M_Oficial.wav?rlkey=mphfjhdb08clx3fnnh2etkr70&st=mhj2asn2&raw=1'},
+      {id:20, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Vuelve Dany Zm', music:'https://www.dropbox.com/scl/fi/5dlej4wkll16uxyz3knwf/vuelve-9-dany-zm.mp3?rlkey=1mw4i576qw1q6xn4wofshg3gz&st=tbpp90qm&raw=1'},
+      {id:19, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Nuestro cuento Dany Zm', music:'https://www.dropbox.com/scl/fi/xmca1v67r0foa02ah0ix5/nuestro-cuento-7-dany-zm.mp3?rlkey=4wdtldt4ch8usesgbsqdkl0o1&st=4xdrusp8&raw=1'},
+      {id:18, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Me dejo solor Dany Zm ft Sain Nt Yezcor Cruz', music:'https://www.dropbox.com/scl/fi/ybuowdfnam5frrjksy570/me-dejo-solo-5-dany-zm.mp3?rlkey=9oiwuxep5v6se4r7af6qlwhb2&st=zbzpdjp2&raw=1'},
+      {id:17, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Lluvia Dany Zm', music:'https://www.dropbox.com/scl/fi/fo85o8m1etbo68m9a46xq/lluvia-8-dany-zm.mp3?rlkey=ywh0y4ezduhd3q7bjvh5orki1&st=n3ykoz9q&raw=1'},
+      {id:16, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Hasta cuendo Dany Zm', music:'https://www.dropbox.com/scl/fi/6588ikrqstte1wzjkreja/hasta-cuando-1-dany-zm.mp3?rlkey=uqpq1cpmnj1e5pnd5ndxwpb47&st=tgxuj89m&raw=1'},
+      {id:15, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Engaño Dany Zm', music:'https://www.dropbox.com/scl/fi/7qvtyhs6smsgnu56z9ch7/en-gano-6-dany-zm.mp3?rlkey=lzu6kbgqicirph9sp4ndhyq90&st=gu0hpw1p&raw=1'},
+      {id:14, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Tu tiempo de acabo Dany Zm', music:'https://www.dropbox.com/scl/fi/ees3i5mgfc50lwtg59hgw/Dany-Zm-Tu-tiempo-se-acavo.mp3?rlkey=kijhvu3rsv6j3zri6dh20wowf&st=3k6i51wu&raw=1'},
+      {id:13, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Especial Dany Zm', music:'https://www.dropbox.com/scl/fi/han7yoy13ncejnz4exj3r/dalex-especial-cover-dany-zm.mp3?rlkey=8pchaqdtz2iq854i8zrhxfriw&st=var5yqcp&raw=1'},
+      {id:12, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Corito sano Dany Zm', music:'https://www.dropbox.com/scl/fi/l4d8dvoahieq4yqf536ol/CORITO-SANO-DANY-ZM-VA-YEZKOR-CRUZ-SAIN-NT-VERSION-T.E.C.mp3?rlkey=wsj8578k3e14hqr74npb3krjb&st=pdov6vmy&raw=1'},
+      {id:11, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Beyby Dany Zm', music:'https://www.dropbox.com/scl/fi/v4remtzyol50e00rvhpen/beyby-4dany-zm.mp3?rlkey=y803hhbgxghxrlgsvpe9w16i9&st=p6m3gs7z&raw=1'},
+      {id:10, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Bailalo Dany Zm', music:'https://www.dropbox.com/scl/fi/ctedqktecjqbqvd2t5uct/bailado-3-dany-zm.mp3?rlkey=l1zrwqrevorjbxjq3u7gi4k3t&st=3kh4wkgz&raw=1'},
+      {id:9, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Modo Avion Dany Zm', music:'https://www.dropbox.com/scl/fi/rq7dnfuqaywgjdo6dp9de/1-Modo-avion-Dany-Zm-El-rencuentro..flac?rlkey=xfv7h1xurdroh0ct3xu71ge9m&st=v1bfhinm&raw=1'},
+      {id:8, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Ay estare Dany Zm', music:'https://www.dropbox.com/scl/fi/lbohzzgaf7xnw1v7o3ec9/ay-estare-2-dany-zm.mp3?rlkey=41qeo3w154ctk8gvlzl2aa0v1&st=ybnb2zya&raw=1'},
+      {id:6, url:'https://www.dropbox.com/scl/fi/55lnmbdl6wrt1wnpb1j4z/Quiereme-asi.png?rlkey=9knalslivzs7b6r9f3c8um0u7&st=o6wbyer5&raw=1', category:'Musica', title:'Quiere a si Prii Ramirez', music:'https://www.dropbox.com/scl/fi/c9ss4stui4mi1c6ku2w1r/Qui-reme-As.flac?rlkey=7vz44u6mff02f5h7nto5okcr0&st=qnv4scxe&raw=1'},
+      {id:5, url:'https://i.postimg.cc/wMCFZY9H/Picsart-26-02-15-14-39-19-042.jpg', category:'Musica', title:'Dile que tu eres mia Dany Zm', music:'https://www.dropbox.com/scl/fi/qx6o5slgy64yr6fgmg1fr/DanyZmTueresmiaOfical.wav?rlkey=iaxc3giic8tw7fc1ope4t6qwc&st=zr0joz18&raw=1'},
+      {id:4, url:'https://i.postimg.cc/3JGtpNZk/Picsart-26-02-24-14-11-02-954.jpg', category:'Musica', title:'De nada me estreso Placoso de la L', music:'https://www.dropbox.com/scl/fi/86rzw7fafswhle6yl8y9z/Es-el-M-KERIM-MUSIC.wav?rlkey=4m6i3hi98rqgu9iewhpvyitz8&st=78rqjwpx&raw=1'},
+      {id:3, url:'https://i.postimg.cc/RFymvC4R/Picsart-26-02-22-22-13-49-068.jpg', category:'Musica', title:'Andas diciendo Prii Ramirez', music:'https://www.dropbox.com/scl/fi/arf3n114kljfqs1a5rwm0/Andan-diciendo-Prii-Ramirez.wav?rlkey=qeqb9egyjn1n0n4cq9kt2kc5r&st=6s1ck9s6&raw=1'},
+      {id:2, url:'https://i.postimg.cc/tTxkMmxc/Picsart-26-02-07-19-56-32-530.jpg', category:'Musica', title:'Sigo Vivo Aizber', music:'https://www.dropbox.com/scl/fi/0y977tgyjp66og2ze36uh/SIgoVivoIazberMp3.wav?rlkey=6vdswfh8f3wtqa66seeugc480&st=byt5z91w&raw=1'},
+      {id:1, url:'https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg', category:'Musica', title:'Catorce de febrero J Vazquez', music:'https://www.dropbox.com/scl/fi/igoyb7x8feuz6otf67ddt/JBazques14deFrebreroOficial.wav?rlkey=vbgyvxlgyk5t1pl6kojif7w65&st=1ogeqzbh&raw=1'},
+      {id:7, url:'https://i.postimg.cc/MXJXxVL3/Te-estoy-llamando.jpg', category:'Musica', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/97yj1flb0bgaaedaxr9h1/Te_estoy_Llamando_lista.wav?rlkey=cn3oppwsfjv617hhcuy2rcga4&st=ipum1s6a&raw=1'}
+    ];
+    
+    let masterSongs = [...originalSongs];
+    let favSet = new Set();
+    // CONTADOR DE REPRODUCCIONES (para temas menos escuchados)
+    let playCount = new Map(); // id -> veces reproducido
+    
+    try{ 
+      let saved = localStorage.getItem('kerim_favs_set'); 
+      if(saved) JSON.parse(saved).forEach(id=>favSet.add(Number(id))); 
+      let savedCounts = localStorage.getItem('kerim_play_counts');
+      if(savedCounts){
+        let parsed = JSON.parse(savedCounts);
+        for(let [k,v] of Object.entries(parsed)) playCount.set(Number(k), v);
+      }
+    } catch(e){}
+    
+    function saveFavs(){ localStorage.setItem('kerim_favs_set', JSON.stringify([...favSet])); }
+    function savePlayCounts(){ 
+      let obj = {};
+      for(let [k,v] of playCount.entries()) obj[k] = v;
+      localStorage.setItem('kerim_play_counts', JSON.stringify(obj));
+    }
+    
+    function incrementPlayCount(songId){
+      let current = playCount.get(songId) || 0;
+      playCount.set(songId, current + 1);
+      savePlayCounts();
+    }
+    
+    function isFav(id){ return favSet.has(id); }
+    function toggleFav(id){ if(isFav(id)) favSet.delete(id); else favSet.add(id); saveFavs(); renderFavMenu(); updateFavButtonUI(); }
+    function getFavSongs(){ return [...favSet].map(id=>originalSongs.find(s=>s.id===id)).filter(Boolean);}
+    
+    // Obtener temas menos escuchados (máximo 6, orden ascendente por reproducciones)
+    function getLeastPlayedSuggestions(limit = 6){
+      let songsWithCount = masterSongs.map(song => ({
+        ...song,
+        plays: playCount.get(song.id) || 0
+      }));
+      songsWithCount.sort((a,b) => a.plays - b.plays);
+      return songsWithCount.slice(0, limit);
+    }
+    
+    let currentPlayQueue = [], currentQueueIndex = 0, currentSong = null;
+    let audio = new Audio();
+    let isPlaying = false;
+    let currentMode = 'all', currentFilter = 'all', currentSearch = '';
+
+    // Elementos DOM
+    const contentContainer = document.getElementById('contentContainer');
+    const suggestionsContainer = document.getElementById('suggestionsContainer');
+    const searchBadge = document.getElementById('searchBadge');
+    const fullPlayer = document.getElementById('fullscreenPlayer');
+    const miniPlayerDiv = document.getElementById('miniPlayer');
+    const fullCover = document.getElementById('fullCover');
+    const fullSongTitle = document.getElementById('fullSongTitle');
+    const fullSongCategory = document.getElementById('fullSongCategory');
+    const fullPlayPause = document.getElementById('fullPlayPauseBtn');
+    const fullPrev = document.getElementById('fullPrevBtn');
+    const fullNext = document.getElementById('fullNextBtn');
+    const progressFill = document.getElementById('progressFill');
+    const progressBarBg = document.getElementById('progressBarBg');
+    const currentTimeSpan = document.getElementById('currentTime');
+    const durationSpan = document.getElementById('durationTime');
+    const favMainBtn = document.getElementById('favoriteBtnMain');
+    const closePlayerBtn = document.getElementById('closePlayerBtn');
+    const miniCover = document.getElementById('miniCover');
+    const miniTitle = document.getElementById('miniTitle');
+    const miniPlayPause = document.getElementById('miniPlayPauseBtn');
+    const miniPrev = document.getElementById('miniPrevBtn');
+    const miniNext = document.getElementById('miniNextBtn');
+    const miniProgressFill = document.getElementById('miniProgressFill');
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const playFavBtn = document.getElementById('playOnlyFavoritesBtn');
+    const randomMatteBg = document.getElementById('randomMatteBg');
+    
+    const mattePalette = ['#2C3E50', '#4A5D23', '#6B4E3A', '#2F4F4F', '#5D3A1A', '#3E5C4A', '#49516F', '#5E5A3C', '#6D4C3C', '#264653', '#2A4B41', '#6A4E4B', '#3D405B', '#5D576B', '#636940', '#2C5F5F', '#4A3B32'];
+    function getRandomMatteColor() { return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
+    function changeBackgroundRandomly() { randomMatteBg.style.backgroundColor = getRandomMatteColor(); }
+    let intervalBg = setInterval(() => changeBackgroundRandomly(), 7000);
+    function triggerBackgroundRefresh() { changeBackgroundRandomly(); }
+    
+    function shuffleArray(arr) { const array = [...arr]; for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+    
+    function getActiveListShuffled(){
+      let base = (currentFilter === 'all') ? [...masterSongs] : masterSongs.filter(s=>s.category === currentFilter);
+      if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase()));
+      return shuffleArray(base);
+    }
+    
+    function getActiveListForQueue(){
+      let base = (currentFilter === 'all') ? [...masterSongs] : masterSongs.filter(s=>s.category === currentFilter);
+      if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase()));
+      return base;
+    }
+    
+    function buildBaseQueue(){ return (currentMode === 'favorites') ? getFavSongs() : getActiveListForQueue(); }
+    function updateQueueAndMode(){
+      currentPlayQueue = buildBaseQueue();
+      if(currentPlayQueue.length === 0 && masterSongs.length) currentPlayQueue = [...masterSongs];
+      if(currentSong && currentPlayQueue.findIndex(s=>s.id===currentSong.id) !== -1) currentQueueIndex = currentPlayQueue.findIndex(s=>s.id===currentSong.id);
+      else { currentQueueIndex = 0; if(currentPlayQueue.length) currentSong = currentPlayQueue[0]; }
+    }
+    function setMode(mode){ currentMode = mode; updateQueueAndMode(); if(currentPlayQueue.length && currentSong && !currentPlayQueue.some(s=>s.id===currentSong.id)) playSong(currentPlayQueue[0]); }
+    
+    // ACTUALIZAR MEDIA SESSION (Isla del reproductor en pantalla de bloqueo/notificaciones)
+    function updateMediaSession(song) {
+      if (!song) return;
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: song.title,
+          artist: 'Kerim Music+',
+          album: song.category,
+          artwork: [
+            { src: song.url, sizes: '512x512', type: 'image/jpeg' }
+          ]
+        });
+        
+        // Configurar manejadores de la isla
+        navigator.mediaSession.setActionHandler('play', () => { audio.play(); });
+        navigator.mediaSession.setActionHandler('pause', () => { audio.pause(); });
+        navigator.mediaSession.setActionHandler('previoustrack', () => { prevTrack(); });
+        navigator.mediaSession.setActionHandler('nexttrack', () => { nextTrack(); });
+        navigator.mediaSession.setActionHandler('stop', () => { audio.pause(); audio.currentTime = 0; });
+      }
+    }
+    
+    function playSong(song, customQueue = null){
+      if(!song) return;
+      currentSong = song;
+      incrementPlayCount(song.id);
+      renderSuggestions();
+      
+      if(customQueue) currentPlayQueue = customQueue;
+      else updateQueueAndMode();
+      let idx = currentPlayQueue.findIndex(s=>s.id===song.id);
+      if(idx !== -1) currentQueueIndex = idx;
+      if(song.music){ 
+        audio.src = song.music; 
+        audio.play().catch(e=>console.log); 
+        isPlaying = true; 
+      } else { 
+        audio.pause(); 
+        isPlaying = false; 
+      }
+      updateUIWithSong(song);
+      updateMediaSession(song); // ACTUALIZAR ISLA DEL REPRODUCTOR
+      fullPlayer.classList.add('show'); 
+      miniPlayerDiv.classList.add('show'); 
+      updatePlayPauseIcon(); 
+      triggerBackgroundRefresh();
+    }
+    
+    function updateUIWithSong(song){ 
+      fullCover.src = song.url; 
+      fullSongTitle.innerText = song.title; 
+      fullSongCategory.innerText = song.category; 
+      miniCover.src = song.url; 
+      miniTitle.innerText = song.title; 
+      updateFavButtonUI(); 
+    }
+    function updateFavButtonUI(){ if(currentSong){ favMainBtn.classList.toggle('active', isFav(currentSong.id)); favMainBtn.innerText = isFav(currentSong.id) ? '❤️' : '♡'; } }
+    function updatePlayPauseIcon(){ const icon = isPlaying ? '⏸' : '▶'; fullPlayPause.innerText = icon; miniPlayPause.innerText = icon; }
+    function nextTrack(){ 
+      if(!currentPlayQueue.length) return; 
+      let newIdx = (currentQueueIndex + 1) % currentPlayQueue.length; 
+      currentQueueIndex = newIdx; 
+      playSong(currentPlayQueue[newIdx]); 
+    }
+    function prevTrack(){ 
+      if(!currentPlayQueue.length) return; 
+      let newIdx = (currentQueueIndex - 1 + currentPlayQueue.length) % currentPlayQueue.length; 
+      currentQueueIndex = newIdx; 
+      playSong(currentPlayQueue[newIdx]); 
+    }
+    function togglePlayPause(){ isPlaying ? audio.pause() : audio.play(); }
+    
+    function renderSuggestions(){
+      if(currentSearch.trim() !== '') {
+        suggestionsContainer.innerHTML = '';
+        return;
+      }
+      const leastPlayed = getLeastPlayedSuggestions(6);
+      if(leastPlayed.length === 0 || (currentFilter !== 'all' && currentFilter !== 'Musica')){
+        suggestionsContainer.innerHTML = '';
+        return;
+      }
+      let html = `
+        <div class="suggestions-title">
+          🎧 ⚡ DESCUBRE TEMAS MENOS ESCUCHADOS
+          <span>pon atención ⚡</span>
+        </div>
+        <div class="suggestions-horizontal">
+      `;
+      leastPlayed.forEach(song => {
+        const plays = (playCount.get(song.id) || 0);
+        const inviteMsg = plays === 0 ? '✨ ¡Sin estrenar!' : `🎧 Solo ${plays} reproducción${plays !== 1 ? 'es' : ''}`;
+        html += `
+          <div class="suggestion-card" data-id="${song.id}">
+            <img src="${song.url}" loading="lazy" alt="${song.title}">
+            <div class="suggestion-info">
+              <div class="suggestion-title">${escapeHtml(song.title)}</div>
+              <div class="suggestion-badge">${song.category}</div>
+              <div class="suggestion-invite">
+                <span class="play-icon-small">▶</span> ${inviteMsg}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      suggestionsContainer.innerHTML = html;
+      
+      document.querySelectorAll('.suggestion-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = parseInt(card.getAttribute('data-id'));
+          const found = originalSongs.find(s => s.id === id);
+          if(found){
+            if(currentMode === 'favorites') setMode('all');
+            updateQueueAndMode();
+            playSong(found);
+          }
+        });
+      });
+    }
+    
+    function renderContent(){
+      const items = getActiveListShuffled();
+      const isSearching = currentSearch.trim() !== '';
+      const isMusicCategory = (currentFilter === 'Musica' && !isSearching);
+      
+      if(isSearching) searchBadge.innerHTML = `🔍 Resultados: "${escapeHtml(currentSearch)}" (${items.length})`;
+      else searchBadge.innerHTML = '';
+      
+      if(items.length === 0){ contentContainer.innerHTML = '<div class="no-results">🎲 No se encontraron canciones ⚪</div>'; return; }
+      
+      if(isMusicCategory){
+        let html = `<div class="music-list-view">`;
+        items.forEach(song => {
+          html += `
+            <div class="music-list-item" data-id="${song.id}">
+              <img src="${song.url}" loading="lazy" alt="${song.title}">
+              <div class="music-list-info">
+                <div class="music-list-title">${escapeHtml(song.title)}</div>
+                <div class="music-list-cat">🎵 ${song.category}</div>
+              </div>
+              <div class="music-list-play-icon">▶</div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+        contentContainer.innerHTML = html;
+        
+        document.querySelectorAll('.music-list-item').forEach(el => {
+          el.addEventListener('click', (e) => {
+            const id = parseInt(el.getAttribute('data-id'));
+            const found = originalSongs.find(s => s.id === id);
+            if(found){
+              if(currentMode === 'favorites') setMode('all');
+              updateQueueAndMode();
+              playSong(found);
+            }
+          });
+        });
+      } 
+      else {
+        let gridClass = 'gallery-grid';
+        if(isSearching) gridClass += ' list-view';
+        let html = `<div class="${gridClass}">`;
+        items.forEach(song => {
+          if(isSearching){
+            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)} <span style="font-size:0.65rem;"> · ${song.category}</span></div></div>`;
+          } else {
+            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}</div></div>`;
+          }
+        });
+        html += `</div>`;
+        contentContainer.innerHTML = html;
+        document.querySelectorAll('.image-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = parseInt(card.getAttribute('data-id'));
+            const found = originalSongs.find(s => s.id === id);
+            if(found){ if(currentMode === 'favorites') setMode('all'); updateQueueAndMode(); playSong(found); }
+          });
+        });
+      }
+      triggerBackgroundRefresh();
+    }
+    
+    function escapeHtml(str){ return str.replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m;}); }
+    
+    function renderFavMenu(){
+      const container = document.getElementById('favListContainer');
+      const favs = getFavSongs();
+      if(!favs.length){ container.innerHTML='<div class="empty-fav">⚪ Sin favoritos aún ⚫</div>'; return; }
+      let html='';
+      favs.forEach(f=>{ html+=`<div class="fav-list-item" data-id="${f.id}"><span>${escapeHtml(f.title)}</span><button class="fav-remove" data-rid="${f.id}">✖</button></div>`; });
+      container.innerHTML = html;
+      document.querySelectorAll('.fav-list-item').forEach(el=>{
+        let id = parseInt(el.getAttribute('data-id'));
+        el.addEventListener('click',(e)=>{
+          if(e.target.classList.contains('fav-remove')){ e.stopPropagation(); toggleFav(id); }
+          else { const song = originalSongs.find(s=>s.id===id); if(song){ setMode('favorites'); const freshFavs = getFavSongs(); playSong(song, freshFavs); closeMenu(); } }
+        });
+      });
+    }
+    function playOnlyFavs(){ const favs = getFavSongs(); if(favs.length===0){ alert('💔 Aún no hay favoritos. Dale like (❤️) a una canción.'); return; } setMode('favorites'); playSong(favs[0], favs); closeMenu(); }
+    function applyFilters(){ renderContent(); renderSuggestions(); if(currentMode !== 'favorites') updateQueueAndMode(); }
+    
+    document.querySelectorAll('.filter-vert-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.filter-vert-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.getAttribute('data-filter');
+        currentSearch = searchInput.value.trim();
+        applyFilters();
+        closeMenu();
+      });
+    });
+    function performSearch(){ currentSearch = searchInput.value.trim(); applyFilters(); }
+    searchButton.addEventListener('click', performSearch);
+    searchInput.addEventListener('keyup', (e) => { if(e.key === 'Enter') performSearch(); });
+    
+    audio.addEventListener('timeupdate',()=>{ 
+      if(audio.duration && isFinite(audio.duration)){ 
+        let p = (audio.currentTime/audio.duration)*100; 
+        progressFill.style.width = `${p}%`; 
+        miniProgressFill.style.width = `${p}%`; 
+        currentTimeSpan.innerText = formatTime(audio.currentTime); 
+        if(durationSpan.innerText === '0:00') durationSpan.innerText = formatTime(audio.duration); 
+        // Actualizar posición en Media Session
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.setPositionState({
+            duration: audio.duration,
+            position: audio.currentTime,
+            playbackRate: audio.playbackRate
+          });
+        }
+      } 
+    });
+    audio.addEventListener('loadedmetadata',()=>{ if(audio.duration) durationSpan.innerText = formatTime(audio.duration); });
+    audio.addEventListener('play',()=>{ isPlaying=true; updatePlayPauseIcon(); });
+    audio.addEventListener('pause',()=>{ isPlaying=false; updatePlayPauseIcon(); });
+    audio.addEventListener('ended',()=>{ nextTrack(); });
+    progressBarBg.addEventListener('click',(e)=>{ if(audio.duration){ let rect = progressBarBg.getBoundingClientRect(); let perc = (e.clientX - rect.left)/rect.width; audio.currentTime = perc * audio.duration; } });
+    
+    fullPlayPause.addEventListener('click', togglePlayPause);
+    fullNext.addEventListener('click', nextTrack);
+    fullPrev.addEventListener('click', prevTrack);
+    miniPlayPause.addEventListener('click', togglePlayPause);
+    miniNext.addEventListener('click', nextTrack);
+    miniPrev.addEventListener('click', prevTrack);
+    miniPlayerDiv.addEventListener('click',(e)=>{ if(!e.target.closest('.mini-btn')) fullPlayer.classList.add('show'); });
+    closePlayerBtn.addEventListener('click',()=>fullPlayer.classList.remove('show'));
+    favMainBtn.addEventListener('click',()=>{ if(currentSong) toggleFav(currentSong.id); });
+    playFavBtn.addEventListener('click', playOnlyFavs);
+    
+    // CONTROLES FÍSICOS (TECLADO)
+    function handleKeyboardControls(e) {
+      const isPlayerVisible = miniPlayerDiv.classList.contains('show') || fullPlayer.classList.contains('show');
+      if (!isPlayerVisible) return;
+      
+      const activeElement = document.activeElement;
+      if (activeElement && (activeElement.id === 'searchInput' || activeElement.tagName === 'INPUT')) {
+        return;
+      }
+      
+      switch(e.key) {
+        case ' ':
+        case 'Space':
+          e.preventDefault();
+          togglePlayPause();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          prevTrack();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          nextTrack();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          if(audio.volume < 0.95) audio.volume = Math.min(1, audio.volume + 0.1);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          if(audio.volume > 0.05) audio.volume = Math.max(0, audio.volume - 0.1);
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          if(currentSong) toggleFav(currentSong.id);
+          break;
+        case 'Escape':
+          e.preventDefault();
+          fullPlayer.classList.remove('show');
+          break;
+        default:
+          break;
+      }
+    }
+    
+    window.addEventListener('keydown', handleKeyboardControls);
+    
+    // PREVENIR QUE EL AUDIO SE DETENGA AL BLOQUEAR PANTALLA
+    // Esto se logra configurando correctamente el audio y usando MediaSession
+    // Además, recargar la reproducción si es necesario al volver a la visibilidad
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && isPlaying) {
+        // Si la página se vuelve visible y debería estar sonando, aseguramos reproducción
+        audio.play().catch(e => console.log('Play reanudado:', e));
+      }
+    });
+    
+    // Manejar beforeunload para no perder el estado
+    window.addEventListener('beforeunload', () => {
+      if (isPlaying) {
+        // Opcional: no hacer nada, solo mantener
+      }
+    });
+    
+    const hamburger = document.getElementById('hamburgerBtn'), sideMenuEl = document.getElementById('sideMenu'), overlay = document.getElementById('menuOverlay'), closeMenuBtn = document.getElementById('closeMenuBtn');
+    function openMenu(){ sideMenuEl.classList.add('open'); overlay.classList.add('show'); renderFavMenu(); }
+    function closeMenu(){ sideMenuEl.classList.remove('open'); overlay.classList.remove('show'); }
+    hamburger.addEventListener('click', openMenu); closeMenuBtn.addEventListener('click', closeMenu); overlay.addEventListener('click', closeMenu);
+    function formatTime(sec){ if(isNaN(sec)) return '0:00'; let m=Math.floor(sec/60), s=Math.floor(sec%60); return `${m}:${s<10?'0':''}${s}`; }
+    
+    const welcomeModal = document.getElementById('welcomeModal'), acceptBtn = document.getElementById('acceptWelcomeBtn');
+    if (localStorage.getItem('kerim_welcome_accepted') === 'true') welcomeModal.classList.add('hidden');
+    else { welcomeModal.classList.remove('hidden'); acceptBtn.addEventListener('click', () => { localStorage.setItem('kerim_welcome_accepted', 'true'); welcomeModal.classList.add('hidden'); }); }
+    
+    changeBackgroundRandomly();
+    currentFilter = 'all';
+    currentSearch = '';
+    renderContent();
+    renderSuggestions();
+    updateQueueAndMode();
+    renderFavMenu();
+    if(masterSongs.length) currentSong = masterSongs[0];
+    audio.volume = 0.9;
+  })();
+</script>
+</body>
+</html>
