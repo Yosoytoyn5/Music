@@ -106,6 +106,41 @@
     }
     .search-container button:hover { background: white; color: black; }
 
+    /* CONTADOR HITWEBCODER (esquina superior derecha) */
+    .counter-wrapper {
+      position: absolute;
+      right: 1rem;
+      top: 0.7rem;
+      z-index: 115;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 4px 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 0.5px solid rgba(255,255,200,0.25);
+      pointer-events: auto;
+    }
+    .counter-wrapper a {
+      line-height: 0;
+      display: block;
+    }
+    .counter-wrapper img {
+      max-height: 28px;
+      width: auto;
+      border-radius: 20px;
+    }
+    /* Ajuste responsive: en móviles muy pequeños mover ligeramente */
+    @media (max-width: 560px) {
+      .counter-wrapper { padding: 2px 8px; top: 0.65rem; right: 0.7rem; }
+      .counter-wrapper img { max-height: 24px; }
+    }
+    @media (max-width: 480px) {
+      .top-bar h1 { font-size: 1rem; margin-left: 2.5rem; }
+      .counter-wrapper { top: 0.7rem; right: 0.6rem; }
+    }
+
     /* SIDEMENU */
     .side-menu {
       position: fixed;
@@ -152,37 +187,6 @@
       width: 100%;
     }
     .filter-vert-btn.active, .filter-vert-btn:hover { background: white; color: black; border-color: white; }
-    .fav-list-container {
-      max-height: 220px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-top: 0.5rem;
-    }
-    .fav-list-item {
-      background: #111;
-      border: 1px solid #2c2c2c;
-      border-radius: 40px;
-      padding: 0.5rem 0.8rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-    .fav-remove { background: none; border: none; color: #aa5555; font-size: 1.2rem; cursor: pointer; padding: 0 5px; }
-    .play-fav-btn {
-      background: #181818;
-      border: 1px solid #444;
-      border-radius: 60px;
-      padding: 0.7rem;
-      text-align: center;
-      font-size: 0.8rem;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      color: #ffcc88;
-    }
     .close-menu-btn { background: #111; border: 1px solid #333; border-radius: 60px; padding: 0.7rem; margin-top: auto; cursor: pointer; }
 
     /* SECCIÓN PRINCIPAL */
@@ -403,6 +407,108 @@
       font-size: 0.7rem;
     }
     
+    /* PANEL DE ORDENACIÓN ESTILO FLOTANTE (SOLO PLAYLITS) */
+    .floating-sort-container {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 1500;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .floating-sort-btn {
+      width: 56px;
+      height: 56px;
+      background: #ffcc88;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+      color: #1a1a1a;
+      font-size: 1.6rem;
+      font-weight: bold;
+      border: 1px solid rgba(255,255,200,0.8);
+      z-index: 1501;
+    }
+    .floating-sort-btn:hover {
+      transform: scale(1.05);
+      background: white;
+    }
+    .sort-panel-floating {
+      background: rgba(10, 10, 14, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 1.2rem;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(255,255,200,0.35);
+      width: 220px;
+      transform: scale(0.9);
+      transform-origin: bottom right;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+    }
+    .sort-panel-floating.open {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+    .sort-label {
+      font-size: 0.7rem;
+      color: #ffcc88;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+      text-align: center;
+    }
+    .sort-buttons-floating {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .sort-btn-floating {
+      background: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 60px;
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #ccc;
+      font-weight: 500;
+      text-align: center;
+      width: 100%;
+    }
+    .sort-btn-floating.active {
+      background: #ffcc88;
+      color: #000;
+      border-color: #ffcc88;
+    }
+    .sort-btn-floating:hover {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+    .close-sort-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 1499;
+      display: none;
+    }
+    .close-sort-overlay.show {
+      display: block;
+    }
+    
     @media (min-width: 500px) {
       .gallery-grid:not(.list-view) { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
       .suggestion-card { flex: 0 0 180px; }
@@ -471,7 +577,7 @@
       text-shadow: 0 0 4px black;
     }
 
-    /* REPRODUCTOR MODERNO */
+    /* REPRODUCTOR MODERNO SIN CUADRO */
     .fullscreen-player {
       position: fixed;
       top: 0;
@@ -490,13 +596,12 @@
     }
     .fullscreen-player.show { opacity: 1; visibility: visible; }
     .player-card {
-      background: rgba(12, 12, 16, 0.9);
-      border-radius: 2rem;
-      padding: 1.8rem;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
       max-width: 500px;
       width: 90%;
-      border: 1px solid #3a3a3a;
-      box-shadow: 0 25px 40px rgba(0,0,0,0.6);
     }
     .player-cover {
       width: 100%;
@@ -551,6 +656,8 @@
       transition: 0.1s;
     }
     .ctrl-btn.play-pause { width: 75px; height: 75px; background: white; color: black; border: none; font-size: 2.2rem; }
+    .ctrl-btn.shuffle-btn { background: #1a1a1a; width: 50px; height: 50px; font-size: 1.3rem; }
+    .ctrl-btn.shuffle-btn.active { background: #ffcc88; color: #000; border-color: #ffcc88; }
     .ctrl-btn:hover { background: white; color: black; border-color: white; transform: scale(1.02); }
     .close-player {
       position: absolute;
@@ -645,9 +752,11 @@
       .controls { gap: 1rem; }
       .ctrl-btn { width: 48px; height: 48px; font-size: 1.4rem; }
       .ctrl-btn.play-pause { width: 65px; height: 65px; font-size: 2rem; }
+      .ctrl-btn.shuffle-btn { width: 45px; height: 45px; font-size: 1.1rem; }
       .music-list-item img { width: 44px; height: 44px; }
       .music-list-title { font-size: 0.85rem; }
       .suggestion-card { flex: 0 0 140px; }
+      .floating-sort-btn { width: 48px; height: 48px; font-size: 1.3rem; bottom: 70px; }
     }
     .attribution { text-align: center; margin-top: 2rem; font-size: 0.65rem; color: #aaa; background: rgba(0,0,0,0.4); display: inline-block; width: auto; margin-left: auto; margin-right: auto; border-radius: 20px; padding: 0.3rem 1rem; backdrop-filter: blur(4px);}
   </style>
@@ -656,7 +765,7 @@
 <div class="random-matte-bg" id="randomMatteBg"></div>
 
 <div class="welcome-modal" id="welcomeModal">
-  <div class="welcome-card"><h2>Kerim Music+</h2><p>· Música → Formato lista · Fondos mates aleatorios</p><button class="accept-btn" id="acceptWelcomeBtn">ACEPTAR</button></div>
+  <div class="welcome-card"><h2>Kerim Music+</h2><p>·</p><button class="accept-btn" id="acceptWelcomeBtn">ACEPTAR</button></div>
 </div>
 
 <header class="top-bar">
@@ -666,6 +775,13 @@
     <input type="text" id="searchInput" placeholder="Buscar canción...">
     <button id="searchButton">🔍</button>
   </div>
+  <!-- CONTADOR HITWEBCODER (esquina superior derecha) -->
+  <div class="counter-wrapper">
+    <a href="https://www.hitwebcounter.com/" target="_blank" rel="noopener" title="Stats Check">
+      <img src="https://www.hitwebcounter.com/counter/counter.php?page=21496730&amp;style=0006&amp;nbdigits=1&amp;type=ip" alt="Stats Check" decoding="async" style="border:0;max-width:100%;height:auto;" />
+    </a>
+  </div>
+  <!-- FIN CONTADOR -->
 </header>
 <div class="menu-overlay" id="menuOverlay"></div>
 <nav class="side-menu" id="sideMenu">
@@ -673,8 +789,8 @@
   <div class="filter-container-vertical">
     <button class="filter-vert-btn active" data-filter="all">Todo</button>
     <button class="filter-vert-btn" data-filter="Musica">Música</button>
+    <button class="filter-vert-btn" id="playlistsBtn">PlayLits</button>
   </div>
-  <div><h3 style="font-size:1rem; margin-bottom:0.5rem;">❤️ Favoritos</h3><div id="favListContainer"></div><div class="play-fav-btn" id="playOnlyFavoritesBtn">▶ REPRODUCIR SOLO FAVORITOS</div></div>
   <button class="close-menu-btn" id="closeMenuBtn">Cerrar ✕</button>
 </nav>
 
@@ -685,7 +801,7 @@
   <div class="attribution">Kerim Music+ · Lista para Música</div>
 </main>
 
-<!-- FULLSCREEN PLAYER -->
+<!-- Fullscreen Player y Mini Player (IDEM) -->
 <div class="fullscreen-player" id="fullscreenPlayer">
   <div class="close-player" id="closePlayerBtn">✕</div>
   <div class="player-card">
@@ -695,11 +811,11 @@
       <div class="song-category" id="fullSongCategory"></div>
       <button class="fav-btn-player" id="favoriteBtnMain">♡</button>
     </div>
-    <div class="progress-area">
-      <div class="time-row"><span id="currentTime">0:00</span><span id="durationTime">0:00</span></div>
+    <div class="progress-area"><div class="time-row"><span id="currentTime">0:00</span><span id="durationTime">0:00</span></div>
       <div class="progress-bar-bg" id="progressBarBg"><div class="progress-fill" id="progressFill"></div></div>
     </div>
     <div class="controls">
+      <button class="ctrl-btn shuffle-btn" id="shuffleBtn">🔀</button>
       <button class="ctrl-btn" id="fullPrevBtn">⏮</button>
       <button class="ctrl-btn play-pause" id="fullPlayPauseBtn">▶</button>
       <button class="ctrl-btn" id="fullNextBtn">⏭</button>
@@ -707,46 +823,39 @@
   </div>
 </div>
 
-<!-- MINI PLAYER -->
 <div class="mini-player" id="miniPlayer">
   <div class="mini-cover"><img id="miniCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg"></div>
   <div class="mini-info"><div class="mini-title" id="miniTitle">Selecciona</div></div>
-  <div class="mini-controls">
-    <button class="mini-btn" id="miniPrevBtn">⏮</button>
-    <button class="mini-btn" id="miniPlayPauseBtn">▶</button>
-    <button class="mini-btn" id="miniNextBtn">⏭</button>
-  </div>
+  <div class="mini-controls"><button class="mini-btn" id="miniPrevBtn">⏮</button><button class="mini-btn" id="miniPlayPauseBtn">▶</button><button class="mini-btn" id="miniNextBtn">⏭</button></div>
   <div class="mini-progress-bg"><div class="mini-progress-fill" id="miniProgressFill"></div></div>
 </div>
 
+<!-- ESTRUCTURA FLOTANTE PARA PLAYLITS -->
+<div id="floatingSortContainer" class="floating-sort-container" style="display: none;">
+  <div class="sort-panel-floating" id="floatingSortPanel">
+    <div class="sort-label">ORDENAR PLAYLITS</div>
+    <div class="sort-buttons-floating">
+      <button class="sort-btn-floating" data-sort="default">Por defecto</button>
+      <button class="sort-btn-floating" data-sort="lastFirst">Última agregada primero</button>
+      <button class="sort-btn-floating" data-sort="firstFirst">Primera agregada primero</button>
+    </div>
+  </div>
+  <div class="floating-sort-btn" id="floatingSortBtn">⋮•⋮</div>
+</div>
+<div class="close-sort-overlay" id="closeSortOverlay"></div>
+
 <script>
   (function(){
-    // Catálogo de ejemplo (solo con categoría Musica)
     const originalSongs = [
-      {id:46, url:'https://www.dropbox.com/scl/fi/r3j4k5zodxuwi3k3s6kph/Respira-con-migo.jpg?rlkey=tu6xddzy5tkls4gh225ytl6wi&st=qz9i3ofo&raw=1', category:'Musica', title:'Respira Conmigo', music:'https://www.dropbox.com/scl/fi/gyinwhotnt8na2n8pj44e/Respira-Conmigo-M-sica-Original-De-Valentina-Mi-Amor-Especial-cKSAjq7GBDg.mp3?rlkey=efbdmjzthwm6i936z0oxr4tog&st=brqrojib&raw=1'},
-      {id:45, url:'https://www.dropbox.com/scl/fi/b4swlyyadqaq7xfislmoj/ed.jpg?rlkey=owfelgd6j814lzdm7kedqq4tc&st=ss8oqq5c&raw=1', category:'Musica', title:'Grupo Firme - El Beneficio De La Duda', music:'https://www.dropbox.com/scl/fi/gt52jimdiizaiuob70pkm/Grupo-Firme-El-Beneficio-De-La-Duda-Video-Oficial.mp3?rlkey=e1f0b5g1f67nprw8hesdo3csp&st=m2tmv539&raw=1'},
-      {id:44, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman De todos modos me encanta', music:'https://www.dropbox.com/scl/fi/umaokxdp1rc8ldjegsdt0/arpetman-Anyway-I-Love-It.mp3?rlkey=dok3qxbftfpdkxm5z09meyn1j&st=8qh3hda9&raw=1'},
-      {id:43, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Dejalo asrdes', music:'https://www.dropbox.com/scl/fi/u98aqxcjbeiki95gzu7yk/Carpetman-Black-Soil-Let-It-Burn.mp3?rlkey=j96s1i2aqikb5qs0emerw49fh&st=ayeo5xoq&raw=1'},
-      {id:42, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Callejones de tierra negra de mi mente', music:'https://www.dropbox.com/scl/fi/513rqor4s9wxjiysqcthi/Carpetman-Black-Soil-Alleys-of-My-Mind.mp3?rlkey=9o3fg87q8ig365r1fzkjjs494&st=lfojlcfb&raw=1'},
-      {id:41, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Tonos de gris', music:'https://www.dropbox.com/scl/fi/cs3nvcf762dlt9dpsnteh/Carpetman-x-Scott-Rill-Shades-Of-Gray.mp3?rlkey=z5qtx1xdyq3yily2i8npc3stf&st=piamv9j3&raw=1'},
-      {id:40, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Isla temblorosa', music:'https://www.dropbox.com/scl/fi/nehjomplov69gpfp3r8x4/Carpetman-Theo-Remme-Trembling-Island.mp3?rlkey=hr9epqxudkz2w7si4lab7humg&st=tvrpc13o&raw=1'},
-      {id:39, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Mano Cristo', music:'https://www.dropbox.com/scl/fi/uqq936vjma6rzl1il49y3/Carpetman-Manuscript.mp3?rlkey=zkfoscwiyc4oudt8wmsxgw1y1&st=no8b0xur&raw=1'},
-      {id:38, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Nunca lo sabras', music:'https://www.dropbox.com/scl/fi/hzfvilgsmlc0yctskippv/Carpetman-You-Will-Never-Know-it.mp3?rlkey=885vs38mrc81jvikxkk21xe06&st=an32fpzu&raw=1'},
-      {id:37, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Que se inifica para ti', music:'https://www.dropbox.com/scl/fi/b73vj8y8ei28aiwt1t6ew/Carpetman-What-Does-It-Mean-To-You.mp3?rlkey=i90y7s1kwh3trab6q5nxeyull&st=d9nmao1a&raw=1'},
-      {id:36, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Caminando a traves del codigo', music:'https://www.dropbox.com/scl/fi/nxh48m6c5e40hj5gjmefx/Carpetman-WalKing-Through-the-Code-Official-Lyric-Video.mp3?rlkey=tgo6sy0s9fhnds3xzb6237t6y&st=sulu485w&raw=1'},
-      {id:35, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Fumando Ceresa', music:'https://www.dropbox.com/scl/fi/zycn3iolzc08uffcjs7dd/Carpetman-Smoking-Cherry.mp3?rlkey=x1c0bqdiz3y0oc42vmxl9094m&st=v6v8ncdc&raw=1'},
-      {id:34, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Mi amor', music:'https://www.dropbox.com/scl/fi/m7vs3sb7tomdwwu12ge90/Carpetman-My-honey.mp3?rlkey=oz6bsaw0b63khqvv7yrqc1gek&st=16iwfrcq&raw=1'},
-      {id:33, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Haslo mas bajo', music:'https://www.dropbox.com/scl/fi/af60q5l91qdz39f4qt0cv/Carpetman-Make-It-Lower.mp3?rlkey=005dg9cbz35uewzuigedm83yj&st=9r93qphy&raw=1'},
-      {id:32, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Vive sin sistema', music:'https://www.dropbox.com/scl/fi/rb4a6nl0p6m565ubjfwne/Carpetman-Live-without-a-system.mp3?rlkey=06lg8m93aju5dk3x8hke9cogy&st=5ay4xkmp&raw=1'},
-      {id:31, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman siente mucho frio', music:'https://www.dropbox.com/scl/fi/5gdrzob2h6f4joslpjnqt/Carpetman-Feel-so-cold.mp3?rlkey=pi39mv9hhju1hlv8y1romc8zz&st=ssoiejo6&raw=1'},
-      {id:30, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Lucha sin fin', music:'https://www.dropbox.com/scl/fi/w965tg951gr5lfjrvm82s/Carpetman-Endless-fight.mp3?rlkey=9hz13if98wvxapte9l2frqa5p&st=idgsopbw&raw=1'},
-      {id:29, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman No puedo perder mas', music:'https://www.dropbox.com/scl/fi/o5qcwey48575qnpssd2g8/Carpetman-Can-t-lose-more.mp3?rlkey=m65lieaalt8cmrknb70aclow2&st=6ost6xfy&raw=1'},
-      {id:28, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Me llama loco', music:'https://www.dropbox.com/scl/fi/ocbe68gjm8x4ljo2kxlxq/Carpetman-Call-Me-Insane.mp3?rlkey=g4sbgjtgctchkkm0g0jqem9qm&st=o15rwz87&raw=1'},
-      {id:27, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman & Vanek Foundation & Clear Man - What’s goin’ 0n', music:'https://www.dropbox.com/scl/fi/lfrztfgjjeiu0hi66yijz/Carpetman-Vanek-Foundation-Clear-Man-Whats-goin-0n.mp3?rlkey=xwq4d9d09tdya5igc1u6jaxwk&st=mhqoravr&raw=1'},
-      {id:26, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman Lagrimas doradas', music:'https://www.dropbox.com/scl/fi/ko47idlbamy91358v4ssx/Carpetman-Golden-Tears.mp3?rlkey=j9aetqzvc0y8rw24h2s8dimrx&st=4omp4t3s&raw=1'},
-      {id:25, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman No tienes que sentir dolor', music:'https://www.dropbox.com/scl/fi/4lndjg5gjnk2byx64jjj1/Carpetman-Ain-tgottafeelthatpain.mp3?rlkey=lyadgkl1e03st5j9lxhhiwtfi&st=l2i3qcwv&raw=1'},
-      {id:24, url:'https://www.dropbox.com/scl/fi/wweukyu5v7uieeqscrd8u/descarga.jpg?rlkey=u0h8eas78xjzy13i34lzu3kpa&st=l1m8e4w9&raw=1', category:'Musica', title:'Carpetman – Feel so cold', music:'https://www.dropbox.com/scl/fi/5gdrzob2h6f4joslpjnqt/Carpetman-Feel-so-cold.mp3?rlkey=pi39mv9hhju1hlv8y1romc8zz&st=9jzs5fav&raw=1'},
-      {id:23, url:'https://www.dropbox.com/scl/fi/drndovq7yh4l4zqqi4tvw/429191430254406.avif?rlkey=rkg5ohi30my6b7gkza6ddo2jk&st=5fodfn51&raw=1', category:'Musica', title:'Besos mojados Wisin y Yandel', music:'https://www.dropbox.com/scl/fi/uyccnv37der36tby65ze2/Wisin-Yandel-Besos-Mojados-Visualizer.mp3?rlkey=twjpgo8p0afzlzaq26v3thcm4&st=c9wdkbp8&raw=1'},
+      {id:31, url:'https://www.dropbox.com/scl/fi/kgnxbl0mdp3q2uivbi4et/800x800-7986476-0F948044-9801-4FC9-8EFF36DDC1873148-0-3542185-Teestoyllamando.jpg?rlkey=jki22g8n7mq0b7ufv138n4wsn&st=iw8gk09e&raw=1', category:'Musica', title:'Te estoy llamando', music:'https://www.dropbox.com/scl/fi/rok6qgex9a7qer30xqwvd/TeestoyLlamandolista.wav?rlkey=qwtm9h6cswvdzhxyauww79hd4&st=60pcm99d&raw=1'},
+      {id:30, url:'https://www.dropbox.com/scl/fi/9xqi6k1g5cnbior62dh0l/800x800-7986476-B8AD12F4-560F-4E85-8EE3DD6C45025D0E-0-565367-Picsart260207195632530.jpg?rlkey=zjttay9r0myk8r0h1x2074pnj&st=521n7hvx&raw=1', category:'Musica', title:'Sigo Vivo Aziber', music:'https://www.dropbox.com/scl/fi/d3pjln5vf9ndpey9gqg67/SIgoVivoIazberMp3-1.wav?rlkey=njt48r9cm06ven5h6p476afac&st=4g5krti4&raw=1'},
+      {id:29, url:'https://www.dropbox.com/scl/fi/kk1f1fdpsgx7noxb5lly9/800x800-7986476-70C18BD7-1A24-4B1E-9D524972181DB7D1-0-663215-FBIMG17490012695773000x3000.jpg?rlkey=0exgl54ffel1k27ncua1j7kd2&st=vr0tik1g&raw=1', category:'Musica', title:'Recuerdos Aizber', music:'https://www.dropbox.com/scl/fi/ivi9sc8o5muusrfvbutay/RecuedosAizberKerimMusic.flac?rlkey=yx3b7v98f47r7vzz9wmfrbu8e&st=eaz12kjs&raw=1'},
+      {id:28, url:'https://www.dropbox.com/scl/fi/ufyml25z65fpccmntk0u8/800x800-7986476-31310345-26C0-4D4C-BE84E673A034B972-0-396100-1000023011.jpg?rlkey=0wt2tk5frnl8olkgqrv2pzavg&st=2701x6fs&raw=1', category:'Musica', title:'No eres juego de nintendo J Vazquez', music:'https://www.dropbox.com/scl/fi/b8esp6xyrrgx99ojfghav/NoeresjuegodenintendoJbazquez.wav?rlkey=3bdruu1u6ywo8w11k6mne106a&st=07wqaypb&raw=1'},
+      {id:27, url:'https://www.dropbox.com/scl/fi/ag7fqpeejjz9cii89zp0j/800x800-7986476-AA08955F-14F0-44B5-9A5806FE2B5CF93F-0-1499720-1000026237.jpg?rlkey=zzm139tr5viuw47njuzpd29ds&st=nosfkylb&raw=1', category:'Musica', title:'My corazon en tu alatar Aizber', music:'https://www.dropbox.com/scl/fi/jlocoo87ctkvwua1a8my0/MicorazonentualtarAizberKerimMusic.flac?rlkey=zz0bypimr6ge8gglqs7vgwpa4&st=c0k9pwux&raw=1'},
+      {id:26, url:'https://www.dropbox.com/scl/fi/76ecpaei3j09h886fy314/800x800-7986476-FF4245C9-9198-41D6-8FD5A0EEA619ECCD-0-713007-Picsart250806182628068.jpg?rlkey=ug6nue19ikdth4sqpor6laygt&st=8b6a0ssv&raw=1', category:'Musica', title:'Haora me toca ami J Vazquez Ft Out Mx', music:'https://www.dropbox.com/scl/fi/or5cfdp8v5amsz6yjs7k1/MetocaamiJVazquezxOutMx.flac?rlkey=9jkzytxk2ioh9kf96gnuj0vdq&st=wb9xdjnh&raw=1'},
+      {id:25, url:'https://www.dropbox.com/scl/fi/bv6fo6j2vmnp2esqd4ula/800x800-7986476-700B12B5-E66A-4DC7-B44D0B4ABA4553B2-0-483095-Picsart251220185548595.jpg?rlkey=r6plwuux7kuee6uw307l1isar&st=gkhgd4oa&raw=1', category:'Musica', title:'Lo que nunca exprese J Vazquez', music:'https://www.dropbox.com/scl/fi/bz13mnpi351mj8jpmt73q/J-Vazquez-Lo-que-nunca-exprese.wav?rlkey=zcuwzjc22eom2d3qythgr130y&st=y1deklv8&raw=1'},
+      {id:24, url:'https://www.dropbox.com/scl/fi/xts5le77z60r3k7cfnkv6/800x800-7986476-DA4D5540-E151-42F0-8E9AA054C66F26A0-0-91650-FBIMG1754180896541.jpg?rlkey=kphe4vcw8pktyxwkgm3cl78bb&st=raimy7zq&raw=1', category:'Musica', title:'Cinco AM Tonny Reyes', music:'https://www.dropbox.com/scl/fi/h3t25byzypksnjjqgysui/CincoAmTonnyreyes.flac?rlkey=zpsntr84ozefiuyl8c7go1he0&st=08d0mcha&raw=1'},
+      {id:23, url:'https://www.dropbox.com/scl/fi/kfrpspuowtzrkjvwe2kxa/800x800-7986476-EBBCC76E-8564-423A-9B173657F2C27F7C-0-563472-Picsart250629201208586.jpg?rlkey=qglu4yfiepshx5p119dk647du&st=mw8lfbtl&raw=1', category:'Musica', title:'Beyby J Vazquez', music:'https://www.dropbox.com/scl/fi/vffz16jp4lb35ow738v2y/BeybyJVazquez.flac?rlkey=54fvvt360fd9af0vglxq3xsjf&st=ju3378de&raw=1'},
       {id:22, url:'https://www.dropbox.com/scl/fi/u451cfrep8ohfcdrepmxq/483488957_122195212382093529_2576876991791910487_n.jpg?rlkey=gnrgw1i2tkspyxg2de03ffma8&st=175922oz&raw=1', category:'Musica', title:'Me estoy mueirdo Clave 462', music:'https://www.dropbox.com/scl/fi/n66wxeygxd8ddchrls1kv/Me-estoy-muriendo-clave-462.wav?rlkey=hfkc487fwb71ziploobu8duqi&st=5nca4wns&raw=1'},
       {id:21, url:'https://www.dropbox.com/scl/fi/zixsk3wr4r62bb9x6ea1g/Picsart_26-04-25_18-14-14-639.jpg?rlkey=kzujxp5xzvxtp38sbd3y6oz68&st=x25iex9q&raw=1', category:'Musica', title:'Ella mueve el tootoo J Vazquez ft Prii Ramirez', music:'https://www.dropbox.com/scl/fi/vw9p5zadrjyki5by39mmd/TootootooJ_VazquezBarrio_Bajo_M_Oficial.wav?rlkey=mphfjhdb08clx3fnnh2etkr70&st=mhj2asn2&raw=1'},
       {id:20, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Vuelve Dany Zm', music:'https://www.dropbox.com/scl/fi/5dlej4wkll16uxyz3knwf/vuelve-9-dany-zm.mp3?rlkey=1mw4i576qw1q6xn4wofshg3gz&st=tbpp90qm&raw=1'},
@@ -773,79 +882,45 @@
     
     let masterSongs = [...originalSongs];
     let favSet = new Set();
-    // CONTADOR DE REPRODUCCIONES (para temas menos escuchados)
-    let playCount = new Map(); // id -> veces reproducido
+    let playCount = new Map();
+    let favOrder = [];
     
     try{ 
-      let saved = localStorage.getItem('kerim_favs_set'); 
-      if(saved) JSON.parse(saved).forEach(id=>favSet.add(Number(id))); 
+      let saved = localStorage.getItem('kerim_favs_set'); if(saved) JSON.parse(saved).forEach(id=>favSet.add(Number(id))); 
       let savedCounts = localStorage.getItem('kerim_play_counts');
-      if(savedCounts){
-        let parsed = JSON.parse(savedCounts);
-        for(let [k,v] of Object.entries(parsed)) playCount.set(Number(k), v);
-      }
+      if(savedCounts){ let parsed = JSON.parse(savedCounts); for(let [k,v] of Object.entries(parsed)) playCount.set(Number(k), v); }
+      let savedOrder = localStorage.getItem('kerim_fav_order');
+      if(savedOrder) favOrder = JSON.parse(savedOrder);
+      else favOrder = [...favSet];
     } catch(e){}
     
-    function saveFavs(){ localStorage.setItem('kerim_favs_set', JSON.stringify([...favSet])); }
-    function savePlayCounts(){ 
-      let obj = {};
-      for(let [k,v] of playCount.entries()) obj[k] = v;
-      localStorage.setItem('kerim_play_counts', JSON.stringify(obj));
-    }
-    
-    function incrementPlayCount(songId){
-      let current = playCount.get(songId) || 0;
-      playCount.set(songId, current + 1);
-      savePlayCounts();
-    }
-    
+    function saveFavs(){ localStorage.setItem('kerim_favs_set', JSON.stringify([...favSet])); favOrder = favOrder.filter(id => favSet.has(id)); for(let id of favSet) if(!favOrder.includes(id)) favOrder.push(id); localStorage.setItem('kerim_fav_order', JSON.stringify(favOrder)); }
+    function savePlayCounts(){ let obj = {}; for(let [k,v] of playCount.entries()) obj[k] = v; localStorage.setItem('kerim_play_counts', JSON.stringify(obj)); }
+    function incrementPlayCount(songId){ playCount.set(songId, (playCount.get(songId) || 0) + 1); savePlayCounts(); }
     function isFav(id){ return favSet.has(id); }
-    function toggleFav(id){ if(isFav(id)) favSet.delete(id); else favSet.add(id); saveFavs(); renderFavMenu(); updateFavButtonUI(); }
-    function getFavSongs(){ return [...favSet].map(id=>originalSongs.find(s=>s.id===id)).filter(Boolean);}
+    function toggleFav(id){ if(isFav(id)) { favSet.delete(id); favOrder = favOrder.filter(fid => fid !== id); } else { favSet.add(id); if(!favOrder.includes(id)) favOrder.push(id); } saveFavs(); updateFavButtonUI(); if(isPlaylistsMode) renderContent(); }
+    function getFavSongsSorted(){ return favOrder.map(id => originalSongs.find(s => s.id === id)).filter(Boolean); }
     
-    // Obtener temas menos escuchados (máximo 6, orden ascendente por reproducciones)
-    function getLeastPlayedSuggestions(limit = 6){
-      let songsWithCount = masterSongs.map(song => ({
-        ...song,
-        plays: playCount.get(song.id) || 0
-      }));
-      songsWithCount.sort((a,b) => a.plays - b.plays);
-      return songsWithCount.slice(0, limit);
+    let playlistsSortMode = 'default';
+    const savedSortMode = localStorage.getItem('kerim_playlists_sort_mode');
+    if (savedSortMode && ['default', 'lastFirst', 'firstFirst'].includes(savedSortMode)) {
+      playlistsSortMode = savedSortMode;
     }
+    function applyPlaylistsSort(songs){ 
+      if(playlistsSortMode === 'default') return songs; 
+      if(playlistsSortMode === 'lastFirst') return [...songs].reverse(); 
+      return songs; 
+    }
+    function getFavSongs(){ return applyPlaylistsSort(getFavSongsSorted()); }
+    function getLeastPlayedSuggestions(limit = 6){ let songsWithCount = masterSongs.map(song => ({...song, plays: playCount.get(song.id) || 0})); songsWithCount.sort((a,b) => a.plays - b.plays); return songsWithCount.slice(0, limit); }
     
-    let currentPlayQueue = [], currentQueueIndex = 0, currentSong = null;
-    let audio = new Audio();
-    let isPlaying = false;
-    let currentMode = 'all', currentFilter = 'all', currentSearch = '';
-
-    // Elementos DOM
-    const contentContainer = document.getElementById('contentContainer');
-    const suggestionsContainer = document.getElementById('suggestionsContainer');
-    const searchBadge = document.getElementById('searchBadge');
-    const fullPlayer = document.getElementById('fullscreenPlayer');
-    const miniPlayerDiv = document.getElementById('miniPlayer');
-    const fullCover = document.getElementById('fullCover');
-    const fullSongTitle = document.getElementById('fullSongTitle');
-    const fullSongCategory = document.getElementById('fullSongCategory');
-    const fullPlayPause = document.getElementById('fullPlayPauseBtn');
-    const fullPrev = document.getElementById('fullPrevBtn');
-    const fullNext = document.getElementById('fullNextBtn');
-    const progressFill = document.getElementById('progressFill');
-    const progressBarBg = document.getElementById('progressBarBg');
-    const currentTimeSpan = document.getElementById('currentTime');
-    const durationSpan = document.getElementById('durationTime');
-    const favMainBtn = document.getElementById('favoriteBtnMain');
-    const closePlayerBtn = document.getElementById('closePlayerBtn');
-    const miniCover = document.getElementById('miniCover');
-    const miniTitle = document.getElementById('miniTitle');
-    const miniPlayPause = document.getElementById('miniPlayPauseBtn');
-    const miniPrev = document.getElementById('miniPrevBtn');
-    const miniNext = document.getElementById('miniNextBtn');
-    const miniProgressFill = document.getElementById('miniProgressFill');
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
-    const playFavBtn = document.getElementById('playOnlyFavoritesBtn');
-    const randomMatteBg = document.getElementById('randomMatteBg');
+    let currentPlayQueue = [], currentQueueIndex = 0, currentSong = null, audio = new Audio(), isPlaying = false, currentFilter = 'all', currentSearch = '', shuffleActive = false, originalQueue = [], isPlaylistsMode = false;
+    const contentContainer = document.getElementById('contentContainer'), suggestionsContainer = document.getElementById('suggestionsContainer'), searchBadge = document.getElementById('searchBadge'), fullPlayer = document.getElementById('fullscreenPlayer'), miniPlayerDiv = document.getElementById('miniPlayer'), fullCover = document.getElementById('fullCover'), fullSongTitle = document.getElementById('fullSongTitle'), fullSongCategory = document.getElementById('fullSongCategory'), fullPlayPause = document.getElementById('fullPlayPauseBtn'), fullPrev = document.getElementById('fullPrevBtn'), fullNext = document.getElementById('fullNextBtn'), progressFill = document.getElementById('progressFill'), progressBarBg = document.getElementById('progressBarBg'), currentTimeSpan = document.getElementById('currentTime'), durationSpan = document.getElementById('durationTime'), favMainBtn = document.getElementById('favoriteBtnMain'), closePlayerBtn = document.getElementById('closePlayerBtn'), miniCover = document.getElementById('miniCover'), miniTitle = document.getElementById('miniTitle'), miniPlayPause = document.getElementById('miniPlayPauseBtn'), miniPrev = document.getElementById('miniPrevBtn'), miniNext = document.getElementById('miniNextBtn'), miniProgressFill = document.getElementById('miniProgressFill'), searchInput = document.getElementById('searchInput'), searchButton = document.getElementById('searchButton'), shuffleBtn = document.getElementById('shuffleBtn'), randomMatteBg = document.getElementById('randomMatteBg');
+    const floatingContainer = document.getElementById('floatingSortContainer');
+    const floatingSortBtn = document.getElementById('floatingSortBtn');
+    const floatingSortPanel = document.getElementById('floatingSortPanel');
+    const closeSortOverlay = document.getElementById('closeSortOverlay');
+    let sortPanelFloatingOpen = false;
     
     const mattePalette = ['#2C3E50', '#4A5D23', '#6B4E3A', '#2F4F4F', '#5D3A1A', '#3E5C4A', '#49516F', '#5E5A3C', '#6D4C3C', '#264653', '#2A4B41', '#6A4E4B', '#3D405B', '#5D576B', '#636940', '#2C5F5F', '#4A3B32'];
     function getRandomMatteColor() { return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
@@ -854,263 +929,60 @@
     function triggerBackgroundRefresh() { changeBackgroundRandomly(); }
     
     function shuffleArray(arr) { const array = [...arr]; for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
-    
-    function getActiveListShuffled(){
-      let base = (currentFilter === 'all') ? [...masterSongs] : masterSongs.filter(s=>s.category === currentFilter);
-      if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase()));
-      return shuffleArray(base);
-    }
-    
-    function getActiveListForQueue(){
-      let base = (currentFilter === 'all') ? [...masterSongs] : masterSongs.filter(s=>s.category === currentFilter);
-      if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase()));
-      return base;
-    }
-    
-    function buildBaseQueue(){ return (currentMode === 'favorites') ? getFavSongs() : getActiveListForQueue(); }
-    function updateQueueAndMode(){
-      currentPlayQueue = buildBaseQueue();
-      if(currentPlayQueue.length === 0 && masterSongs.length) currentPlayQueue = [...masterSongs];
-      if(currentSong && currentPlayQueue.findIndex(s=>s.id===currentSong.id) !== -1) currentQueueIndex = currentPlayQueue.findIndex(s=>s.id===currentSong.id);
-      else { currentQueueIndex = 0; if(currentPlayQueue.length) currentSong = currentPlayQueue[0]; }
-    }
-    function setMode(mode){ currentMode = mode; updateQueueAndMode(); if(currentPlayQueue.length && currentSong && !currentPlayQueue.some(s=>s.id===currentSong.id)) playSong(currentPlayQueue[0]); }
-    
-    // ACTUALIZAR MEDIA SESSION (Isla del reproductor en pantalla de bloqueo/notificaciones)
-    function updateMediaSession(song) {
-      if (!song) return;
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: song.title,
-          artist: 'Kerim Music+',
-          album: song.category,
-          artwork: [
-            { src: song.url, sizes: '512x512', type: 'image/jpeg' }
-          ]
-        });
-        
-        // Configurar manejadores de la isla
-        navigator.mediaSession.setActionHandler('play', () => { audio.play(); });
-        navigator.mediaSession.setActionHandler('pause', () => { audio.pause(); });
-        navigator.mediaSession.setActionHandler('previoustrack', () => { prevTrack(); });
-        navigator.mediaSession.setActionHandler('nexttrack', () => { nextTrack(); });
-        navigator.mediaSession.setActionHandler('stop', () => { audio.pause(); audio.currentTime = 0; });
-      }
-    }
-    
-    function playSong(song, customQueue = null){
-      if(!song) return;
-      currentSong = song;
-      incrementPlayCount(song.id);
-      renderSuggestions();
-      
-      if(customQueue) currentPlayQueue = customQueue;
-      else updateQueueAndMode();
-      let idx = currentPlayQueue.findIndex(s=>s.id===song.id);
-      if(idx !== -1) currentQueueIndex = idx;
-      if(song.music){ 
-        audio.src = song.music; 
-        audio.play().catch(e=>console.log); 
-        isPlaying = true; 
-      } else { 
-        audio.pause(); 
-        isPlaying = false; 
-      }
-      updateUIWithSong(song);
-      updateMediaSession(song); // ACTUALIZAR ISLA DEL REPRODUCTOR
-      fullPlayer.classList.add('show'); 
-      miniPlayerDiv.classList.add('show'); 
-      updatePlayPauseIcon(); 
-      triggerBackgroundRefresh();
-    }
-    
-    function updateUIWithSong(song){ 
-      fullCover.src = song.url; 
-      fullSongTitle.innerText = song.title; 
-      fullSongCategory.innerText = song.category; 
-      miniCover.src = song.url; 
-      miniTitle.innerText = song.title; 
-      updateFavButtonUI(); 
-    }
+    function toggleShuffle() { shuffleActive = !shuffleActive; if (shuffleActive) { shuffleBtn.classList.add('active'); originalQueue = [...currentPlayQueue]; const currentSongId = currentSong ? currentSong.id : null; const shuffledQueue = shuffleArray(currentPlayQueue); let newIndex = shuffledQueue.findIndex(s => s.id === currentSongId); if (newIndex === -1 && currentSong) newIndex = 0; if (newIndex !== -1) { currentPlayQueue = shuffledQueue; currentQueueIndex = newIndex; } else { currentPlayQueue = shuffledQueue; currentQueueIndex = 0; } } else { shuffleBtn.classList.remove('active'); if (originalQueue.length > 0) { const currentSongId = currentSong ? currentSong.id : null; let newIndex = originalQueue.findIndex(s => s.id === currentSongId); if (newIndex === -1 && currentSong) newIndex = 0; currentPlayQueue = originalQueue; currentQueueIndex = newIndex !== -1 ? newIndex : 0; originalQueue = []; } } }
+    function getActiveListForQueue(){ if(isPlaylistsMode) return getFavSongs(); let base = (currentFilter === 'all') ? [...masterSongs] : masterSongs.filter(s=>s.category === currentFilter); if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase())); return base; }
+    function buildBaseQueue(){ return getActiveListForQueue(); }
+    function updateQueueAndMode(){ const newQueue = buildBaseQueue(); if (shuffleActive) { originalQueue = [...newQueue]; const shuffledQueue = shuffleArray(newQueue); const currentSongId = currentSong ? currentSong.id : null; let newIndex = shuffledQueue.findIndex(s => s.id === currentSongId); currentPlayQueue = shuffledQueue; currentQueueIndex = newIndex !== -1 ? newIndex : 0; } else { currentPlayQueue = newQueue; if(currentSong && currentPlayQueue.findIndex(s=>s.id===currentSong.id) !== -1) currentQueueIndex = currentPlayQueue.findIndex(s=>s.id===currentSong.id); else { currentQueueIndex = 0; if(currentPlayQueue.length) currentSong = currentPlayQueue[0]; } } if(currentPlayQueue.length === 0 && !isPlaylistsMode && masterSongs.length) { currentPlayQueue = [...masterSongs]; if(shuffleActive) currentPlayQueue = shuffleArray(currentPlayQueue); } if(currentPlayQueue.length && !currentSong) currentSong = currentPlayQueue[0]; }
+    function playSong(song, customQueue = null){ if(!song) return; currentSong = song; incrementPlayCount(song.id); renderSuggestions(); if(customQueue) { currentPlayQueue = customQueue; if(shuffleActive) { originalQueue = [...customQueue]; currentPlayQueue = shuffleArray(customQueue); const newIndex = currentPlayQueue.findIndex(s => s.id === song.id); currentQueueIndex = newIndex !== -1 ? newIndex : 0; } else { currentQueueIndex = currentPlayQueue.findIndex(s=>s.id===song.id); } } else { updateQueueAndMode(); let idx = currentPlayQueue.findIndex(s=>s.id===song.id); if(idx !== -1) currentQueueIndex = idx; } if(song.music){ audio.src = song.music; audio.play().catch(e=>console.log); isPlaying = true; } else { audio.pause(); isPlaying = false; } updateUIWithSong(song); fullPlayer.classList.add('show'); miniPlayerDiv.classList.add('show'); updatePlayPauseIcon(); triggerBackgroundRefresh(); }
+    function updateUIWithSong(song){ fullCover.src = song.url; fullSongTitle.innerText = song.title; fullSongCategory.innerText = song.category; miniCover.src = song.url; miniTitle.innerText = song.title; updateFavButtonUI(); }
     function updateFavButtonUI(){ if(currentSong){ favMainBtn.classList.toggle('active', isFav(currentSong.id)); favMainBtn.innerText = isFav(currentSong.id) ? '❤️' : '♡'; } }
     function updatePlayPauseIcon(){ const icon = isPlaying ? '⏸' : '▶'; fullPlayPause.innerText = icon; miniPlayPause.innerText = icon; }
-    function nextTrack(){ 
-      if(!currentPlayQueue.length) return; 
-      let newIdx = (currentQueueIndex + 1) % currentPlayQueue.length; 
-      currentQueueIndex = newIdx; 
-      playSong(currentPlayQueue[newIdx]); 
-    }
-    function prevTrack(){ 
-      if(!currentPlayQueue.length) return; 
-      let newIdx = (currentQueueIndex - 1 + currentPlayQueue.length) % currentPlayQueue.length; 
-      currentQueueIndex = newIdx; 
-      playSong(currentPlayQueue[newIdx]); 
-    }
+    function nextTrack(){ if(!currentPlayQueue.length) return; let newIdx = (currentQueueIndex + 1) % currentPlayQueue.length; currentQueueIndex = newIdx; playSong(currentPlayQueue[newIdx]); }
+    function prevTrack(){ if(!currentPlayQueue.length) return; let newIdx = (currentQueueIndex - 1 + currentPlayQueue.length) % currentPlayQueue.length; currentQueueIndex = newIdx; playSong(currentPlayQueue[newIdx]); }
     function togglePlayPause(){ isPlaying ? audio.pause() : audio.play(); }
     
-    function renderSuggestions(){
-      if(currentSearch.trim() !== '') {
-        suggestionsContainer.innerHTML = '';
-        return;
+    function renderSuggestions(){ if(isPlaylistsMode || currentFilter === 'Musica' || currentSearch.trim() !== '') { suggestionsContainer.innerHTML = ''; return; } const leastPlayed = getLeastPlayedSuggestions(6); if(leastPlayed.length === 0){ suggestionsContainer.innerHTML = ''; return; } let html = `<div class="suggestions-title"></div><div class="suggestions-horizontal">`; leastPlayed.forEach(song => { const plays = (playCount.get(song.id) || 0); const inviteMsg = plays === 0 ? '✨ ¡Sin estrenar!' : `🎧 Solo ${plays} reproducción${plays !== 1 ? 'es' : ''}`; html += `<div class="suggestion-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="suggestion-info"><div class="suggestion-title">${escapeHtml(song.title)}</div><div class="suggestion-badge">${song.category}</div><div class="suggestion-invite"><span class="play-icon-small">▶</span> ${inviteMsg}</div></div></div>`; }); html += `</div>`; suggestionsContainer.innerHTML = html; document.querySelectorAll('.suggestion-card').forEach(card => { card.addEventListener('click', () => { const id = parseInt(card.dataset.id); const found = originalSongs.find(s => s.id === id); if(found){ updateQueueAndMode(); playSong(found); } }); }); }
+    
+    function renderContent(){ const items = getActiveListShuffled(); const isSearching = currentSearch.trim() !== ''; const isMusicCategory = (!isPlaylistsMode && currentFilter === 'Musica' && !isSearching); if(isSearching) searchBadge.innerHTML = `🔍 Resultados: "${escapeHtml(currentSearch)}" (${items.length})`; else if(isPlaylistsMode) searchBadge.innerHTML = `🎵 Mis PlayLits · ${items.length} canción${items.length !== 1 ? 'es' : ''} favorita${items.length !== 1 ? 's' : ''}`; else searchBadge.innerHTML = ''; if(items.length === 0){ if(isPlaylistsMode) contentContainer.innerHTML = '<div class="no-results">💔 No hay canciones en PlayLits aún. ¡Dale like ❤️ a una canción para agregarla!</div>'; else contentContainer.innerHTML = '<div class="no-results">🎲 No se encontraron canciones ⚪</div>'; return; } if(isMusicCategory){ let html = `<div class="music-list-view">`; items.forEach(song => { html += `<div class="music-list-item" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="music-list-info"><div class="music-list-title">${escapeHtml(song.title)}</div><div class="music-list-cat">🎵 ${song.category}</div></div><div class="music-list-play-icon">▶</div></div>`; }); html += `</div>`; contentContainer.innerHTML = html; document.querySelectorAll('.music-list-item').forEach(el => { el.addEventListener('click', () => { const id = parseInt(el.dataset.id); const found = originalSongs.find(s => s.id === id); if(found){ updateQueueAndMode(); playSong(found); } }); }); } else { let gridClass = 'gallery-grid' + (isSearching ? ' list-view' : ''); let html = `<div class="${gridClass}">`; items.forEach(song => { const favMarker = isFav(song.id) ? ' ❤️' : ''; if(isSearching) html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.65rem;"> · ${song.category}${favMarker}</span></div></div>`; else html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${isPlaylistsMode ? ' ❤️' : ''}</div></div>`; }); html += `</div>`; contentContainer.innerHTML = html; document.querySelectorAll('.image-card').forEach(card => { card.addEventListener('click', () => { const id = parseInt(card.dataset.id); const found = originalSongs.find(s => s.id === id); if(found){ updateQueueAndMode(); playSong(found); } }); }); } triggerBackgroundRefresh(); }
+    function getActiveListShuffled(){ if(isPlaylistsMode){ const favs = getFavSongs(); if(currentSearch.trim() !== '') return favs.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase())); return favs; } let base = (currentFilter === 'all') ? [...masterSongs] : masterSongs.filter(s=>s.category === currentFilter); if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase())); return shuffleArray(base); }
+    function escapeHtml(str){ return str.replace(/[&<>]/g, m => ({'&':'&lt;', '<':'&lt;', '>':'&gt;'}[m] || m)); }
+    function applyFilters(){ if(!isPlaylistsMode) renderContent(); renderSuggestions(); updateQueueAndMode(); }
+    
+    function toggleFloatingSortButton(show) { floatingContainer.style.display = show ? 'flex' : 'none'; if(!show) { floatingSortPanel.classList.remove('open'); sortPanelFloatingOpen = false; closeSortOverlay.classList.remove('show'); } }
+    function initSortFloatingEvents(){ 
+      floatingSortBtn.addEventListener('click', (e) => { e.stopPropagation(); sortPanelFloatingOpen = !sortPanelFloatingOpen; if(sortPanelFloatingOpen) { floatingSortPanel.classList.add('open'); closeSortOverlay.classList.add('show'); } else { floatingSortPanel.classList.remove('open'); closeSortOverlay.classList.remove('show'); } });
+      closeSortOverlay.addEventListener('click', () => { floatingSortPanel.classList.remove('open'); sortPanelFloatingOpen = false; closeSortOverlay.classList.remove('show'); });
+      function setSortMode(mode) {
+        playlistsSortMode = mode;
+        localStorage.setItem('kerim_playlists_sort_mode', mode);
+        renderContent();
+        updateQueueAndMode();
+        document.querySelectorAll('.sort-btn-floating').forEach(b => b.classList.remove('active'));
+        const activeBtn = document.querySelector(`.sort-btn-floating[data-sort="${mode}"]`);
+        if(activeBtn) activeBtn.classList.add('active');
       }
-      const leastPlayed = getLeastPlayedSuggestions(6);
-      if(leastPlayed.length === 0 || (currentFilter !== 'all' && currentFilter !== 'Musica')){
-        suggestionsContainer.innerHTML = '';
-        return;
-      }
-      let html = `
-        <div class="suggestions-title">
-          🎧 ⚡ DESCUBRE TEMAS MENOS ESCUCHADOS
-          <span>pon atención ⚡</span>
-        </div>
-        <div class="suggestions-horizontal">
-      `;
-      leastPlayed.forEach(song => {
-        const plays = (playCount.get(song.id) || 0);
-        const inviteMsg = plays === 0 ? '✨ ¡Sin estrenar!' : `🎧 Solo ${plays} reproducción${plays !== 1 ? 'es' : ''}`;
-        html += `
-          <div class="suggestion-card" data-id="${song.id}">
-            <img src="${song.url}" loading="lazy" alt="${song.title}">
-            <div class="suggestion-info">
-              <div class="suggestion-title">${escapeHtml(song.title)}</div>
-              <div class="suggestion-badge">${song.category}</div>
-              <div class="suggestion-invite">
-                <span class="play-icon-small">▶</span> ${inviteMsg}
-              </div>
-            </div>
-          </div>
-        `;
+      document.querySelectorAll('.sort-btn-floating').forEach(btn => { 
+        btn.addEventListener('click', (e) => { 
+          e.stopPropagation(); 
+          const mode = btn.getAttribute('data-sort'); 
+          setSortMode(mode);
+          floatingSortPanel.classList.remove('open'); 
+          sortPanelFloatingOpen = false; 
+          closeSortOverlay.classList.remove('show'); 
+        }); 
       });
-      html += `</div>`;
-      suggestionsContainer.innerHTML = html;
-      
-      document.querySelectorAll('.suggestion-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const id = parseInt(card.getAttribute('data-id'));
-          const found = originalSongs.find(s => s.id === id);
-          if(found){
-            if(currentMode === 'favorites') setMode('all');
-            updateQueueAndMode();
-            playSong(found);
-          }
-        });
-      });
+      const activeBtn = document.querySelector(`.sort-btn-floating[data-sort="${playlistsSortMode}"]`);
+      if(activeBtn) activeBtn.classList.add('active');
+      else document.querySelector('.sort-btn-floating[data-sort="default"]')?.classList.add('active');
     }
     
-    function renderContent(){
-      const items = getActiveListShuffled();
-      const isSearching = currentSearch.trim() !== '';
-      const isMusicCategory = (currentFilter === 'Musica' && !isSearching);
-      
-      if(isSearching) searchBadge.innerHTML = `🔍 Resultados: "${escapeHtml(currentSearch)}" (${items.length})`;
-      else searchBadge.innerHTML = '';
-      
-      if(items.length === 0){ contentContainer.innerHTML = '<div class="no-results">🎲 No se encontraron canciones ⚪</div>'; return; }
-      
-      if(isMusicCategory){
-        let html = `<div class="music-list-view">`;
-        items.forEach(song => {
-          html += `
-            <div class="music-list-item" data-id="${song.id}">
-              <img src="${song.url}" loading="lazy" alt="${song.title}">
-              <div class="music-list-info">
-                <div class="music-list-title">${escapeHtml(song.title)}</div>
-                <div class="music-list-cat">🎵 ${song.category}</div>
-              </div>
-              <div class="music-list-play-icon">▶</div>
-            </div>
-          `;
-        });
-        html += `</div>`;
-        contentContainer.innerHTML = html;
-        
-        document.querySelectorAll('.music-list-item').forEach(el => {
-          el.addEventListener('click', (e) => {
-            const id = parseInt(el.getAttribute('data-id'));
-            const found = originalSongs.find(s => s.id === id);
-            if(found){
-              if(currentMode === 'favorites') setMode('all');
-              updateQueueAndMode();
-              playSong(found);
-            }
-          });
-        });
-      } 
-      else {
-        let gridClass = 'gallery-grid';
-        if(isSearching) gridClass += ' list-view';
-        let html = `<div class="${gridClass}">`;
-        items.forEach(song => {
-          if(isSearching){
-            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)} <span style="font-size:0.65rem;"> · ${song.category}</span></div></div>`;
-          } else {
-            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}</div></div>`;
-          }
-        });
-        html += `</div>`;
-        contentContainer.innerHTML = html;
-        document.querySelectorAll('.image-card').forEach(card => {
-          card.addEventListener('click', () => {
-            const id = parseInt(card.getAttribute('data-id'));
-            const found = originalSongs.find(s => s.id === id);
-            if(found){ if(currentMode === 'favorites') setMode('all'); updateQueueAndMode(); playSong(found); }
-          });
-        });
-      }
-      triggerBackgroundRefresh();
-    }
+    document.querySelectorAll('.filter-vert-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.filter-vert-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(btn.id === 'playlistsBtn') { isPlaylistsMode = true; currentFilter = 'Musica'; toggleFloatingSortButton(true); renderContent(); renderSuggestions(); updateQueueAndMode(); } else { isPlaylistsMode = false; toggleFloatingSortButton(false); currentFilter = btn.getAttribute('data-filter'); renderContent(); renderSuggestions(); updateQueueAndMode(); } closeMenu(); }); });
     
-    function escapeHtml(str){ return str.replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m;}); }
-    
-    function renderFavMenu(){
-      const container = document.getElementById('favListContainer');
-      const favs = getFavSongs();
-      if(!favs.length){ container.innerHTML='<div class="empty-fav">⚪ Sin favoritos aún ⚫</div>'; return; }
-      let html='';
-      favs.forEach(f=>{ html+=`<div class="fav-list-item" data-id="${f.id}"><span>${escapeHtml(f.title)}</span><button class="fav-remove" data-rid="${f.id}">✖</button></div>`; });
-      container.innerHTML = html;
-      document.querySelectorAll('.fav-list-item').forEach(el=>{
-        let id = parseInt(el.getAttribute('data-id'));
-        el.addEventListener('click',(e)=>{
-          if(e.target.classList.contains('fav-remove')){ e.stopPropagation(); toggleFav(id); }
-          else { const song = originalSongs.find(s=>s.id===id); if(song){ setMode('favorites'); const freshFavs = getFavSongs(); playSong(song, freshFavs); closeMenu(); } }
-        });
-      });
-    }
-    function playOnlyFavs(){ const favs = getFavSongs(); if(favs.length===0){ alert('💔 Aún no hay favoritos. Dale like (❤️) a una canción.'); return; } setMode('favorites'); playSong(favs[0], favs); closeMenu(); }
-    function applyFilters(){ renderContent(); renderSuggestions(); if(currentMode !== 'favorites') updateQueueAndMode(); }
-    
-    document.querySelectorAll('.filter-vert-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        document.querySelectorAll('.filter-vert-btn').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.getAttribute('data-filter');
-        currentSearch = searchInput.value.trim();
-        applyFilters();
-        closeMenu();
-      });
-    });
-    function performSearch(){ currentSearch = searchInput.value.trim(); applyFilters(); }
+    function performSearch(){ currentSearch = searchInput.value.trim(); renderContent(); renderSuggestions(); updateQueueAndMode(); }
     searchButton.addEventListener('click', performSearch);
     searchInput.addEventListener('keyup', (e) => { if(e.key === 'Enter') performSearch(); });
     
-    audio.addEventListener('timeupdate',()=>{ 
-      if(audio.duration && isFinite(audio.duration)){ 
-        let p = (audio.currentTime/audio.duration)*100; 
-        progressFill.style.width = `${p}%`; 
-        miniProgressFill.style.width = `${p}%`; 
-        currentTimeSpan.innerText = formatTime(audio.currentTime); 
-        if(durationSpan.innerText === '0:00') durationSpan.innerText = formatTime(audio.duration); 
-        // Actualizar posición en Media Session
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.setPositionState({
-            duration: audio.duration,
-            position: audio.currentTime,
-            playbackRate: audio.playbackRate
-          });
-        }
-      } 
-    });
+    audio.addEventListener('timeupdate',()=>{ if(audio.duration && isFinite(audio.duration)){ let p = (audio.currentTime/audio.duration)*100; progressFill.style.width = `${p}%`; miniProgressFill.style.width = `${p}%`; currentTimeSpan.innerText = formatTime(audio.currentTime); if(durationSpan.innerText === '0:00') durationSpan.innerText = formatTime(audio.duration); } });
     audio.addEventListener('loadedmetadata',()=>{ if(audio.duration) durationSpan.innerText = formatTime(audio.duration); });
     audio.addEventListener('play',()=>{ isPlaying=true; updatePlayPauseIcon(); });
     audio.addEventListener('pause',()=>{ isPlaying=false; updatePlayPauseIcon(); });
@@ -1125,76 +997,14 @@
     miniPrev.addEventListener('click', prevTrack);
     miniPlayerDiv.addEventListener('click',(e)=>{ if(!e.target.closest('.mini-btn')) fullPlayer.classList.add('show'); });
     closePlayerBtn.addEventListener('click',()=>fullPlayer.classList.remove('show'));
-    favMainBtn.addEventListener('click',()=>{ if(currentSong) toggleFav(currentSong.id); });
-    playFavBtn.addEventListener('click', playOnlyFavs);
+    favMainBtn.addEventListener('click',()=>{ if(currentSong){ toggleFav(currentSong.id); if(isPlaylistsMode) renderContent(); } });
+    shuffleBtn.addEventListener('click', toggleShuffle);
     
-    // CONTROLES FÍSICOS (TECLADO)
-    function handleKeyboardControls(e) {
-      const isPlayerVisible = miniPlayerDiv.classList.contains('show') || fullPlayer.classList.contains('show');
-      if (!isPlayerVisible) return;
-      
-      const activeElement = document.activeElement;
-      if (activeElement && (activeElement.id === 'searchInput' || activeElement.tagName === 'INPUT')) {
-        return;
-      }
-      
-      switch(e.key) {
-        case ' ':
-        case 'Space':
-          e.preventDefault();
-          togglePlayPause();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          prevTrack();
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          nextTrack();
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          if(audio.volume < 0.95) audio.volume = Math.min(1, audio.volume + 0.1);
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          if(audio.volume > 0.05) audio.volume = Math.max(0, audio.volume - 0.1);
-          break;
-        case 'f':
-        case 'F':
-          e.preventDefault();
-          if(currentSong) toggleFav(currentSong.id);
-          break;
-        case 'Escape':
-          e.preventDefault();
-          fullPlayer.classList.remove('show');
-          break;
-        default:
-          break;
-      }
-    }
-    
-    window.addEventListener('keydown', handleKeyboardControls);
-    
-    // PREVENIR QUE EL AUDIO SE DETENGA AL BLOQUEAR PANTALLA
-    // Esto se logra configurando correctamente el audio y usando MediaSession
-    // Además, recargar la reproducción si es necesario al volver a la visibilidad
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && isPlaying) {
-        // Si la página se vuelve visible y debería estar sonando, aseguramos reproducción
-        audio.play().catch(e => console.log('Play reanudado:', e));
-      }
-    });
-    
-    // Manejar beforeunload para no perder el estado
-    window.addEventListener('beforeunload', () => {
-      if (isPlaying) {
-        // Opcional: no hacer nada, solo mantener
-      }
-    });
+    window.addEventListener('keydown', (e) => { const isPlayerVisible = miniPlayerDiv.classList.contains('show') || fullPlayer.classList.contains('show'); if (!isPlayerVisible) return; if (document.activeElement && (document.activeElement.id === 'searchInput' || document.activeElement.tagName === 'INPUT')) return; switch(e.key) { case ' ': case 'Space': e.preventDefault(); togglePlayPause(); break; case 'ArrowLeft': e.preventDefault(); prevTrack(); break; case 'ArrowRight': e.preventDefault(); nextTrack(); break; case 'ArrowUp': e.preventDefault(); if(audio.volume < 0.95) audio.volume = Math.min(1, audio.volume + 0.1); break; case 'ArrowDown': e.preventDefault(); if(audio.volume > 0.05) audio.volume = Math.max(0, audio.volume - 0.1); break; case 'f': case 'F': e.preventDefault(); if(currentSong){ toggleFav(currentSong.id); if(isPlaylistsMode) renderContent(); } break; case 'Escape': e.preventDefault(); fullPlayer.classList.remove('show'); break; default: break; } });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && isPlaying) { audio.play().catch(e=>console.log('Play reanudado:', e)); } });
     
     const hamburger = document.getElementById('hamburgerBtn'), sideMenuEl = document.getElementById('sideMenu'), overlay = document.getElementById('menuOverlay'), closeMenuBtn = document.getElementById('closeMenuBtn');
-    function openMenu(){ sideMenuEl.classList.add('open'); overlay.classList.add('show'); renderFavMenu(); }
+    function openMenu(){ sideMenuEl.classList.add('open'); overlay.classList.add('show'); }
     function closeMenu(){ sideMenuEl.classList.remove('open'); overlay.classList.remove('show'); }
     hamburger.addEventListener('click', openMenu); closeMenuBtn.addEventListener('click', closeMenu); overlay.addEventListener('click', closeMenu);
     function formatTime(sec){ if(isNaN(sec)) return '0:00'; let m=Math.floor(sec/60), s=Math.floor(sec%60); return `${m}:${s<10?'0':''}${s}`; }
@@ -1204,12 +1014,10 @@
     else { welcomeModal.classList.remove('hidden'); acceptBtn.addEventListener('click', () => { localStorage.setItem('kerim_welcome_accepted', 'true'); welcomeModal.classList.add('hidden'); }); }
     
     changeBackgroundRandomly();
-    currentFilter = 'all';
-    currentSearch = '';
-    renderContent();
-    renderSuggestions();
-    updateQueueAndMode();
-    renderFavMenu();
+    currentFilter = 'all'; isPlaylistsMode = false; currentSearch = '';
+    toggleFloatingSortButton(false);
+    initSortFloatingEvents();
+    renderContent(); renderSuggestions(); updateQueueAndMode();
     if(masterSongs.length) currentSong = masterSongs[0];
     audio.volume = 0.9;
   })();
