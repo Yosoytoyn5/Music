@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página con fondo dinámico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* Fondo dinámico con animación de gradiente */
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+        }
+
+        /* Animación del gradiente de fondo */
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Animación de entrada para la imagen */
+        .portadainico {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+            animation: fadeInScale 1.2s ease-out forwards;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        /* Animación de entrada para el botón (con retraso) */
+        .button1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .button1 button {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Efecto hover en el botón */
+        .button1 button:hover {
+            background-color: rgba(0, 0, 0, 0.95);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Definición de las animaciones */
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animación de brillo en la imagen */
+        @keyframes subtleGlow {
+            0% {
+                filter: drop-shadow(0 0 0px rgba(255,255,255,0));
+            }
+            50% {
+                filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
+            }
+            100% {
+                filter: drop-shadow(0 0 0px rgba(255,255,255,0));
+            }
+        }
+
+        /* Aplicar brillo a la imagen justo al aparecer */
+        .portadainico img {
+            max-width: 90%;
+            height: auto;
+            border-radius: 20px;
+            animation: subtleGlow 1.2s ease-out 0.2s forwards;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        /* Efecto adicional: partículas de fondo opcionales */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+            animation: particleMove 8s ease-in-out infinite;
+        }
+
+        @keyframes particleMove {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .portadainico img {
+                width: 85%;
+            }
+            .button1 button {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portadainico">
+        <img src="https://variety.com/wp-content/uploads/2022/07/Music-Streaming-Wars.jpg?w=1000&h=563&crop=1" alt="Imagen de portada">
+    </div>
+    <div class="button1">
+        <a href="Index.html">
+            <button>Agendar</button>
+        </a>
+    </div>
+     <div class="button1">
+        <a href="index4.html">
+            <button>Horarios</button>
+        </a>
+    </div>
+</body>
+</html>
