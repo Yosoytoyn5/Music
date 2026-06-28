@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Acceso Usuario - Barra de texto</title>
+    <title>Acceso Usuario - Blanco y Negro</title>
     <style>
         * {
             margin: 0;
@@ -26,12 +26,73 @@
             position: relative;
         }
 
+        /* Filtro en blanco y negro para la imagen de fondo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 0;
+            backdrop-filter: grayscale(100%) brightness(0.7);
+        }
+
+        /* Contenedor principal */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* ===== LEYENDA PROFESIONAL SIN EMOJIS ===== */
+        .legend-text {
+            text-align: center;
+            color: #ffffff;
+            font-size: 15px;
+            line-height: 1.8;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+            padding: 0 10px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .legend-text .highlight {
+            color: #e0e0e0;
+            font-weight: 400;
+        }
+
+        .legend-text .highlight-action {
+            color: #ffffff;
+            font-weight: 500;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SEARCH BOX ===== */
         .search-box {
             display: flex;
             flex-direction: row;
             gap: 12px;
             width: 100%;
-            max-width: 600px;
             margin: 0 auto;
         }
 
@@ -39,33 +100,34 @@
             flex: 1;
             padding: 16px 20px;
             font-size: 16px;
-            border: none;
+            border: 2px solid #ffffff;
             border-radius: 50px;
             outline: none;
-            background: rgba(153, 53, 53, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
-            color: white;
+            color: #ffffff;
             transition: all 0.3s ease;
             -webkit-appearance: none;
             appearance: none;
         }
 
         input[type="text"]::placeholder {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 14px;
         }
 
         input[type="text"]:focus {
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.9);
+            border-color: #aaaaaa;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         button {
             padding: 16px 28px;
-            background: rgba(184, 71, 71, 0.6);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(8px);
-            color: white;
-            border: none;
+            color: #ffffff;
+            border: 2px solid #ffffff;
             border-radius: 50px;
             font-size: 16px;
             font-weight: 500;
@@ -76,8 +138,9 @@
         }
 
         button:hover {
-            background: rgba(255, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.3);
             transform: scale(1.02);
+            border-color: #cccccc;
         }
 
         button:active {
@@ -86,18 +149,23 @@
 
         /* Estilo específico para el botón Registrar */
         .registrar-btn {
-            background: rgba(180, 60, 50, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            border-color: #aaaaaa;
         }
         
         .registrar-btn:hover {
-            background: rgba(200, 70, 60, 0.9);
+            background: rgba(0, 0, 0, 0.7);
+            border-color: #ffffff;
         }
 
         /* ========== RESPONSIVE PARA MÓVIL ========== */
         
         @media (max-width: 768px) {
-            .search-box {
+            .main-container {
                 max-width: 90%;
+            }
+            
+            .search-box {
                 gap: 10px;
             }
             
@@ -109,6 +177,11 @@
             button {
                 padding: 14px 24px;
                 font-size: 15px;
+            }
+
+            .legend-text {
+                font-size: 14px;
+                line-height: 1.6;
             }
         }
         
@@ -137,11 +210,15 @@
                 padding: 12px;
             }
             
+            .main-container {
+                max-width: 100%;
+                gap: 15px;
+            }
+            
             .search-box {
                 flex-direction: column;
                 gap: 12px;
                 width: 100%;
-                max-width: 100%;
             }
             
             input[type="text"] {
@@ -156,6 +233,12 @@
                 padding: 14px 20px;
                 font-size: 16px;
                 font-weight: 600;
+            }
+
+            .legend-text {
+                font-size: 13px;
+                line-height: 1.5;
+                padding: 0 5px;
             }
         }
         
@@ -173,6 +256,10 @@
                 padding: 12px 18px;
                 font-size: 14px;
             }
+
+            .legend-text {
+                font-size: 12px;
+            }
         }
         
         @media (hover: none) and (pointer: coarse) {
@@ -185,15 +272,15 @@
             }
         }
 
-        /* ---------- ESTILOS VENTANA FLOTANTE (MODAL) ---------- */
+        /* ---------- ESTILOS VENTANA FLOTANTE (MODAL) BLANCO Y NEGRO ---------- */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -209,13 +296,13 @@
         }
 
         .modal-container {
-            background: linear-gradient(145deg, #2c2c2c, #1f1f1f);
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
             border-radius: 28px;
             max-width: 340px;
             width: 85%;
             padding: 24px 20px 20px;
             text-align: center;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 80, 80, 0.2);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.1);
             animation: modalAppear 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             font-family: inherit;
         }
@@ -235,49 +322,38 @@
             font-size: 56px;
             margin-bottom: 12px;
             display: inline-block;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            filter: grayscale(100%) drop-shadow(0 4px 6px rgba(0,0,0,0.5));
         }
 
         .modal-title {
             font-size: 26px;
             font-weight: 700;
-            color: #ff7e5e;
+            color: #ffffff;
             margin-bottom: 12px;
             letter-spacing: -0.3px;
-            text-shadow: 0 1px 2px black;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .modal-message {
             font-size: 17px;
-            color: #f0f0f0;
-            background: rgba(0, 0, 0, 0.5);
+            color: #e0e0e0;
+            background: rgba(0, 0, 0, 0.6);
             padding: 12px 12px;
             border-radius: 48px;
             margin: 14px 0 10px;
             line-height: 1.4;
             font-weight: 500;
-        }
-
-        .user-list-hint {
-            font-size: 14px;
-            color: #ffb347;
-            background: rgba(0,0,0,0.4);
-            border-radius: 32px;
-            padding: 8px 12px;
-            margin-top: 8px;
-            margin-bottom: 18px;
-            display: inline-block;
-            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .modal-close-btn {
-            background: #e34d3a;
-            border: none;
+            background: #333333;
+            border: 2px solid #666666;
             padding: 12px 24px;
             border-radius: 50px;
             font-size: 16px;
             font-weight: bold;
-            color: white;
+            color: #ffffff;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 8px;
@@ -287,7 +363,8 @@
         }
 
         .modal-close-btn:hover {
-            background: #ff5c46;
+            background: #555555;
+            border-color: #aaaaaa;
             transform: scale(1.02);
         }
 
@@ -311,10 +388,20 @@
     </style>
 </head>
 <body>
-    <div class="search-box">
-        <input type="text" id="textInput" placeholder="Ingresa tu usuario...">
-        <button id="submitBtn" class="enviar-btn">Entrar</button>
-        <button id="registrarBtn" class="registrar-btn">Registrar</button>
+    <div class="main-container">
+        <!-- LEYENDA PROFESIONAL SIN EMOJIS -->
+        <div class="legend-text">
+            Si su usuario ya está registrado,<br>
+            ingrese su información y presione <span class="highlight-action">Entrar</span>.<br>
+            En caso contrario, presione <span class="highlight-action">Registrar</span>.
+        </div>
+
+        <!-- SEARCH BOX -->
+        <div class="search-box">
+            <input type="text" id="textInput" placeholder="Ingrese su usuario...">
+            <button id="submitBtn" class="enviar-btn">Entrar</button>
+            <button id="registrarBtn" class="registrar-btn">Registrar</button>
+        </div>
     </div>
 
     <!-- VENTANA FLOTANTE PERSONALIZADA (MODAL) -->
@@ -338,7 +425,6 @@
         const modalOverlay = document.getElementById('customModal');
         const modalMessageText = document.getElementById('modalMessageText');
         const modalCloseBtn = document.getElementById('modalCloseBtn');
-        const userListHintSpan = document.getElementById('userListHint');
 
         // Lista de usuarios válidos (exactos, case-sensitive como en el enunciado)
         const USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain", "Ana", "Luis", "Carlos"];
@@ -347,9 +433,9 @@
         function mostrarModalInvalido(usuarioIngresado) {
             // Personalizamos el mensaje según el caso
             if (usuarioIngresado === "") {
-                modalMessageText.innerHTML = "❓ No has escrito ningún nombre.<br>Por favor, ingresa un usuario.";
+                modalMessageText.innerHTML = "No ha ingresado ningún nombre.<br>Por favor, ingrese un usuario.";
             } else {
-                modalMessageText.innerHTML = `“${escapeHtml(usuarioIngresado)}” no está autorizado.<br>Verifica tu usuario o regístrate.`;
+                modalMessageText.innerHTML = `“${escapeHtml(usuarioIngresado)}” no está autorizado.<br>Verifique su usuario o regístrese.`;
             }
             // Mostramos overlay con animación
             modalOverlay.classList.add('active');
@@ -437,10 +523,6 @@
                 e.stopPropagation();
             });
         }
-        
-        // Pequeña mejora: si el usuario intenta enviar estando vacío, mostramos mensaje flotante y además
-        // resaltamos visualmente el campo? No necesario pero buena experiencia.
-        // Opcional: Remover scroll al cerrar si se recarga la página no hay problema.
         
         // Ajuste extra: Para navegadores muy antiguos, aseguramos que el modal se pueda cerrar con escape
         document.addEventListener('keydown', (e) => {
