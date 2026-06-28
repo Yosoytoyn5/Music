@@ -12,25 +12,18 @@
         }
 
         body {
-            /* Opción 1: con la imagen de York (la que pediste) */
             background-image: url('https://www.york.ac.uk/media/study/courses/postgraduate/music/music-production-banner.jpg');
-            
-            /* Opción 2 alternativa (si la primera falla, descomenta y prueba otra URL) */
-            /* background-image: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070'); */
-            
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
             background-repeat: no-repeat;
-            
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             padding: 2rem;
-            
-            /* Para que el texto se lea bien sobre la imagen */
             min-height: 100vh;
+            position: relative;
         }
 
-        /* Capa semitransparente opcional para mejorar legibilidad */
+        /* Capa semitransparente para mejorar legibilidad */
         .overlay {
             position: fixed;
             top: 0;
@@ -52,6 +45,48 @@
             border-radius: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             backdrop-filter: blur(2px);
+        }
+
+        /* Botón circular de flecha hacia atrás - posición fija */
+        .back-button {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 10;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #1e466e;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+        }
+
+        .back-button svg {
+            width: 26px;
+            height: 26px;
+            fill: none;
+            stroke: #1e466e;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .day-item {
@@ -82,12 +117,30 @@
                 padding: 1.2rem;
                 margin: 1rem;
             }
+            .back-button {
+                width: 45px;
+                height: 45px;
+                top: 15px;
+                right: 15px;
+            }
+            .back-button svg {
+                width: 22px;
+                height: 22px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Capa para oscurecer el fondo y que el texto resalte -->
+    <!-- Capa para oscurecer el fondo -->
     <div class="overlay"></div>
+    
+    <!-- Botón circular de flecha hacia atrás -->
+    <a href="Index.html" class="back-button" aria-label="Volver atrás">
+        <svg viewBox="0 0 24 24">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+        </svg>
+    </a>
     
     <div class="content">
         <div class="day-item">
