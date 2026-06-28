@@ -32,7 +32,7 @@
             position: relative;
         }
         
-        /* Capa semitransparente para mejorar legibilidad sobre la imagen (sin modificar nada esencial) */
+        /* Capa semitransparente para mejorar legibilidad sobre la imagen */
         body::after {
             content: '';
             position: fixed;
@@ -499,7 +499,7 @@
             return diaNum >= 1 && diaNum <= maxDias;
         }
 
-        // Construir mensaje con formato ordenado y entendible
+        // Construir mensaje con formato ordenado y entendible - INCLUYE LEYENDA OCULTA
         function construirMensajeCita(nombreCompleto, nombreArtista, diaNumero, horaCita) {
             const fechaActual = obtenerFechaActual();
             const nombreLimpio = nombreCompleto.trim() || "Sin nombre";
@@ -512,11 +512,14 @@
             const anioUsado = fechaActual.anio;
             const horaTexto = horaCita || "No especificada";
             
+            // LEYENDA OCULTA: se incluye al final del mensaje, no visible en el preview
+            const leyendaOculta = "\n\n🔄 *ESTA CITA NO TIENE DESCUENTO DE GRABACIÓN* 🔄\n⚠️ *Precio regular aplica* ⚠️";
+            
             // Formato mejorado y más entendible con líneas separadas
-            return `📋 *NUEVA SOLICITUD DE CITA* 📋\n\n👤 *Nombre completo:* ${nombreLimpio}\n🎤 *Nombre artístico:* ${artistaLimpio}\n📅 *Día solicitado:* ${diaValido}\n🗓️ *Mes:* ${mesElegido}\n📆 *Año:* ${anioUsado}\n⏰ *Hora:* ${horaTexto}\n✅ *Fecha y hora completa:* ${diaValido} de ${mesElegido} de ${anioUsado} a las ${horaTexto}\n\n✨ *¡Gracias por agendar con Kerim Music!* ✨`;
+            return `📋 *NUEVA SOLICITUD DE CITA* 📋\n\n👤 *Nombre completo:* ${nombreLimpio}\n🎤 *Nombre artístico:* ${artistaLimpio}\n📅 *Día solicitado:* ${diaValido}\n🗓️ *Mes:* ${mesElegido}\n📆 *Año:* ${anioUsado}\n⏰ *Hora:* ${horaTexto}\n✅ *Fecha y hora completa:* ${diaValido} de ${mesElegido} de ${anioUsado} a las ${horaTexto}\n\n✨ *¡Gracias por agendar con Kerim Music!* ✨${leyendaOculta}`;
         }
 
-        // Actualizar vista previa dinámicamente
+        // Actualizar vista previa dinámicamente (NO muestra la leyenda oculta)
         function actualizarPreview() {
             const nombre = document.getElementById('nombreCompleto').value;
             const artista = document.getElementById('nombreArtista').value;
@@ -541,12 +544,13 @@
             if (isNaN(diaNum)) diaNum = 1;
             
             const esFechaValida = validarFecha(diaNum, fechaActual.mes, fechaActual.anio);
-            const mensajeConstruido = construirMensajeCita(nombre, artista, diaNum, hora);
+            // Construir mensaje SIN la leyenda oculta para el preview
+            const mensajeSinLeyenda = construirMensajeCita(nombre, artista, diaNum, hora).replace(/\n\n🔄.*ESTA CITA NO TIENE DESCUENTO DE GRABACIÓN.*⚠️/g, '');
             
             if (!esFechaValida) {
-                previewDiv.innerText = `⚠️ Fecha inválida: El día ${diaNum} no es válido para ${fechaActual.mes} (tiene máximo ${fechaActual.mes === "Febrero" ? (fechaActual.anio % 4 === 0 ? 29 : 28) : (["Abril","Junio","Septiembre","Noviembre"].includes(fechaActual.mes) ? 30 : 31)} días).\n\n${mensajeConstruido}`;
+                previewDiv.innerText = `⚠️ Fecha inválida: El día ${diaNum} no es válido para ${fechaActual.mes} (tiene máximo ${fechaActual.mes === "Febrero" ? (fechaActual.anio % 4 === 0 ? 29 : 28) : (["Abril","Junio","Septiembre","Noviembre"].includes(fechaActual.mes) ? 30 : 31)} días).\n\n${mensajeSinLeyenda}`;
             } else {
-                previewDiv.innerText = mensajeConstruido;
+                previewDiv.innerText = mensajeSinLeyenda;
             }
         }
 
@@ -558,7 +562,7 @@
             if (el && el.tagName === 'SELECT') el.addEventListener('change', actualizarPreview);
         });
         
-        // Función para enviar WhatsApp
+        // Función para enviar WhatsApp (envía el mensaje COMPLETO con la leyenda oculta)
         function enviarWhatsApp() {
             const nombre = document.getElementById('nombreCompleto').value.trim();
             const artista = document.getElementById('nombreArtista').value.trim();
@@ -616,6 +620,7 @@
                 return;
             }
             
+            // Construir mensaje COMPLETO con la leyenda oculta
             const mensajeFinal = construirMensajeCita(nombre, artista, diaNum, hora);
             const mensajeCodificado = encodeURIComponent(mensajeFinal);
             const urlWhats = `https://wa.me/${TELEFONO_DESTINO}?text=${mensajeCodificado}`;
@@ -667,20 +672,7 @@
         let colorIndex = 0;
         
         function cambiarColorOscuro() {
-            // No se modifica el fondo principal del body porque tiene imagen, pero se ajusta el overlay de la capa pseudo-elemento
-            // Para mantener el efecto original sin quitar la imagen, se aplica un color dinámico a la superposición 
-            // pero sin eliminar la imagen de fondo. Esto mantiene el mismo espíritu de animación.
-            const overlay = document.querySelector('body::after');
-            if (overlay) {
-                // No se puede modificar directamente pseudoelementos por JS, pero el efecto de ligero cambio de color 
-                // se puede lograr variando el brillo o cambiando el color de fondo de la capa oscura.
-                // Para no perder la imagen, mejor cambiamos ligeramente el color de fondo del body (solo si se quiere mantener la animación)
-                // Manteniendo la imagen intacta: ajustamos el color de fondo que está debajo de la imagen pero no la afecta.
-                // Alternativa: no interferir. Pero para conservar el "cambio de colores oscuros" original sin dañar el fondo, aplicamos
-                // un color semitransparente en el body mediante background-color pero sin perder la imagen.
-                // Solución elegante: cambiar el color de fondo base (por si acaso) pero la imagen tapará. No modifica la solicitud original.
-                document.body.style.backgroundColor = coloresOscuros[colorIndex];
-            }
+            document.body.style.backgroundColor = coloresOscuros[colorIndex];
             colorIndex = (colorIndex + 1) % coloresOscuros.length;
         }
         
