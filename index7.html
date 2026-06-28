@@ -59,10 +59,24 @@
       min-width: 140px;
       max-width: 300px;
       transition: all 0.2s;
+      position: relative;
+    }
+    .search-container.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .search-container.locked input {
+      cursor: not-allowed;
+    }
+    .search-container.locked .search-lock-icon {
+      display: flex;
     }
     .search-container:focus-within {
       background: #2a2a2a;
       border: 1px solid #1ed760;
+    }
+    .search-container.locked:focus-within {
+      border-color: #666;
     }
     .search-container input {
       background: transparent;
@@ -72,6 +86,9 @@
       padding: 0.6rem 0;
       width: 100%;
       outline: none;
+    }
+    .search-container input::placeholder {
+      color: rgba(255,255,255,0.4);
     }
     .search-container button {
       background: transparent;
@@ -85,6 +102,19 @@
       transition: 0.2s;
     }
     .search-container button:hover { color: white; }
+    .search-container button.locked {
+      cursor: not-allowed;
+      color: #666;
+    }
+    .search-container button.locked:hover { color: #666; }
+    .search-lock-icon {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: #ffd700;
+      font-size: 0.8rem;
+      margin-right: 4px;
+    }
 
     /* BOTONES DE FILTRO ESTILO SPOTIFY EN LA PARTE SUPERIOR */
     .filter-buttons {
@@ -114,6 +144,14 @@
     .filter-main-btn:hover:not(.active) {
       background: #3a3a3a;
       transform: scale(1.02);
+    }
+    .filter-main-btn.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .filter-main-btn.locked:hover {
+      transform: none;
+      background: #232323;
     }
 
     /* SECCIÓN PRINCIPAL */
@@ -851,11 +889,32 @@
       transform: translateX(-50%) translateY(0);
     }
     
+    /* PLAN BADGE */
+    .plan-badge {
+      display: inline-block;
+      background: #1ed760;
+      color: #000000;
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 500px;
+      margin-left: 6px;
+      letter-spacing: 0.5px;
+    }
+    .plan-badge.locked {
+      background: #444;
+      color: #888;
+    }
+    
     @media (max-width: 480px) {
       .top-bar h1 { font-size: 1.2rem; }
       .artist-avatar { width: 65px; height: 65px; }
       .artist-circle-card { width: 75px; }
       .suggestion-card { flex: 0 0 130px; }
+      .search-container {
+        min-width: 100px;
+        max-width: 200px;
+      }
     }
     
     @keyframes fadeUp {
@@ -875,17 +934,18 @@
 <div class="toast-notification" id="toastNotification">💎 Solo disponible en Kerim Music+</div>
 
 <header class="top-bar">
-  <h1>Kerim Music+</h1>
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="¿Qué quieres escuchar?">
-    <button id="searchButton">🔍</button>
+  <h1>Kerim Music+ <span class="plan-badge locked" id="planBadge">FREE</span></h1>
+  <div class="search-container locked" id="searchContainer">
+    <span class="search-lock-icon">🔒</span>
+    <input type="text" id="searchInput" placeholder="🔒 Buscar (Kerim Music+)" disabled>
+    <button id="searchButton" class="locked" disabled>🔍</button>
   </div>
 </header>
 
 <!-- FILTROS PRINCIPALES: INICIO y TUS ME GUSTA solamente -->
 <div class="filter-buttons">
   <button class="filter-main-btn active" data-view="home">Inicio</button>
-  <button class="filter-main-btn" data-view="likes">Tus Me gusta</button>
+  <button class="filter-main-btn locked" data-view="likes">Tus Me gusta 🔒</button>
 </div>
 
 <main class="gallery-section">
@@ -922,7 +982,7 @@
       <h2 id="fullSongTitle">Kerim Music</h2>
       <div class="song-category" id="fullSongCategory"></div>
       <div class="fav-shuffle-row">
-        <button class="fav-btn-player" id="favoriteBtnMain">♡</button>
+        <button class="fav-btn-player locked" id="favoriteBtnMain">♡</button>
         <button class="ctrl-btn shuffle-btn-player" id="shuffleBtnPlayer">🔀</button>
       </div>
     </div>
@@ -1018,6 +1078,55 @@
     let playCount = new Map();
     let artistPlayCount = new Map();
     let favOrder = [];
+    
+    // --- FUNCIÓN PARA ACTUALIZAR INTERFAZ SEGÚN PLAN ---
+    function updateUIPlan() {
+      const searchContainer = document.getElementById('searchContainer');
+      const searchInput = document.getElementById('searchInput');
+      const searchButton = document.getElementById('searchButton');
+      const planBadge = document.getElementById('planBadge');
+      const favBtn = document.getElementById('favoriteBtnMain');
+      const likesBtn = document.querySelector('[data-view="likes"]');
+      
+      if (hasKerimMusicPlus) {
+        // Plan activo
+        searchContainer.classList.remove('locked');
+        searchInput.disabled = false;
+        searchInput.placeholder = '¿Qué quieres escuchar?';
+        searchButton.classList.remove('locked');
+        searchButton.disabled = false;
+        planBadge.textContent = 'PREMIUM';
+        planBadge.classList.remove('locked');
+        planBadge.style.background = '#1ed760';
+        planBadge.style.color = '#000000';
+        likesBtn.classList.remove('locked');
+        likesBtn.textContent = 'Tus Me gusta';
+        favBtn.classList.remove('locked');
+        favBtn.title = 'Agregar a favoritos';
+      } else {
+        // Plan free
+        searchContainer.classList.add('locked');
+        searchInput.disabled = true;
+        searchInput.placeholder = '🔒 Buscar (Kerim Music+)';
+        searchButton.classList.add('locked');
+        searchButton.disabled = true;
+        planBadge.textContent = 'FREE';
+        planBadge.classList.add('locked');
+        planBadge.style.background = '#444';
+        planBadge.style.color = '#888';
+        likesBtn.classList.add('locked');
+        likesBtn.textContent = 'Tus Me gusta 🔒';
+        favBtn.classList.add('locked');
+        favBtn.title = 'Solo disponible en Kerim Music+';
+        // Limpiar búsqueda si hay
+        searchInput.value = '';
+        currentSearch = '';
+        masterSongs = [...selectedSongs];
+        renderContent();
+        renderSuggestions();
+        updateQueueAndMode();
+      }
+    }
     
     // --- FUNCIÓN PARA MOSTRAR TOAST ---
     function showToast(message, duration = 3000) {
@@ -1124,7 +1233,7 @@
         html += `<div class="artist-circle-card" data-artist="${escapeHtml(artist.name)}"><img class="artist-avatar" src="${artist.image}" alt="${escapeHtml(artist.name)}" loading="lazy"><div class="artist-name">${escapeHtml(artist.name.length > 15 ? artist.name.substring(0,12)+'...' : artist.name)}</div><div class="artist-plays">${artist.plays} reproducción${artist.plays !== 1 ? 'es' : ''}</div></div>`;
       });
       artistsContainer.innerHTML = html;
-      document.querySelectorAll('.artist-circle-card').forEach(card => { card.addEventListener('click', () => { const artistName = card.getAttribute('data-artist'); if(artistName){ currentSearch = artistName; searchInput.value = artistName; performSearch(); } }); });
+      document.querySelectorAll('.artist-circle-card').forEach(card => { card.addEventListener('click', () => { const artistName = card.getAttribute('data-artist'); if(artistName){ if (!hasKerimMusicPlus) { showToast('💎 Búsqueda solo disponible en Kerim Music+'); return; } currentSearch = artistName; searchInput.value = artistName; performSearch(); } }); });
     }
     
     function getPlayerSuggestions(currentSongObj, limit = 6) {
@@ -1369,6 +1478,9 @@
     const likesBtn = document.querySelector('[data-view="likes"]');
     
     homeBtn.addEventListener('click', () => {
+      if (!hasKerimMusicPlus && isPlaylistsMode) {
+        // Si está en modo favoritos sin plan, no hacer nada o mostrar toast
+      }
       homeBtn.classList.add('active');
       likesBtn.classList.remove('active');
       isPlaylistsMode = false;
@@ -1379,6 +1491,10 @@
     });
     
     likesBtn.addEventListener('click', () => {
+      if (!hasKerimMusicPlus) {
+        showToast('💎 Tus Me gusta solo disponible en Kerim Music+');
+        return;
+      }
       likesBtn.classList.add('active');
       homeBtn.classList.remove('active');
       isPlaylistsMode = true;
@@ -1389,6 +1505,11 @@
     });
     
     function performSearch(){ 
+      if (!hasKerimMusicPlus) {
+        showToast('💎 Búsqueda solo disponible en Kerim Music+');
+        searchInput.value = '';
+        return;
+      }
       currentSearch = searchInput.value.trim(); 
       // Si hay búsqueda, buscar en TODAS las canciones (incluyendo las ocultas)
       if(currentSearch !== '') {
@@ -1443,6 +1564,9 @@
     const welcomeModal = document.getElementById('welcomeModal'), acceptBtn = document.getElementById('acceptWelcomeBtn');
     if (localStorage.getItem('kerim_welcome_accepted') === 'true') welcomeModal.classList.add('hidden');
     else { welcomeModal.classList.remove('hidden'); acceptBtn.addEventListener('click', () => { localStorage.setItem('kerim_welcome_accepted', 'true'); welcomeModal.classList.add('hidden'); }); }
+    
+    // Aplicar estado del plan a la interfaz
+    updateUIPlan();
     
     changeBackgroundRandomly();
     isPlaylistsMode = false; currentSearch = '';
