@@ -26,7 +26,6 @@
             position: relative;
         }
 
-        /* Filtro en blanco y negro para la imagen de fondo */
         body::before {
             content: '';
             position: fixed;
@@ -39,7 +38,6 @@
             backdrop-filter: grayscale(100%) brightness(0.7);
         }
 
-        /* Contenedor principal */
         .main-container {
             position: relative;
             z-index: 1;
@@ -49,9 +47,14 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
 
-        /* ===== LEYENDA PROFESIONAL SIN EMOJIS ===== */
+        .main-container.visible {
+            opacity: 1;
+        }
+
         .legend-text {
             text-align: center;
             color: #ffffff;
@@ -87,7 +90,6 @@
             }
         }
 
-        /* ===== SEARCH BOX ===== */
         .search-box {
             display: flex;
             flex-direction: row;
@@ -147,7 +149,6 @@
             transform: scale(0.98);
         }
 
-        /* Estilo específico para el botón Registrar */
         .registrar-btn {
             background: rgba(0, 0, 0, 0.5);
             border-color: #aaaaaa;
@@ -158,27 +159,21 @@
             border-color: #ffffff;
         }
 
-        /* ========== RESPONSIVE PARA MÓVIL ========== */
-        
         @media (max-width: 768px) {
             .main-container {
                 max-width: 90%;
             }
-            
             .search-box {
                 gap: 10px;
             }
-            
             input[type="text"] {
                 padding: 14px 18px;
                 font-size: 15px;
             }
-            
             button {
                 padding: 14px 24px;
                 font-size: 15px;
             }
-
             .legend-text {
                 font-size: 14px;
                 line-height: 1.6;
@@ -190,16 +185,13 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            
             input[type="text"] {
                 flex: 1 1 100%;
                 order: 1;
             }
-            
             .enviar-btn {
                 order: 2;
             }
-            
             .registrar-btn {
                 order: 3;
             }
@@ -209,32 +201,27 @@
             body {
                 padding: 12px;
             }
-            
             .main-container {
                 max-width: 100%;
                 gap: 15px;
             }
-            
             .search-box {
                 flex-direction: column;
                 gap: 12px;
                 width: 100%;
             }
-            
             input[type="text"] {
                 width: 100%;
                 padding: 16px 18px;
                 font-size: 16px;
                 text-align: left;
             }
-            
             button {
                 width: 100%;
                 padding: 14px 20px;
                 font-size: 16px;
                 font-weight: 600;
             }
-
             .legend-text {
                 font-size: 13px;
                 line-height: 1.5;
@@ -247,16 +234,13 @@
                 padding: 14px 16px;
                 font-size: 14px;
             }
-            
             input[type="text"]::placeholder {
                 font-size: 13px;
             }
-            
             button {
                 padding: 12px 18px;
                 font-size: 14px;
             }
-
             .legend-text {
                 font-size: 12px;
             }
@@ -266,13 +250,11 @@
             button {
                 -webkit-tap-highlight-color: rgba(255, 255, 255, 0.3);
             }
-            
             input[type="text"] {
                 font-size: 16px;
             }
         }
 
-        /* ---------- ESTILOS VENTANA FLOTANTE (MODAL) BLANCO Y NEGRO ---------- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -372,7 +354,6 @@
             transform: scale(0.97);
         }
 
-        /* responsivo modal */
         @media (max-width: 480px) {
             .modal-container {
                 width: 80%;
@@ -385,18 +366,60 @@
                 font-size: 15px;
             }
         }
+
+        .video-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-intro video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000000;
+        }
+
+        .video-intro.hidden {
+            display: none;
+        }
+
+        body.video-playing {
+            overflow: hidden;
+        }
+
+        /* Contador de tiempo - oculto */
+        .timer-display {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <!-- LEYENDA PROFESIONAL SIN EMOJIS -->
+    <!-- VIDEO DE INTRO -->
+    <div class="video-intro" id="videoIntro">
+        <video id="introVideo" playsinline>
+            <source src="https://www.dropbox.com/scl/fi/u8g3drfq5eg17jlth29gf/AQNNh-pvnGElBMOzs2TCWvS1Qg7-l6790vep4zd-gh7chug5cqDUambeDrsyVlUpXyXNAUSfr3XjPeRida7vBsfSEalNOo5RhwIgpKztNXzSdQ.mp4?rlkey=x0m5hp76feokbkpxxlty14swz&st=vpndoowb&raw=1" type="video/mp4">
+            Tu navegador no soporta el video.
+        </video>
+        <!-- Contador oculto -->
+        <div class="timer-display" id="timerDisplay">0.00</div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-container" id="mainContainer">
         <div class="legend-text">
             Si su usuario ya está registrado,<br>
             ingrese su información y presione <span class="highlight-action">Entrar</span>.<br>
             En caso contrario, presione <span class="highlight-action">Registrar</span>.
         </div>
 
-        <!-- SEARCH BOX -->
         <div class="search-box">
             <input type="text" id="textInput" placeholder="Ingrese su usuario...">
             <button id="submitBtn" class="enviar-btn">Entrar</button>
@@ -404,7 +427,7 @@
         </div>
     </div>
 
-    <!-- VENTANA FLOTANTE PERSONALIZADA (MODAL) -->
+    <!-- MODAL -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-icon">⚠️</div>
@@ -417,33 +440,102 @@
     </div>
 
     <script>
-        const input = document.getElementById('textInput');
-        const enviarBtn = document.getElementById('submitBtn');
-        const registrarBtn = document.getElementById('registrarBtn');
+        // --- VIDEO CON INICIO AUTOMÁTICO DESPUÉS DE 0 SEGUNDOS ---
+        const videoIntro = document.getElementById('videoIntro');
+        const introVideo = document.getElementById('introVideo');
+        const mainContainer = document.getElementById('mainContainer');
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        // Función para iniciar el video inmediatamente
+        function iniciarVideoInmediato() {
+            // Configurar sonido
+            introVideo.muted = false;
+            introVideo.volume = 1.0;
+            
+            // Iniciar el video
+            var promesa = introVideo.play();
+            
+            if (promesa !== undefined) {
+                promesa.then(function() {
+                    console.log('Video iniciado automáticamente con sonido (0 segundos)');
+                }).catch(function(error) {
+                    console.log('Error al iniciar automáticamente:', error);
+                    // Si falla el autoplay, intentar nuevamente
+                    setTimeout(function() {
+                        introVideo.muted = false;
+                        introVideo.volume = 1.0;
+                        introVideo.play().catch(function() {
+                            console.log('No se pudo iniciar el video automáticamente');
+                        });
+                    }, 100);
+                });
+            }
+        }
+
+        // Mostrar el contador en 0.00 (oculto)
+        timerDisplay.textContent = '0.00';
+
+        // INICIAR EL VIDEO INMEDIATAMENTE (0 SEGUNDOS)
+        document.body.classList.add('video-playing');
         
-        // Elementos del modal personalizado
-        const modalOverlay = document.getElementById('customModal');
-        const modalMessageText = document.getElementById('modalMessageText');
-        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        // Pequeño retraso de 10ms para asegurar que el DOM esté listo
+        setTimeout(function() {
+            iniciarVideoInmediato();
+        }, 10);
 
-        // Lista de usuarios válidos (exactos, case-sensitive como en el enunciado)
-        const USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain", "Ana", "Luis", "Carlos"];
+        // Cuando el video termina, ocultarlo y mostrar la página
+        introVideo.addEventListener('ended', function() {
+            videoIntro.classList.add('hidden');
+            mainContainer.classList.add('visible');
+            document.body.classList.remove('video-playing');
+        });
 
-        // Función para mostrar ventana flotante con mensaje dinámico
+        // Si el video no puede reproducirse, mostrar la página después de 3 segundos
+        introVideo.addEventListener('error', function() {
+            setTimeout(function() {
+                videoIntro.classList.add('hidden');
+                mainContainer.classList.add('visible');
+                document.body.classList.remove('video-playing');
+            }, 3000);
+        });
+
+        // Forzar que el video tenga sonido en todo momento
+        setInterval(function() {
+            if (!videoIntro.classList.contains('hidden')) {
+                if (introVideo.muted) {
+                    introVideo.muted = false;
+                }
+                if (introVideo.volume < 0.9) {
+                    introVideo.volume = 1.0;
+                }
+                // Si el video está pausado, reanudarlo
+                if (introVideo.paused) {
+                    introVideo.play().catch(function() {});
+                }
+            }
+        }, 500);
+
+        // --- CÓDIGO DE VALIDACIÓN ---
+        var input = document.getElementById('textInput');
+        var enviarBtn = document.getElementById('submitBtn');
+        var registrarBtn = document.getElementById('registrarBtn');
+        
+        var modalOverlay = document.getElementById('customModal');
+        var modalMessageText = document.getElementById('modalMessageText');
+        var modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        var USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain", "Ana", "Luis", "Carlos"];
+
         function mostrarModalInvalido(usuarioIngresado) {
-            // Personalizamos el mensaje según el caso
             if (usuarioIngresado === "") {
                 modalMessageText.innerHTML = "No ha ingresado ningún nombre.<br>Por favor, ingrese un usuario.";
             } else {
-                modalMessageText.innerHTML = `“${escapeHtml(usuarioIngresado)}” no está autorizado.<br>Verifique su usuario o regístrese.`;
+                modalMessageText.innerHTML = "“" + escapeHtml(usuarioIngresado) + "” no está autorizado.<br>Verifique su usuario o regístrese.";
             }
-            // Mostramos overlay con animación
             modalOverlay.classList.add('active');
-            // Prevenimos scroll del body mientras modal está activo (mejor UX)
             document.body.style.overflow = 'hidden';
         }
 
-        // Función auxiliar para evitar XSS en el modal (por si el texto tiene etiquetas)
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/[&<>]/g, function(m) {
@@ -451,81 +543,63 @@
                 if (m === '<') return '&lt;';
                 if (m === '>') return '&gt;';
                 return m;
-            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-                return c;
             });
         }
 
-        // Cerrar modal (ocultar y restaurar scroll)
         function cerrarModal() {
             modalOverlay.classList.remove('active');
             document.body.style.overflow = '';
         }
 
-        // Verificar credenciales y redirigir o mostrar modal flotante
         function verificarYRedirigir() {
-            const texto = input.value.trim();
+            var texto = input.value.trim();
             
-            // Caso 1: input vacío -> mostrar ventana flotante informando inválido
             if (texto === "") {
                 mostrarModalInvalido("");
                 return;
-            } 
-            // Caso 2: usuario no está en la lista de válidos -> modal flotante de inválido
-            else if (!USUARIOS_VALIDOS.includes(texto)) {
+            } else if (USUARIOS_VALIDOS.indexOf(texto) === -1) {
                 mostrarModalInvalido(texto);
                 return;
-            }
-            // Caso 3: usuario válido -> redirigir a index2.html guardando sesión
-            else {
+            } else {
                 sessionStorage.setItem("textoEnviado", texto);
                 window.location.href = "index2.html";
             }
         }
 
-        // Redirección directa a registro (sin validación)
         function irARegistro() {
             window.location.href = "index3.html";
         }
 
-        // Eventos principales
         enviarBtn.addEventListener('click', verificarYRedirigir);
         registrarBtn.addEventListener('click', irARegistro);
         
-        // Evento Enter en el input
-        input.addEventListener('keypress', (e) => {
+        input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 verificarYRedirigir();
             }
         });
         
-        // Toque para móvil (focus)
         input.addEventListener('touchstart', function() {
             this.focus();
         });
         
-        // Cerrar modal con el botón "Entendido"
         modalCloseBtn.addEventListener('click', cerrarModal);
         
-        // Opcional: Cerrar modal si se hace clic en el overlay (fuera del contenedor)
-        modalOverlay.addEventListener('click', (e) => {
-            // Solo cerrar si el clic es directamente en el overlay (fondo) y no en el container hijo
+        modalOverlay.addEventListener('click', function(e) {
             if (e.target === modalOverlay) {
                 cerrarModal();
             }
         });
         
-        // Prevenir que el modal se cierre accidentalmente por eventos internos
-        const modalContainer = document.querySelector('.modal-container');
+        var modalContainer = document.querySelector('.modal-container');
         if (modalContainer) {
-            modalContainer.addEventListener('click', (e) => {
+            modalContainer.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
         }
         
-        // Ajuste extra: Para navegadores muy antiguos, aseguramos que el modal se pueda cerrar con escape
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
                 cerrarModal();
                 e.preventDefault();
