@@ -507,29 +507,30 @@
         }
 
         /* ============================================================
-           BOTÓN "SALTAR ANUNCIO" - TOTALMENTE RESPONSIVE PARA MÓVIL
+           BOTÓN "SALTAR ANUNCIO" - CENTRADO, GRANDE Y RESPONSIVE
            ============================================================ */
         .skip-ad-btn {
             position: absolute;
-            bottom: 60px;
-            left: 30px;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 600;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            border-radius: 60px;
+            padding: 18px 40px;
+            font-size: 22px;
+            font-weight: 700;
             cursor: pointer;
             z-index: 30;
             transition: all 0.3s ease;
             opacity: 0;
             pointer-events: none;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
             user-select: none;
@@ -537,10 +538,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            min-height: 36px;
-            min-width: 80px;
-            line-height: 1;
+            gap: 12px;
+            min-height: 60px;
+            min-width: 200px;
+            line-height: 1.2;
         }
 
         .skip-ad-btn.visible {
@@ -551,181 +552,179 @@
         .skip-ad-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: #ffffff;
-            transform: scale(1.05);
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 8px 40px rgba(255, 255, 255, 0.15);
         }
 
         .skip-ad-btn:active {
-            transform: scale(0.94);
+            transform: translateX(-50%) scale(0.95);
             background: rgba(255, 255, 255, 0.3);
         }
 
         .skip-ad-btn .countdown {
-            font-weight: 400;
-            opacity: 0.85;
-            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.9;
+            font-size: 20px;
             background: rgba(255, 255, 255, 0.15);
-            padding: 2px 8px;
-            border-radius: 16px;
-            min-width: 24px;
+            padding: 4px 14px;
+            border-radius: 30px;
+            min-width: 50px;
             text-align: center;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         /* --- Tablets / pantallas medianas --- */
         @media (max-width: 900px) {
             .skip-ad-btn {
-                bottom: 50px;
-                left: 24px;
-                padding: 7px 14px;
-                font-size: 12px;
-                min-height: 32px;
-                min-width: 70px;
-                border-radius: 26px;
-                gap: 5px;
+                bottom: 8%;
+                padding: 16px 32px;
+                font-size: 19px;
+                min-height: 54px;
+                min-width: 170px;
+                gap: 10px;
+                border-width: 2.5px;
             }
             .skip-ad-btn .countdown {
-                font-size: 11px;
-                padding: 1px 6px;
-                min-width: 20px;
+                font-size: 17px;
+                padding: 3px 12px;
+                min-width: 44px;
             }
         }
 
         /* --- Móviles grandes (600px - 768px) --- */
         @media (max-width: 768px) {
             .skip-ad-btn {
-                bottom: 40px;
-                left: 20px;
-                padding: 6px 12px;
-                font-size: 11px;
-                min-height: 30px;
-                min-width: 64px;
-                border-radius: 22px;
-                gap: 4px;
-                border-width: 1.8px;
+                bottom: 8%;
+                padding: 14px 28px;
+                font-size: 17px;
+                min-height: 48px;
+                min-width: 150px;
+                gap: 8px;
+                border-width: 2px;
+                border-radius: 50px;
             }
             .skip-ad-btn .countdown {
-                font-size: 10px;
-                padding: 1px 5px;
-                min-width: 18px;
+                font-size: 15px;
+                padding: 2px 10px;
+                min-width: 38px;
             }
         }
 
         /* --- Móviles medianos (480px - 600px) --- */
         @media (max-width: 600px) {
             .skip-ad-btn {
-                bottom: 34px;
-                left: 18px;
-                padding: 5px 10px;
-                font-size: 10px;
-                min-height: 26px;
-                min-width: 56px;
-                border-radius: 20px;
-                gap: 4px;
-                border-width: 1.5px;
+                bottom: 7%;
+                padding: 12px 24px;
+                font-size: 15px;
+                min-height: 42px;
+                min-width: 130px;
+                gap: 8px;
+                border-width: 2px;
+                border-radius: 40px;
             }
             .skip-ad-btn .countdown {
-                font-size: 9px;
-                padding: 1px 4px;
-                min-width: 16px;
-                border-radius: 12px;
+                font-size: 13px;
+                padding: 2px 8px;
+                min-width: 32px;
+                border-radius: 20px;
             }
         }
 
         /* --- Móviles pequeños (400px - 480px) --- */
         @media (max-width: 480px) {
             .skip-ad-btn {
-                bottom: 28px;
-                left: 14px;
-                padding: 4px 8px;
-                font-size: 9px;
-                min-height: 22px;
-                min-width: 48px;
-                border-radius: 16px;
-                gap: 3px;
-                border-width: 1.2px;
-                box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+                bottom: 6%;
+                padding: 10px 20px;
+                font-size: 13px;
+                min-height: 36px;
+                min-width: 110px;
+                gap: 6px;
+                border-width: 1.8px;
+                border-radius: 34px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             }
             .skip-ad-btn .countdown {
-                font-size: 8px;
-                padding: 0px 4px;
-                min-width: 14px;
-                border-radius: 10px;
+                font-size: 11px;
+                padding: 1px 6px;
+                min-width: 28px;
+                border-radius: 16px;
             }
         }
 
         /* --- Móviles muy pequeños (360px y menos) --- */
         @media (max-width: 400px) {
             .skip-ad-btn {
-                bottom: 22px;
-                left: 12px;
-                padding: 3px 6px;
-                font-size: 8px;
-                min-height: 18px;
-                min-width: 40px;
-                border-radius: 14px;
-                gap: 2px;
-                border-width: 1px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                bottom: 5%;
+                padding: 8px 16px;
+                font-size: 11px;
+                min-height: 30px;
+                min-width: 90px;
+                gap: 5px;
+                border-width: 1.5px;
+                border-radius: 28px;
+                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
             }
             .skip-ad-btn .countdown {
-                font-size: 7px;
-                padding: 0px 3px;
-                min-width: 12px;
-                border-radius: 8px;
+                font-size: 10px;
+                padding: 1px 5px;
+                min-width: 22px;
+                border-radius: 12px;
             }
         }
 
         @media (max-width: 320px) {
             .skip-ad-btn {
-                bottom: 18px;
-                left: 10px;
-                padding: 2px 5px;
-                font-size: 7px;
-                min-height: 16px;
-                min-width: 34px;
-                border-radius: 12px;
-                border-width: 0.8px;
+                bottom: 4%;
+                padding: 6px 12px;
+                font-size: 9px;
+                min-height: 24px;
+                min-width: 70px;
+                gap: 4px;
+                border-width: 1.2px;
+                border-radius: 22px;
             }
             .skip-ad-btn .countdown {
-                font-size: 6px;
-                padding: 0px 2px;
-                min-width: 10px;
-                border-radius: 6px;
+                font-size: 8px;
+                padding: 0px 4px;
+                min-width: 18px;
+                border-radius: 10px;
             }
         }
 
         /* --- Orientación horizontal (landscape) en móviles --- */
         @media (max-height: 500px) and (orientation: landscape) {
             .skip-ad-btn {
-                bottom: 20px;
-                left: 16px;
-                padding: 4px 10px;
-                font-size: 10px;
-                min-height: 24px;
-                min-width: 50px;
-                border-radius: 18px;
+                bottom: 5%;
+                padding: 8px 18px;
+                font-size: 12px;
+                min-height: 28px;
+                min-width: 100px;
+                gap: 6px;
+                border-radius: 30px;
+                border-width: 1.8px;
             }
             .skip-ad-btn .countdown {
-                font-size: 9px;
-                padding: 1px 4px;
-                min-width: 16px;
+                font-size: 11px;
+                padding: 1px 6px;
+                min-width: 26px;
             }
         }
 
         @media (max-height: 400px) and (orientation: landscape) {
             .skip-ad-btn {
-                bottom: 14px;
-                left: 12px;
-                padding: 3px 8px;
-                font-size: 8px;
-                min-height: 20px;
-                min-width: 42px;
-                border-radius: 14px;
+                bottom: 4%;
+                padding: 6px 14px;
+                font-size: 10px;
+                min-height: 22px;
+                min-width: 80px;
+                gap: 4px;
+                border-radius: 24px;
+                border-width: 1.5px;
             }
             .skip-ad-btn .countdown {
-                font-size: 7px;
-                padding: 0px 3px;
-                min-width: 12px;
+                font-size: 9px;
+                padding: 0px 4px;
+                min-width: 20px;
             }
         }
 
@@ -735,8 +734,8 @@
     </style>
 </head>
 <body>
-    <!-- VIDEO DE INTRO CON BOTÓN DE PLAY, LEYENDA "ANUNCIO" Y BOTÓN "SALTAR ANUNCIO" RESPONSIVE -->
-    <div class="video-intro" id="videoIntro">
+    <!-- VIDEO DE INTRO CON BOTÓN DE PLAY, LEYENDA "ANUNCIO" Y BOTÓN "SALTAR ANUNCIO" CENTRADO Y RESPONSIVE -->
+    <div class="video-intro hidden" id="videoIntro">
         <!-- Leyenda "Anuncio" -->
         <div class="anuncio-label">Anuncio</div>
         
@@ -749,7 +748,7 @@
             </div>
         </div>
 
-        <!-- Botón "Saltar anuncio" - totalmente responsive -->
+        <!-- Botón "Saltar anuncio" - CENTRADO, GRANDE Y RESPONSIVE -->
         <button class="skip-ad-btn" id="skipAdBtn">
             Saltar <span class="countdown" id="skipCountdown">33s</span>
         </button>
@@ -789,7 +788,7 @@
     </div>
 
     <script>
-        // --- VIDEO CON BOTÓN DE PLAY, LEYENDA "ANUNCIO" Y SALTAR ANUNCIO (responsive) ---
+        // --- VIDEO CON BOTÓN DE PLAY, LEYENDA "ANUNCIO" Y SALTAR ANUNCIO (centrado y responsive) ---
         const videoIntro = document.getElementById('videoIntro');
         const introVideo = document.getElementById('introVideo');
         const mainContainer = document.getElementById('mainContainer');
@@ -805,6 +804,11 @@
         let skipAdVisible = false;
         let adSkipped = false;
         const SKIP_APPEAR_TIME = 33;
+        const AD_INTERVAL_MINUTES = 60; // 60 minutos entre anuncios
+
+        // Verificar si es la primera visita
+        let isFirstVisit = true;
+        let adCompleted = false;
 
         function iniciarVideoConSonido() {
             if (videoStarted) return;
@@ -858,13 +862,26 @@
             saltarAnuncio();
         }, { passive: false });
 
-        let tiempoTotalAnuncio = 0;
         let anuncioActivo = false;
 
         function mostrarAnuncio() {
             if (anuncioActivo) return;
+            
+            // Si es la primera visita, siempre mostrar
+            // Si no es la primera, solo mostrar si ya pasó el tiempo
+            if (!isFirstVisit) {
+                const lastAdTime = localStorage.getItem('lastAdTime');
+                if (lastAdTime) {
+                    const elapsed = (Date.now() - parseInt(lastAdTime)) / 60000; // en minutos
+                    if (elapsed < AD_INTERVAL_MINUTES) {
+                        console.log(`Faltan ${Math.round(AD_INTERVAL_MINUTES - elapsed)} minutos para el próximo anuncio`);
+                        return;
+                    }
+                }
+            }
+            
             anuncioActivo = true;
-            console.log('Mostrando anuncio (cada 10 minutos)');
+            console.log('Mostrando anuncio');
             introVideo.currentTime = 0;
             adSkipped = false;
             videoStarted = false;
@@ -876,6 +893,7 @@
             playOverlay.classList.remove('hidden');
             mainContainer.classList.remove('visible');
             videoStarted = false;
+            isFirstVisit = false;
         }
 
         function ocultarAnuncio() {
@@ -886,7 +904,9 @@
             playOverlay.classList.add('hidden');
             skipAdBtn.classList.remove('visible');
             skipAdVisible = false;
-            console.log('Anuncio oculto');
+            // Guardar el momento en que se completó el anuncio
+            localStorage.setItem('lastAdTime', Date.now().toString());
+            console.log('Anuncio oculto - próximo en 60 minutos');
         }
 
         introVideo.addEventListener('ended', function() {
@@ -894,18 +914,40 @@
             if (!adSkipped) {
                 console.log('Anuncio visto completo');
             }
-            tiempoTotalAnuncio = 0;
         });
 
+        // Mostrar el primer anuncio al cargar la página (solo si es primera visita)
+        setTimeout(function() {
+            // Verificar si es la primera visita
+            const lastAdTime = localStorage.getItem('lastAdTime');
+            if (!lastAdTime) {
+                // Primera visita - mostrar anuncio
+                mostrarAnuncio();
+            } else {
+                // No es primera visita - mostrar contenido directamente
+                mainContainer.classList.add('visible');
+                // Programar el próximo anuncio
+                const elapsed = (Date.now() - parseInt(lastAdTime)) / 60000;
+                const timeToNextAd = Math.max(0, AD_INTERVAL_MINUTES - elapsed);
+                console.log(`Próximo anuncio en ${Math.round(timeToNextAd)} minutos`);
+                setTimeout(function() {
+                    mostrarAnuncio();
+                }, timeToNextAd * 60000);
+            }
+        }, 100);
+
+        // Verificar cada minuto si ya pasó el tiempo para el próximo anuncio
         setInterval(function() {
             if (!anuncioActivo && videoIntro.classList.contains('hidden')) {
-                tiempoTotalAnuncio += 1;
-                if (tiempoTotalAnuncio >= 600) {
-                    mostrarAnuncio();
-                    tiempoTotalAnuncio = 0;
+                const lastAdTime = localStorage.getItem('lastAdTime');
+                if (lastAdTime) {
+                    const elapsed = (Date.now() - parseInt(lastAdTime)) / 60000;
+                    if (elapsed >= AD_INTERVAL_MINUTES) {
+                        mostrarAnuncio();
+                    }
                 }
             }
-        }, 1000);
+        }, 60000); // Verificar cada minuto
 
         introVideo.addEventListener('timeupdate', function() {
             if (!anuncioActivo) return;
@@ -928,13 +970,8 @@
             }
         });
 
-        setTimeout(function() {
-            mostrarAnuncio();
-        }, 100);
-
         introVideo.addEventListener('error', function() {
             ocultarAnuncio();
-            tiempoTotalAnuncio = 0;
         });
 
         document.body.classList.add('video-playing');
