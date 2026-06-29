@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página con fondo blanco y negro</title>
+    <title>Página con fondo blanco y negro · posiciones aleatorias</title>
     <style>
         * {
             margin: 0;
@@ -17,11 +17,11 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            /* --- FONDO BLANCO Y NEGRO CON ANIMACIÓN --- */
+            /* FONDO BLANCO Y NEGRO CON ANIMACIÓN */
             background: linear-gradient(135deg, #1a1a1a, #4a4a4a, #2a2a2a, #5a5a5a, #1a1a1a);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
-            padding: 0;
+            padding: 0 10px 30px 10px;
         }
 
         @keyframes gradientShift {
@@ -30,8 +30,8 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Contenedor de la imagen */
-        .portadainico {
+        /* IMAGEN DE PORTADA FIJA ARRIBA */
+        .portada-fija {
             width: 100%;
             max-width: 1200px;
             margin: 12px auto 0 auto;
@@ -41,7 +41,7 @@
             transform: scale(0.9);
         }
 
-        .portadainico img {
+        .portada-fija img {
             display: block;
             width: 100%;
             height: auto;
@@ -59,12 +59,17 @@
             100% { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
         }
 
-        /* --- LISTA VERTICAL DE BOTONES EN BLANCO Y NEGRO --- */
-        .button-list {
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* CONTENEDOR DE BOTONES (se reordenarán aleatoriamente) */
+        .botones-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             margin-top: 25px;
             margin-bottom: 20px;
             width: 100%;
@@ -72,11 +77,40 @@
             padding: 0 10px;
         }
 
-        .button1 {
+        /* Cada bloque de botón + mini imagen */
+        .boton-item {
             width: 100%;
-            animation: fadeInUp 1s ease-out 0.4s forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInUp 1s ease-out forwards;
             opacity: 0;
             transform: translateY(20px);
+        }
+
+        .mini-img {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .mini-img img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 5;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .mini-img img:hover {
+            transform: scale(1.02);
+        }
+
+        .button1 {
+            width: 100%;
         }
 
         .button1 button {
@@ -95,19 +129,12 @@
             text-align: center;
         }
 
-        /* Hover: invertir colores */
         .button1 button:hover {
             background-color: #000000;
             color: #ffffff;
             transform: scale(1.03);
             box-shadow: 0 6px 20px rgba(0,0,0,0.5);
             border-color: #ffffff;
-        }
-
-        /* Animaciones */
-        @keyframes fadeInScale {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
         }
 
         @keyframes fadeInUp {
@@ -136,17 +163,17 @@
 
         /* --- RESPONSIVE --- */
         @media (max-width: 600px) {
-            .portadainico {
+            .portada-fija {
                 padding: 0 5px;
                 margin-top: 8px;
             }
-            .portadainico img {
+            .portada-fija img {
                 aspect-ratio: 16 / 6;
                 border-radius: 12px;
             }
-            .button-list {
+            .botones-container {
                 max-width: 260px;
-                gap: 15px;
+                gap: 18px;
                 margin-top: 18px;
             }
             .button1 button {
@@ -156,57 +183,93 @@
         }
 
         @media (min-width: 1200px) {
-            .portadainico {
+            .portada-fija {
                 margin-top: 16px;
             }
-            .portadainico img {
+            .portada-fija img {
                 aspect-ratio: 16 / 5;
             }
-            .button-list {
+            .botones-container {
                 max-width: 360px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="portadainico">
+
+    <!-- IMAGEN DE PORTADA FIJA (siempre arriba) -->
+    <div class="portada-fija">
         <img src="https://www.dropbox.com/scl/fi/vq4jn4iwd80021o5abfl2/van3ssa-halloween-7604_512.gif?rlkey=ho2ngxqntwfkj1204lckzihkk&st=o9yzb5oe&raw=1" alt="Imagen de portada">
     </div>
 
-    <!-- Lista vertical de botones en blanco y negro -->
-    <div class="button-list">
-        <div class="button1">
-            <div class="portadainico">
-        <img src="https://www.dropbox.com/scl/fi/fi800hxjvsqe0bwwlhxxa/3346530_slider.png?rlkey=qiifcvge4lvg5o7fcr88ftcxu&st=mp5kiu9b&raw=1" alt="Imagen de portada">
+    <!-- CONTENEDOR DE BOTONES (se reordenarán aleatoriamente) -->
+    <div id="botonesContainer" class="botones-container">
+        <!-- Los botones se inyectan con JS en orden aleatorio -->
     </div>
-            <a href="index5.html">
-                <button>Agendar</button>
-            </a>
-        </div>
-        <div class="button1">
-            <div class="portadainico">
-        <img src="https://www.dropbox.com/scl/fi/kckbrg6uyca6acqd9ltps/juliush-clock-1983_512.gif?rlkey=rn797llxxj1loqewnlh51iwqs&st=c5bz9j90&raw=1" alt="Imagen de portada">
-    </div>
-            <a href="index4.html">
-                <button>Horarios</button>
-            </a>
-        </div>
-        <div class="button1">
-            <div class="portadainico">
-        <img src="https://www.dropbox.com/scl/fi/6wh4qibh3rzhzrq230yuk/25735928-skull-1339_512.gif?rlkey=5au2p6hnzovf32e2oqsg4o1yn&st=wimv373f&raw=1" alt="Imagen de portada">
-    </div>
-            <a href="index6.html">
-                <button>Noticias</button>
-            </a>
-        </div>
-        <div class="button1">
-            <div class="portadainico">
-        <img src="https://www.dropbox.com/scl/fi/bf60dftx3xarwa9bxvu4l/gustavorezende-audio-4919.gif?rlkey=n9azy9ivi6414a3a34w64tcll&st=xm5tdx4v&raw=1" alt="Imagen de portada">
-    </div>
-            <a href="index7.html">
-                <button>Kerim Music</button>
-            </a>
-        </div>
-    </div>
+
+    <script>
+        (function() {
+            // DATOS DE CADA BOTÓN (con su mini imagen y enlace)
+            const botonesData = [
+                {
+                    id: 'agendar',
+                    img: 'https://www.dropbox.com/scl/fi/fi800hxjvsqe0bwwlhxxa/3346530_slider.png?rlkey=qiifcvge4lvg5o7fcr88ftcxu&st=mp5kiu9b&raw=1',
+                    link: 'index5.html',
+                    texto: 'Agendar'
+                },
+                {
+                    id: 'horarios',
+                    img: 'https://www.dropbox.com/scl/fi/kckbrg6uyca6acqd9ltps/juliush-clock-1983_512.gif?rlkey=rn797llxxj1loqewnlh51iwqs&st=c5bz9j90&raw=1',
+                    link: 'index4.html',
+                    texto: 'Horarios'
+                },
+                {
+                    id: 'noticias',
+                    img: 'https://www.dropbox.com/scl/fi/6wh4qibh3rzhzrq230yuk/25735928-skull-1339_512.gif?rlkey=5au2p6hnzovf32e2oqsg4o1yn&st=wimv373f&raw=1',
+                    link: 'index6.html',
+                    texto: 'Noticias'
+                },
+                {
+                    id: 'kerim',
+                    img: 'https://www.dropbox.com/scl/fi/bf60dftx3xarwa9bxvu4l/gustavorezende-audio-4919.gif?rlkey=n9azy9ivi6414a3a34w64tcll&st=xm5tdx4v&raw=1',
+                    link: 'index7.html',
+                    texto: 'Kerim Music'
+                }
+            ];
+
+            // FUNCIÓN PARA REVOLVER (FISHER-YATES)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // MEZCLAR LOS BOTONES
+            const shuffled = shuffleArray([...botonesData]);
+
+            // GENERAR HTML
+            const container = document.getElementById('botonesContainer');
+            container.innerHTML = '';
+
+            shuffled.forEach(boton => {
+                const html = `
+                    <div class="boton-item">
+                        <div class="mini-img">
+                            <img src="${boton.img}" alt="mini ${boton.texto}">
+                        </div>
+                        <div class="button1">
+                            <a href="${boton.link}">
+                                <button>${boton.texto}</button>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        })();
+    </script>
+
 </body>
 </html>
