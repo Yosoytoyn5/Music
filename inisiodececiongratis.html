@@ -1151,7 +1151,7 @@
             skipAdVisible = false;
             // Guardar el momento en que se completó el anuncio
             localStorage.setItem('lastAdTime', Date.now().toString());
-            console.log('Anuncio oculto - próximo en 60 minutos');
+            console.log('Anuncio oculto - próximo en 1 minutos');
         }
 
         introVideo.addEventListener('ended', function() {
@@ -1278,7 +1278,7 @@
 
         // --- NUEVA FUNCIÓN PARA MEJORAR PLAN (FLOTANTE CIRCULAR) ---
         function irAMejorarPlan() {
-            window.location.href = "planesgratis.html";
+            window.location.href = "index.html";
         }
 
         enviarBtn.addEventListener('click', verificarYRedirigir);
