@@ -159,6 +159,246 @@
             border-color: #ffffff;
         }
 
+        /* ============================================================
+           BOTÓN MEJORAR PLAN - VERSIÓN FLOTANTE CIRCULAR
+           ============================================================ */
+        .mejorar-plan-flotante {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.35), rgba(255, 200, 0, 0.2));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: #ffffff;
+            border: 2.5px solid #ffd700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 8px 35px rgba(255, 215, 0, 0.3), 0 2px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 0;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .mejorar-plan-flotante::after {
+            content: "⬆";
+            display: block;
+            font-size: 30px;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .mejorar-plan-flotante .tooltip-text {
+            position: absolute;
+            bottom: 85px;
+            right: 50%;
+            transform: translateX(50%);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .mejorar-plan-flotante:hover .tooltip-text,
+        .mejorar-plan-flotante:focus .tooltip-text {
+            opacity: 1;
+        }
+
+        .mejorar-plan-flotante:hover {
+            transform: scale(1.12);
+            background: rgba(255, 215, 0, 0.5);
+            border-color: #ffffff;
+            box-shadow: 0 12px 50px rgba(255, 215, 0, 0.4), 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .mejorar-plan-flotante:active {
+            transform: scale(0.92);
+            background: rgba(255, 215, 0, 0.6);
+        }
+
+        /* --- Tablets y pantallas medianas --- */
+        @media (max-width: 900px) {
+            .mejorar-plan-flotante {
+                bottom: 25px;
+                right: 25px;
+                width: 62px;
+                height: 62px;
+                font-size: 24px;
+                border-width: 2px;
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 26px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                font-size: 11px;
+                bottom: 75px;
+                padding: 5px 12px;
+            }
+        }
+
+        /* --- Móviles grandes (600px - 768px) --- */
+        @media (max-width: 768px) {
+            .mejorar-plan-flotante {
+                bottom: 22px;
+                right: 22px;
+                width: 56px;
+                height: 56px;
+                font-size: 20px;
+                border-width: 2px;
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 22px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                font-size: 10px;
+                bottom: 68px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* --- Móviles medianos (480px - 600px) --- */
+        @media (max-width: 600px) {
+            .mejorar-plan-flotante {
+                bottom: 18px;
+                right: 18px;
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+                border-width: 1.8px;
+                box-shadow: 0 6px 25px rgba(255, 215, 0, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3);
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 20px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                font-size: 9px;
+                bottom: 60px;
+                padding: 3px 8px;
+                border-radius: 16px;
+            }
+        }
+
+        /* --- Móviles pequeños (400px - 480px) --- */
+        @media (max-width: 480px) {
+            .mejorar-plan-flotante {
+                bottom: 15px;
+                right: 15px;
+                width: 44px;
+                height: 44px;
+                font-size: 15px;
+                border-width: 1.5px;
+                box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.25);
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 17px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                font-size: 8px;
+                bottom: 52px;
+                padding: 2px 7px;
+                border-radius: 14px;
+            }
+        }
+
+        /* --- Móviles muy pequeños (360px y menos) --- */
+        @media (max-width: 400px) {
+            .mejorar-plan-flotante {
+                bottom: 12px;
+                right: 12px;
+                width: 38px;
+                height: 38px;
+                font-size: 12px;
+                border-width: 1.3px;
+                box-shadow: 0 3px 15px rgba(255, 215, 0, 0.15), 0 1px 6px rgba(0, 0, 0, 0.2);
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 14px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                font-size: 7px;
+                bottom: 46px;
+                padding: 2px 6px;
+                border-radius: 12px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .mejorar-plan-flotante {
+                bottom: 10px;
+                right: 10px;
+                width: 32px;
+                height: 32px;
+                font-size: 10px;
+                border-width: 1px;
+                box-shadow: 0 2px 10px rgba(255, 215, 0, 0.1);
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 12px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                display: none;
+            }
+        }
+
+        /* --- Orientación horizontal (landscape) --- */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .mejorar-plan-flotante {
+                bottom: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+                border-width: 1.5px;
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 16px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                font-size: 8px;
+                bottom: 50px;
+                padding: 2px 8px;
+            }
+        }
+
+        @media (max-height: 400px) and (orientation: landscape) {
+            .mejorar-plan-flotante {
+                bottom: 10px;
+                right: 10px;
+                width: 34px;
+                height: 34px;
+                font-size: 11px;
+                border-width: 1.2px;
+            }
+            .mejorar-plan-flotante::after {
+                font-size: 13px;
+            }
+            .mejorar-plan-flotante .tooltip-text {
+                display: none;
+            }
+        }
+
         @media (max-width: 768px) {
             .main-container {
                 max-width: 90%;
@@ -775,6 +1015,11 @@
         </div>
     </div>
 
+    <!-- BOTÓN MEJORAR PLAN - VERSIÓN FLOTANTE CIRCULAR (esquina inferior derecha) -->
+    <button id="mejorarPlanBtn" class="mejorar-plan-flotante" aria-label="Mejorar Plan">
+        <span class="tooltip-text">Mejorar Plan</span>
+    </button>
+
     <!-- MODAL -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-container">
@@ -1023,16 +1268,24 @@
                 return;
             } else {
                 sessionStorage.setItem("textoEnviado", texto);
-                window.location.href = "index2.html";
+                window.location.href = "menugratis.html";
             }
         }
 
         function irARegistro() {
-            window.location.href = "index3.html";
+            window.location.href = "registrorapidodewhatsapgratis.html";
+        }
+
+        // --- NUEVA FUNCIÓN PARA MEJORAR PLAN (FLOTANTE CIRCULAR) ---
+        function irAMejorarPlan() {
+            window.location.href = "planesgratis.html";
         }
 
         enviarBtn.addEventListener('click', verificarYRedirigir);
         registrarBtn.addEventListener('click', irARegistro);
+        
+        // Evento para el botón Mejorar Plan flotante circular
+        document.getElementById('mejorarPlanBtn').addEventListener('click', irAMejorarPlan);
         
         input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
