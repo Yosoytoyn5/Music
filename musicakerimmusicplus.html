@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Kerim Music+ · Spotify Style</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      line-height: 1.4;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    /* BARRA SUPERIOR ESTILO SPOTIFY - SIN HAMBURGUESA */
+    .top-bar {
+      background: #000000;
+      padding: 0.5rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      border-bottom: none;
+      flex-wrap: wrap;
+    }
+
+    .top-bar h1 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #1ed760, #1aa34a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    /* search container estilo Spotify */
+    .search-container {
+      display: flex;
+      align-items: center;
+      background: #1f1f1f;
+      border: none;
+      border-radius: 500px;
+      padding: 0.2rem 0.2rem 0.2rem 1rem;
+      flex: 1;
+      min-width: 140px;
+      max-width: 300px;
+      transition: all 0.2s;
+    }
+    .search-container:focus-within {
+      background: #2a2a2a;
+      border: 1px solid #1ed760;
+    }
+    .search-container input {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 0.85rem;
+      padding: 0.6rem 0;
+      width: 100%;
+      outline: none;
+    }
+    .search-container button {
+      background: transparent;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      color: #b3b3b3;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .search-container button:hover { color: white; }
+
+    /* BOTONES DE FILTRO ESTILO SPOTIFY EN LA PARTE SUPERIOR */
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 0.5rem auto 1rem auto;
+      padding: 0 1rem;
+      flex-wrap: wrap;
+    }
+    .filter-main-btn {
+      background: #232323;
+      border: none;
+      border-radius: 500px;
+      padding: 0.55rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #f0f0f0;
+      letter-spacing: 0.3px;
+    }
+    .filter-main-btn.active {
+      background: #1ed760;
+      color: #000000;
+    }
+    .filter-main-btn:hover:not(.active) {
+      background: #3a3a3a;
+      transform: scale(1.02);
+    }
+
+    /* SECCIÓN PRINCIPAL */
+    .gallery-section {
+      max-width: 1400px;
+      margin: 0.5rem auto;
+      padding: 0 1rem 6rem;
+      position: relative;
+    }
+    
+    /* CONTADOR */
+    .counter-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0.5rem auto 1rem auto;
+      padding: 4px 12px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 500px;
+      width: fit-content;
+      gap: 0.5rem;
+    }
+    .counter-wrapper.hidden-counter {
+      display: none;
+    }
+    .counter-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: #1ed760;
+    }
+    
+    /* SECCIÓN DE ARTISTAS MÁS ESCUCHADOS - ESTILO SPOTIFY */
+    .top-artists-section {
+      margin-bottom: 2rem;
+      padding: 0;
+    }
+    .top-artists-section.hidden-artists {
+      display: none;
+    }
+    .artists-horizontal {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      padding-bottom: 0.75rem;
+      -webkit-overflow-scrolling: touch;
+      justify-content: flex-start;
+    }
+    .artists-horizontal::-webkit-scrollbar {
+      height: 4px;
+      background: #282828;
+    }
+    .artists-horizontal::-webkit-scrollbar-thumb {
+      background: #1ed760;
+      border-radius: 10px;
+    }
+    .artist-circle-card {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 90px;
+    }
+    .artist-circle-card:hover {
+      transform: translateY(-4px);
+    }
+    .artist-circle-card:hover .artist-avatar {
+      box-shadow: 0 0 0 3px #1ed760;
+    }
+    .artist-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #282828;
+      transition: all 0.2s ease;
+      background: #1a1a1a;
+    }
+    .artist-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      color: #f0f0f0;
+      max-width: 90px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .artist-plays {
+      font-size: 0.55rem;
+      color: #b3b3b3;
+    }
+
+    /* CARRUSEL DE CHIPS - ESTILO SPOTIFY */
+    .sort-chips-container {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      gap: 0.8rem;
+      margin: 0.5rem auto 1.5rem auto;
+      padding: 0.25rem 0.3rem 0.6rem 0.3rem;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      justify-content: flex-start;
+      width: 100%;
+      white-space: nowrap;
+    }
+    .sort-chips-container::-webkit-scrollbar {
+      height: 3px;
+      background: #1e1e1e;
+      border-radius: 10px;
+    }
+    .sort-chips-container::-webkit-scrollbar-thumb {
+      background: #1ed760;
+      border-radius: 10px;
+    }
+    .chip-sort {
+      flex: 0 0 auto;
+      background: #232323;
+      border: none;
+      border-radius: 500px;
+      padding: 0.55rem 1.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #f0f0f0;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    .chip-sort.active {
+      background: #1ed760;
+      color: #000000;
+    }
+    .chip-sort:hover:not(.active) {
+      background: #3a3a3a;
+      transform: scale(1.02);
+    }
+    
+    /* FONDO MATE ALEATORIO */
+    .random-matte-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      transition: background-color 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      pointer-events: none;
+    }
+    .random-matte-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 40%, rgba(30,215,96,0.05) 0%, rgba(0,0,0,0.4) 100%);
+      pointer-events: none;
+    }
+    
+    /* GALERÍA GRID ESTILO SPOTIFY - TARJETAS REDONDEADAS */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.4s forwards;
+    }
+    
+    /* MODO LISTA PARA MÚSICA */
+    .music-list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .music-list-item {
+      background: rgba(18, 18, 18, 0.95);
+      border-radius: 8px;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 1rem 0.5rem 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .music-list-item:hover {
+      background: #282828;
+      transform: scale(1.01);
+    }
+    .music-list-item img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .music-list-info {
+      flex: 1;
+    }
+    .music-list-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: -0.2px;
+      color: #fff;
+    }
+    .music-list-cat {
+      font-size: 0.7rem;
+      color: #b3b3b3;
+      margin-top: 2px;
+    }
+    .music-list-play-icon {
+      font-size: 1.4rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+      color: #1ed760;
+    }
+    .music-list-item:hover .music-list-play-icon {
+      opacity: 1;
+    }
+    
+    /* VISTA DE LISTA PARA BÚSQUEDA */
+    .gallery-grid.list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .gallery-grid.list-view .image-card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background: rgba(18, 18, 18, 0.95);
+    }
+    .gallery-grid.list-view .image-card img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      aspect-ratio: 1/1;
+      flex-shrink: 0;
+    }
+    .gallery-grid.list-view .card-title {
+      flex: 1;
+      text-align: left;
+      white-space: normal;
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: white;
+    }
+    
+    /* SECCIÓN DE SUGERENCIAS - ESTILO SPOTIFY */
+    .suggestions-section {
+      margin-bottom: 2rem;
+      padding: 0;
+    }
+    .suggestions-horizontal {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      padding-bottom: 0.75rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .suggestions-horizontal::-webkit-scrollbar {
+      height: 4px;
+      background: #282828;
+    }
+    .suggestions-horizontal::-webkit-scrollbar-thumb {
+      background: #1ed760;
+      border-radius: 10px;
+    }
+    .suggestion-card {
+      flex: 0 0 160px;
+      background: #181818;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .suggestion-card:hover {
+      background: #282828;
+      transform: translateY(-4px);
+    }
+    .suggestion-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+    .suggestion-info {
+      padding: 0.6rem 0.5rem;
+      text-align: left;
+    }
+    .suggestion-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #f0f0f0;
+      margin-bottom: 4px;
+    }
+    .suggestion-badge {
+      font-size: 0.55rem;
+      color: #1ed760;
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: rgba(30,215,96,0.1);
+    }
+    .suggestion-invite {
+      font-size: 0.6rem;
+      color: #b3b3b3;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* TARJETAS ESTILO SPOTIFY - REDONDEADAS */
+    .image-card {
+      background: #181818;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .image-card:hover {
+      background: #282828;
+      transform: translateY(-4px);
+    }
+    .image-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      display: block;
+      border-radius: 0px;
+    }
+    .image-card:hover img {
+      transform: scale(1.02);
+    }
+    .card-title {
+      padding: 0.75rem 0.5rem;
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #f0f0f0;
+      background: transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    @media (min-width: 500px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    }
+    @media (min-width: 640px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 1200px) {
+      .gallery-grid:not(.list-view) { grid-template-columns: repeat(6, 1fr); }
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: #b3b3b3;
+      background: rgba(24,24,24,0.8);
+      border-radius: 8px;
+    }
+    .search-badge {
+      font-size: 0.8rem;
+      color: #b3b3b3;
+      margin-bottom: 1rem;
+      padding-left: 0.5rem;
+    }
+    
+    /* REPRODUCTOR EN PANTALLA COMPLETA - ESTILO SPOTIFY */
+    .fullscreen-player {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+      backdrop-filter: blur(0);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .fullscreen-player.show { opacity: 1; visibility: visible; }
+    .player-card {
+      background: transparent;
+      border: none;
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .player-cover {
+      width: min(70vw, 280px);
+      max-width: 280px;
+      margin: 0 auto 1.5rem auto;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .player-cover img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+    .song-details { 
+      text-align: center; 
+      margin-bottom: 1rem;
+    }
+    .song-details h2 { 
+      font-size: clamp(1rem, 5vw, 1.3rem); 
+      font-weight: 700; 
+      letter-spacing: -0.3px; 
+      margin-bottom: 0.3rem;
+    }
+    .song-category { color: #1ed760; font-size: 0.75rem; font-weight: 500; }
+    
+    .fav-shuffle-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 0.8rem;
+    }
+    .fav-btn-player {
+      background: transparent;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #b3b3b3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fav-btn-player.active { color: #1ed760; }
+    .fav-btn-player:hover { color: white; transform: scale(1.05); }
+    
+    .ctrl-btn.shuffle-btn-player {
+      background: transparent;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #b3b3b3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ctrl-btn.shuffle-btn-player.active { color: #1ed760; }
+    .ctrl-btn.shuffle-btn-player:hover { color: white; transform: scale(1.05); }
+    
+    .progress-area { width: 100%; margin: 1.5rem 0; }
+    .time-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: #b3b3b3; margin-bottom: 5px; }
+    .progress-bar-bg {
+      width: 100%;
+      height: 4px;
+      background: #282828;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .progress-fill { width: 0%; height: 100%; background: #1ed760; border-radius: 2px; }
+    
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+    .ctrl-btn {
+      background: transparent;
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #b3b3b3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ctrl-btn:hover {
+      color: white;
+      transform: scale(1.05);
+    }
+    .ctrl-btn.play-pause {
+      width: 64px;
+      height: 64px;
+      background: #1ed760;
+      color: #000000;
+      font-size: 1.8rem;
+    }
+    .ctrl-btn.play-pause:hover {
+      background: #1ed760;
+      transform: scale(1.05);
+      color: #000000;
+    }
+    
+    .close-player {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #b3b3b3;
+    }
+    .close-player:hover {
+      color: white;
+      transform: scale(1.05);
+    }
+    
+    /* SUGERENCIAS EN REPRODUCTOR */
+    .player-suggestions {
+      margin-top: 1.5rem;
+    }
+    .player-suggestions-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+    .player-suggestions-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #b3b3b3;
+      letter-spacing: 0.5px;
+    }
+    .toggle-suggestions-btn {
+      background: transparent;
+      border: 1px solid #3a3a3a;
+      border-radius: 500px;
+      padding: 0.25rem 0.8rem;
+      font-size: 0.6rem;
+      cursor: pointer;
+      color: #b3b3b3;
+      transition: all 0.2s ease;
+    }
+    .toggle-suggestions-btn:hover {
+      border-color: #1ed760;
+      color: white;
+    }
+    .player-suggestions-track {
+      display: flex;
+      gap: 0.8rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      padding-bottom: 0.6rem;
+      transition: opacity 0.2s ease;
+    }
+    .player-suggestions-track.hidden-suggestions {
+      display: none;
+    }
+    .player-suggestion-item {
+      flex: 0 0 min(22vw, 100px);
+      min-width: 80px;
+      background: #181818;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      overflow: hidden;
+    }
+    .player-suggestion-item:hover {
+      background: #282828;
+      transform: translateY(-4px);
+    }
+    .player-suggestion-img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+    .player-suggestion-info {
+      padding: 0.4rem 0.2rem;
+    }
+    .player-suggestion-title {
+      font-size: 0.6rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #f0f0f0;
+    }
+    .player-suggestion-plays {
+      font-size: 0.45rem;
+      color: #b3b3b3;
+    }
+    
+    /* MINI PLAYER */
+    .mini-player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #000000;
+      border-top: 1px solid #282828;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 1200;
+      cursor: pointer;
+    }
+    .mini-player.show { transform: translateY(0); }
+    .mini-cover { width: 48px; height: 48px; border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+    .mini-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .mini-info { flex: 1; min-width: 0; }
+    .mini-title { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: white; }
+    .mini-controls { display: flex; gap: 8px; flex-shrink: 0; }
+    .mini-btn {
+      background: transparent;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: #b3b3b3;
+    }
+    .mini-btn:hover { color: white; }
+    .mini-progress-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #282828;
+    }
+    .mini-progress-fill { width: 0%; height: 100%; background: #1ed760; }
+    
+    .welcome-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+    }
+    .welcome-modal.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .welcome-card {
+      background: #121212;
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      max-width: 320px;
+      width: 85%;
+    }
+    .welcome-card h2 { color: #1ed760; margin-bottom: 0.5rem; }
+    .accept-btn { background: #1ed760; color: black; border: none; padding: 0.8rem 2rem; border-radius: 500px; font-weight: bold; margin-top: 1rem; cursor: pointer; transition: 0.2s; }
+    .accept-btn:hover { transform: scale(1.02); background: #1aa34a; }
+    
+    .attribution { text-align: center; margin-top: 2rem; font-size: 0.6rem; color: #5a5a5a; }
+    
+    @media (max-width: 480px) {
+      .top-bar h1 { font-size: 1.2rem; }
+      .artist-avatar { width: 65px; height: 65px; }
+      .artist-circle-card { width: 75px; }
+      .suggestion-card { flex: 0 0 130px; }
+    }
+    
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="random-matte-bg" id="randomMatteBg"></div>
+
+<div class="welcome-modal" id="welcomeModal">
+  <div class="welcome-card"><h2>Kerim Music+</h2><p style="color:#b3b3b3">Disfruta tu música</p><button class="accept-btn" id="acceptWelcomeBtn">COMENZAR</button></div>
+</div>
+
+<header class="top-bar">
+  <h1>Kerim Music+</h1>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="¿Qué quieres escuchar?">
+    <button id="searchButton">🔍</button>
+  </div>
+</header>
+
+<!-- FILTROS PRINCIPALES: INICIO y TUS ME GUSTA solamente -->
+<div class="filter-buttons">
+  <button class="filter-main-btn active" data-view="home">Inicio</button>
+  <button class="filter-main-btn" data-view="likes">Tus Me gusta</button>
+</div>
+
+<main class="gallery-section">
+  <div class="counter-wrapper" id="counterWrapper">
+    <span class="counter-label">👁️ VISITAS</span>
+    <div class="counter-container">
+      <a href="https://www.hitwebcounter.com/" target="_blank" rel="noopener" title="Web Counter">
+        <img src="https://www.hitwebcounter.com/counter/counter.php?page=21497063&amp;style=0049&amp;nbdigits=1&amp;type=ip" alt="Web Counter" decoding="async" style="border:0;max-width:100%;height:auto;" />
+      </a>
+    </div>
+  </div>
+  
+  <div class="top-artists-section" id="topArtistsSection">
+    <div class="artists-horizontal" id="artistsContainer"></div>
+  </div>
+  
+  <div id="sortChipsContainer" class="sort-chips-container" style="display: none;">
+    <button class="chip-sort" data-sort="default">Por defecto</button>
+    <button class="chip-sort" data-sort="lastFirst">Más recientes</button>
+    <button class="chip-sort" data-sort="firstFirst">Más antiguas</button>
+  </div>
+  
+  <div id="searchBadge" class="search-badge"></div>
+  <div id="suggestionsContainer" class="suggestions-section"></div>
+  <div id="contentContainer"></div>
+  <div class="attribution">Kerim Music+ · Stream your vibe</div>
+</main>
+
+<div class="fullscreen-player" id="fullscreenPlayer">
+  <div class="close-player" id="closePlayerBtn">✕</div>
+  <div class="player-card">
+    <div class="player-cover"><img id="fullCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg" alt="cover"></div>
+    <div class="song-details">
+      <h2 id="fullSongTitle">Kerim Music</h2>
+      <div class="song-category" id="fullSongCategory"></div>
+      <div class="fav-shuffle-row">
+        <button class="fav-btn-player" id="favoriteBtnMain">♡</button>
+        <button class="ctrl-btn shuffle-btn-player" id="shuffleBtnPlayer">🔀</button>
+      </div>
+    </div>
+    <div class="progress-area"><div class="time-row"><span id="currentTime">0:00</span><span id="durationTime">0:00</span></div>
+      <div class="progress-bar-bg" id="progressBarBg"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="controls">
+      <button class="ctrl-btn" id="fullPrevBtn">⏮</button>
+      <button class="ctrl-btn play-pause" id="fullPlayPauseBtn">▶</button>
+      <button class="ctrl-btn" id="fullNextBtn">⏭</button>
+    </div>
+    
+    <div class="player-suggestions" id="playerSuggestions">
+      <div class="player-suggestions-header">
+        <div class="player-suggestions-title">🎧 Temas relacionados</div>
+        <button class="toggle-suggestions-btn" id="toggleSuggestionsBtn">Ocultar</button>
+      </div>
+      <div class="player-suggestions-track" id="playerSuggestionsTrack"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-player" id="miniPlayer">
+  <div class="mini-cover"><img id="miniCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg"></div>
+  <div class="mini-info"><div class="mini-title" id="miniTitle">Selecciona</div></div>
+  <div class="mini-controls"><button class="mini-btn" id="miniPrevBtn">⏮</button><button class="mini-btn" id="miniPlayPauseBtn">▶</button><button class="mini-btn" id="miniNextBtn">⏭</button></div>
+  <div class="mini-progress-bg"><div class="mini-progress-fill" id="miniProgressFill"></div></div>
+</div>
+
+<script>
+  (function(){
+    const originalSongs = [
+      {id:34, url:'https://www.dropbox.com/scl/fi/ce5cvqnqfbmbasgswiz5u/J-V-zquez.jpg?rlkey=r4p0lh5s8bsz65l7omsteqd0j&st=u3e0szkd&raw=1', category:'Musica', title:'Me vuelve loco J Vazquez', music:'https://www.dropbox.com/scl/fi/5ojo4u3dak6gytmkcy605/j-vazquez-me-vuelve-loco-fusa-company.mp3?rlkey=ickcmbzdf3wi1k012e0mygo8e&st=q2zmxnh9&raw=1'},
+      {id:33, url:'https://www.dropbox.com/scl/fi/a3qd0pbwbshf0lyztv3a3/Por-ultima-vez.jpg?rlkey=c12cn6qtjyft9l7ead2ajx9vf&st=zapsju9h&raw=1', category:'Musica', title:'Hello Vercion Kerim Music', music:'https://www.dropbox.com/scl/fi/y8t89m2l4wu6eyhc8wvl1/Hello-Cover-Beyonce-guadalajara.wav?rlkey=1eoejx9anwsb8xg72l7850d8p&st=1oaelag9&raw=1'},
+      {id:32, url:'https://www.dropbox.com/scl/fi/4k7bl5r8616fz8ma4009u/Picsart_26-05-09_16-40-27-811.jpg?rlkey=run3f5roahpmf10zc7fuopziw&st=8xnv6fp5&raw=1', category:'Musica', title:'Envidiosos Adan G x Sain Nt', music:'https://www.dropbox.com/scl/fi/n5kptf0owcnipvg5yntrp/08-Ad-n-G-x-Sain-Nt-ENVIDIOSOS-REMIX-CON-UE-OS-IN-DINERO.mp3?rlkey=1zrohzv4ebl51tac3oeix2x7u&st=myhnmu8k&raw=1'},
+      {id:31, url:'https://www.dropbox.com/scl/fi/kgnxbl0mdp3q2uivbi4et/800x800-7986476-0F948044-9801-4FC9-8EFF36DDC1873148-0-3542185-Teestoyllamando.jpg?rlkey=jki22g8n7mq0b7ufv138n4wsn&st=iw8gk09e&raw=1', category:'Musica', title:'Te estoy llamando', music:'https://www.dropbox.com/scl/fi/rok6qgex9a7qer30xqwvd/TeestoyLlamandolista.wav?rlkey=qwtm9h6cswvdzhxyauww79hd4&st=60pcm99d&raw=1'},
+      {id:30, url:'https://www.dropbox.com/scl/fi/9xqi6k1g5cnbior62dh0l/800x800-7986476-B8AD12F4-560F-4E85-8EE3DD6C45025D0E-0-565367-Picsart260207195632530.jpg?rlkey=zjttay9r0myk8r0h1x2074pnj&st=521n7hvx&raw=1', category:'Musica', title:'Sigo Vivo Aziber', music:'https://www.dropbox.com/scl/fi/d3pjln5vf9ndpey9gqg67/SIgoVivoIazberMp3-1.wav?rlkey=njt48r9cm06ven5h6p476afac&st=4g5krti4&raw=1'},
+      {id:29, url:'https://www.dropbox.com/scl/fi/kk1f1fdpsgx7noxb5lly9/800x800-7986476-70C18BD7-1A24-4B1E-9D524972181DB7D1-0-663215-FBIMG17490012695773000x3000.jpg?rlkey=0exgl54ffel1k27ncua1j7kd2&st=vr0tik1g&raw=1', category:'Musica', title:'Recuerdos Aizber', music:'https://www.dropbox.com/scl/fi/ivi9sc8o5muusrfvbutay/RecuedosAizberKerimMusic.flac?rlkey=yx3b7v98f47r7vzz9wmfrbu8e&st=eaz12kjs&raw=1'},
+      {id:28, url:'https://www.dropbox.com/scl/fi/ufyml25z65fpccmntk0u8/800x800-7986476-31310345-26C0-4D4C-BE84E673A034B972-0-396100-1000023011.jpg?rlkey=0wt2tk5frnl8olkgqrv2pzavg&st=2701x6fs&raw=1', category:'Musica', title:'No eres juego de nintendo J Vazquez', music:'https://www.dropbox.com/scl/fi/b8esp6xyrrgx99ojfghav/NoeresjuegodenintendoJbazquez.wav?rlkey=3bdruu1u6ywo8w11k6mne106a&st=07wqaypb&raw=1'},
+      {id:27, url:'https://www.dropbox.com/scl/fi/ag7fqpeejjz9cii89zp0j/800x800-7986476-AA08955F-14F0-44B5-9A5806FE2B5CF93F-0-1499720-1000026237.jpg?rlkey=zzm139tr5viuw47njuzpd29ds&st=nosfkylb&raw=1', category:'Musica', title:'My corazon en tu alatar Aizber', music:'https://www.dropbox.com/scl/fi/jlocoo87ctkvwua1a8my0/MicorazonentualtarAizberKerimMusic.flac?rlkey=zz0bypimr6ge8gglqs7vgwpa4&st=c0k9pwux&raw=1'},
+      {id:26, url:'https://www.dropbox.com/scl/fi/76ecpaei3j09h886fy314/800x800-7986476-FF4245C9-9198-41D6-8FD5A0EEA619ECCD-0-713007-Picsart250806182628068.jpg?rlkey=ug6nue19ikdth4sqpor6laygt&st=8b6a0ssv&raw=1', category:'Musica', title:'Haora me toca ami J Vazquez Ft Out Mx', music:'https://www.dropbox.com/scl/fi/or5cfdp8v5amsz6yjs7k1/MetocaamiJVazquezxOutMx.flac?rlkey=9jkzytxk2ioh9kf96gnuj0vdq&st=wb9xdjnh&raw=1'},
+      {id:25, url:'https://www.dropbox.com/scl/fi/bv6fo6j2vmnp2esqd4ula/800x800-7986476-700B12B5-E66A-4DC7-B44D0B4ABA4553B2-0-483095-Picsart251220185548595.jpg?rlkey=r6plwuux7kuee6uw307l1isar&st=gkhgd4oa&raw=1', category:'Musica', title:'Lo que nunca exprese J Vazquez', music:'https://www.dropbox.com/scl/fi/bz13mnpi351mj8jpmt73q/J-Vazquez-Lo-que-nunca-exprese.wav?rlkey=zcuwzjc22eom2d3qythgr130y&st=y1deklv8&raw=1'},
+      {id:24, url:'https://www.dropbox.com/scl/fi/xts5le77z60r3k7cfnkv6/800x800-7986476-DA4D5540-E151-42F0-8E9AA054C66F26A0-0-91650-FBIMG1754180896541.jpg?rlkey=kphe4vcw8pktyxwkgm3cl78bb&st=raimy7zq&raw=1', category:'Musica', title:'Cinco AM Tonny Reyes', music:'https://www.dropbox.com/scl/fi/h3t25byzypksnjjqgysui/CincoAmTonnyreyes.flac?rlkey=zpsntr84ozefiuyl8c7go1he0&st=08d0mcha&raw=1'},
+      {id:23, url:'https://www.dropbox.com/scl/fi/kfrpspuowtzrkjvwe2kxa/800x800-7986476-EBBCC76E-8564-423A-9B173657F2C27F7C-0-563472-Picsart250629201208586.jpg?rlkey=qglu4yfiepshx5p119dk647du&st=mw8lfbtl&raw=1', category:'Musica', title:'Beyby J Vazquez', music:'https://www.dropbox.com/scl/fi/vffz16jp4lb35ow738v2y/BeybyJVazquez.flac?rlkey=54fvvt360fd9af0vglxq3xsjf&st=ju3378de&raw=1'},
+      {id:22, url:'https://www.dropbox.com/scl/fi/u451cfrep8ohfcdrepmxq/483488957_122195212382093529_2576876991791910487_n.jpg?rlkey=gnrgw1i2tkspyxg2de03ffma8&st=175922oz&raw=1', category:'Musica', title:'Me estoy mueirdo Clave 462', music:'https://www.dropbox.com/scl/fi/n66wxeygxd8ddchrls1kv/Me-estoy-muriendo-clave-462.wav?rlkey=hfkc487fwb71ziploobu8duqi&st=5nca4wns&raw=1'},
+      {id:21, url:'https://www.dropbox.com/scl/fi/zixsk3wr4r62bb9x6ea1g/Picsart_26-04-25_18-14-14-639.jpg?rlkey=kzujxp5xzvxtp38sbd3y6oz68&st=x25iex9q&raw=1', category:'Musica', title:'Ella mueve el tootoo J Vazquez ft Prii Ramirez', music:'https://www.dropbox.com/scl/fi/vw9p5zadrjyki5by39mmd/TootootooJ_VazquezBarrio_Bajo_M_Oficial.wav?rlkey=mphfjhdb08clx3fnnh2etkr70&st=mhj2asn2&raw=1'},
+      {id:20, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Vuelve Dany Zm', music:'https://www.dropbox.com/scl/fi/5dlej4wkll16uxyz3knwf/vuelve-9-dany-zm.mp3?rlkey=1mw4i576qw1q6xn4wofshg3gz&st=tbpp90qm&raw=1'},
+      {id:19, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Nuestro cuento Dany Zm', music:'https://www.dropbox.com/scl/fi/xmca1v67r0foa02ah0ix5/nuestro-cuento-7-dany-zm.mp3?rlkey=4wdtldt4ch8usesgbsqdkl0o1&st=4xdrusp8&raw=1'},
+      {id:18, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Me dejo solor Dany Zm ft Sain Nt Yezcor Cruz', music:'https://www.dropbox.com/scl/fi/ybuowdfnam5frrjksy570/me-dejo-solo-5-dany-zm.mp3?rlkey=9oiwuxep5v6se4r7af6qlwhb2&st=zbzpdjp2&raw=1'},
+      {id:17, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Lluvia Dany Zm', music:'https://www.dropbox.com/scl/fi/fo85o8m1etbo68m9a46xq/lluvia-8-dany-zm.mp3?rlkey=ywh0y4ezduhd3q7bjvh5orki1&st=n3ykoz9q&raw=1'},
+      {id:16, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Hasta cuendo Dany Zm', music:'https://www.dropbox.com/scl/fi/6588ikrqstte1wzjkreja/hasta-cuando-1-dany-zm.mp3?rlkey=uqpq1cpmnj1e5pnd5ndxwpb47&st=tgxuj89m&raw=1'},
+      {id:15, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Engaño Dany Zm', music:'https://www.dropbox.com/scl/fi/7qvtyhs6smsgnu56z9ch7/en-gano-6-dany-zm.mp3?rlkey=lzu6kbgqicirph9sp4ndhyq90&st=gu0hpw1p&raw=1'},
+      {id:14, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Tu tiempo de acabo Dany Zm', music:'https://www.dropbox.com/scl/fi/ees3i5mgfc50lwtg59hgw/Dany-Zm-Tu-tiempo-se-acavo.mp3?rlkey=kijhvu3rsv6j3zri6dh20wowf&st=3k6i51wu&raw=1'},
+      {id:13, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Especial Dany Zm', music:'https://www.dropbox.com/scl/fi/han7yoy13ncejnz4exj3r/dalex-especial-cover-dany-zm.mp3?rlkey=8pchaqdtz2iq854i8zrhxfriw&st=var5yqcp&raw=1'},
+      {id:12, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Corito sano Dany Zm', music:'https://www.dropbox.com/scl/fi/l4d8dvoahieq4yqf536ol/CORITO-SANO-DANY-ZM-VA-YEZKOR-CRUZ-SAIN-NT-VERSION-T.E.C.mp3?rlkey=wsj8578k3e14hqr74npb3krjb&st=pdov6vmy&raw=1'},
+      {id:11, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Beyby Dany Zm', music:'https://www.dropbox.com/scl/fi/v4remtzyol50e00rvhpen/beyby-4dany-zm.mp3?rlkey=y803hhbgxghxrlgsvpe9w16i9&st=p6m3gs7z&raw=1'},
+      {id:10, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Bailalo Dany Zm', music:'https://www.dropbox.com/scl/fi/ctedqktecjqbqvd2t5uct/bailado-3-dany-zm.mp3?rlkey=l1zrwqrevorjbxjq3u7gi4k3t&st=3kh4wkgz&raw=1'},
+      {id:9, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Modo Avion Dany Zm', music:'https://www.dropbox.com/scl/fi/rq7dnfuqaywgjdo6dp9de/1-Modo-avion-Dany-Zm-El-rencuentro..flac?rlkey=xfv7h1xurdroh0ct3xu71ge9m&st=v1bfhinm&raw=1'},
+      {id:8, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Ay estare Dany Zm', music:'https://www.dropbox.com/scl/fi/lbohzzgaf7xnw1v7o3ec9/ay-estare-2-dany-zm.mp3?rlkey=41qeo3w154ctk8gvlzl2aa0v1&st=ybnb2zya&raw=1'},
+      {id:6, url:'https://www.dropbox.com/scl/fi/55lnmbdl6wrt1wnpb1j4z/Quiereme-asi.png?rlkey=9knalslivzs7b6r9f3c8um0u7&st=o6wbyer5&raw=1', category:'Musica', title:'Quiere a si Prii Ramirez', music:'https://www.dropbox.com/scl/fi/c9ss4stui4mi1c6ku2w1r/Qui-reme-As.flac?rlkey=7vz44u6mff02f5h7nto5okcr0&st=qnv4scxe&raw=1'},
+      {id:5, url:'https://i.postimg.cc/wMCFZY9H/Picsart-26-02-15-14-39-19-042.jpg', category:'Musica', title:'Dile que tu eres mia Dany Zm', music:'https://www.dropbox.com/scl/fi/qx6o5slgy64yr6fgmg1fr/DanyZmTueresmiaOfical.wav?rlkey=iaxc3giic8tw7fc1ope4t6qwc&st=zr0joz18&raw=1'},
+      {id:4, url:'https://i.postimg.cc/3JGtpNZk/Picsart-26-02-24-14-11-02-954.jpg', category:'Musica', title:'De nada me estreso Placoso de la L', music:'https://www.dropbox.com/scl/fi/86rzw7fafswhle6yl8y9z/Es-el-M-KERIM-MUSIC.wav?rlkey=4m6i3hi98rqgu9iewhpvyitz8&st=78rqjwpx&raw=1'},
+      {id:3, url:'https://i.postimg.cc/RFymvC4R/Picsart-26-02-22-22-13-49-068.jpg', category:'Musica', title:'Andas diciendo Prii Ramirez', music:'https://www.dropbox.com/scl/fi/arf3n114kljfqs1a5rwm0/Andan-diciendo-Prii-Ramirez.wav?rlkey=qeqb9egyjn1n0n4cq9kt2kc5r&st=6s1ck9s6&raw=1'},
+      {id:2, url:'https://i.postimg.cc/tTxkMmxc/Picsart-26-02-07-19-56-32-530.jpg', category:'Musica', title:'Sigo Vivo Aizber', music:'https://www.dropbox.com/scl/fi/0y977tgyjp66og2ze36uh/SIgoVivoIazberMp3.wav?rlkey=6vdswfh8f3wtqa66seeugc480&st=byt5z91w&raw=1'},
+      {id:1, url:'https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg', category:'Musica', title:'Catorce de febrero J Vazquez', music:'https://www.dropbox.com/scl/fi/igoyb7x8feuz6otf67ddt/JBazques14deFrebreroOficial.wav?rlkey=vbgyvxlgyk5t1pl6kojif7w65&st=1ogeqzbh&raw=1'},
+      {id:7, url:'https://i.postimg.cc/MXJXxVL3/Te-estoy-llamando.jpg', category:'Musica', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/97yj1flb0bgaaedaxr9h1/Te_estoy_Llamando_lista.wav?rlkey=cn3oppwsfjv617hhcuy2rcga4&st=ipum1s6a&raw=1'}
+    ];
+    
+    let masterSongs = [...originalSongs];
+    let favSet = new Set();
+    let playCount = new Map();
+    let artistPlayCount = new Map();
+    let favOrder = [];
+    
+    function rebuildArtistCounts() {
+      artistPlayCount.clear();
+      for (let song of masterSongs) {
+        let plays = playCount.get(song.id) || 0;
+        if(plays > 0){
+          let artist = song.artist || 'Artista';
+          artistPlayCount.set(artist, (artistPlayCount.get(artist) || 0) + plays);
+        }
+      }
+    }
+    
+    try{ 
+      let saved = localStorage.getItem('kerim_favs_set'); if(saved) JSON.parse(saved).forEach(id=>favSet.add(Number(id))); 
+      let savedCounts = localStorage.getItem('kerim_play_counts');
+      if(savedCounts){ let parsed = JSON.parse(savedCounts); for(let [k,v] of Object.entries(parsed)) playCount.set(Number(k), v); }
+      let savedOrder = localStorage.getItem('kerim_fav_order');
+      if(savedOrder) favOrder = JSON.parse(savedOrder);
+      else favOrder = [...favSet];
+      rebuildArtistCounts();
+    } catch(e){}
+    
+    function saveFavs(){ localStorage.setItem('kerim_favs_set', JSON.stringify([...favSet])); favOrder = favOrder.filter(id => favSet.has(id)); for(let id of favSet) if(!favOrder.includes(id)) favOrder.push(id); localStorage.setItem('kerim_fav_order', JSON.stringify(favOrder)); }
+    function savePlayCounts(){ let obj = {}; for(let [k,v] of playCount.entries()) obj[k] = v; localStorage.setItem('kerim_play_counts', JSON.stringify(obj)); rebuildArtistCounts(); renderTopArtists(); }
+    function incrementPlayCount(songId){ 
+      let song = masterSongs.find(s => s.id === songId);
+      if(song) {
+        let artist = song.artist || 'Artista';
+        let newCount = (playCount.get(songId) || 0) + 1;
+        playCount.set(songId, newCount);
+        artistPlayCount.set(artist, (artistPlayCount.get(artist) || 0) + 1);
+        savePlayCounts();
+      } else {
+        playCount.set(songId, (playCount.get(songId) || 0) + 1);
+        savePlayCounts();
+      }
+    }
+    function isFav(id){ return favSet.has(id); }
+    function toggleFav(id){ if(isFav(id)) { favSet.delete(id); favOrder = favOrder.filter(fid => fid !== id); } else { favSet.add(id); if(!favOrder.includes(id)) favOrder.push(id); } saveFavs(); updateFavButtonUI(); if(isPlaylistsMode) renderContent(); }
+    function getFavSongsSorted(){ return favOrder.map(id => originalSongs.find(s => s.id === id)).filter(Boolean); }
+    
+    let playlistsSortMode = 'default';
+    const savedSortMode = localStorage.getItem('kerim_playlists_sort_mode');
+    if (savedSortMode && ['default', 'lastFirst', 'firstFirst'].includes(savedSortMode)) playlistsSortMode = savedSortMode;
+    function applyPlaylistsSort(songs){ 
+      if(playlistsSortMode === 'default') return songs; 
+      if(playlistsSortMode === 'lastFirst') return [...songs].reverse(); 
+      return songs; 
+    }
+    function getFavSongs(){ return applyPlaylistsSort(getFavSongsSorted()); }
+    function getLeastPlayedSuggestions(limit = 6){ let songsWithCount = masterSongs.map(song => ({...song, plays: playCount.get(song.id) || 0})); songsWithCount.sort((a,b) => a.plays - b.plays); return songsWithCount.slice(0, limit); }
+    
+    function getTopArtists(limit = 6) {
+      let artistsArray = [];
+      for (let [artist, plays] of artistPlayCount.entries()) {
+        let songByArtist = masterSongs.find(s => (s.artist || 'Artista') === artist);
+        let artistImage = songByArtist ? songByArtist.url : 'https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg';
+        artistsArray.push({ name: artist, plays: plays, image: artistImage });
+      }
+      artistsArray.sort((a, b) => b.plays - a.plays);
+      return artistsArray.slice(0, limit);
+    }
+    
+    function renderTopArtists() {
+      const topArtistsSection = document.getElementById('topArtistsSection');
+      const artistsContainer = document.getElementById('artistsContainer');
+      const shouldShow = (!isPlaylistsMode && currentSearch.trim() === '');
+      if (!shouldShow) { topArtistsSection.classList.add('hidden-artists'); return; }
+      topArtistsSection.classList.remove('hidden-artists');
+      const topArtists = getTopArtists(6);
+      if (topArtists.length === 0 || (topArtists.length === 1 && topArtists[0].plays === 0)) {
+        artistsContainer.innerHTML = '<div style="color:#b3b3b3; font-size:0.8rem; padding:0.5rem;">Escucha más canciones para ver tus artistas favoritos 🎧</div>';
+        return;
+      }
+      let html = '';
+      topArtists.forEach(artist => {
+        html += `<div class="artist-circle-card" data-artist="${escapeHtml(artist.name)}"><img class="artist-avatar" src="${artist.image}" alt="${escapeHtml(artist.name)}" loading="lazy"><div class="artist-name">${escapeHtml(artist.name.length > 15 ? artist.name.substring(0,12)+'...' : artist.name)}</div><div class="artist-plays">${artist.plays} reproducción${artist.plays !== 1 ? 'es' : ''}</div></div>`;
+      });
+      artistsContainer.innerHTML = html;
+      document.querySelectorAll('.artist-circle-card').forEach(card => { card.addEventListener('click', () => { const artistName = card.getAttribute('data-artist'); if(artistName){ currentSearch = artistName; searchInput.value = artistName; performSearch(); } }); });
+    }
+    
+    function getPlayerSuggestions(currentSongObj, limit = 6) {
+      if (!currentSongObj) return [];
+      const sameArtist = masterSongs.filter(s => s.id !== currentSongObj.id && ((s.artist && currentSongObj.artist) && s.artist.toLowerCase() === currentSongObj.artist.toLowerCase()));
+      const others = masterSongs.filter(s => s.id !== currentSongObj.id && !sameArtist.includes(s));
+      let combined = [...sameArtist, ...others];
+      return combined.slice(0, limit);
+    }
+    
+    let suggestionsHidden = false;
+    function renderPlayerSuggestions() {
+      const suggestionsTrack = document.getElementById('playerSuggestionsTrack');
+      const toggleBtn = document.getElementById('toggleSuggestionsBtn');
+      if (!currentSong) { suggestionsTrack.innerHTML = ''; return; }
+      const suggestions = getPlayerSuggestions(currentSong);
+      if (suggestions.length === 0) { suggestionsTrack.innerHTML = '<div style="color:#b3b3b3; text-align:center; font-size:0.7rem;">No hay sugerencias disponibles</div>'; return; }
+      let html = '';
+      suggestions.forEach(song => {
+        const plays = playCount.get(song.id) || 0;
+        html += `<div class="player-suggestion-item" data-id="${song.id}"><img class="player-suggestion-img" src="${song.url}" loading="lazy"><div class="player-suggestion-info"><div class="player-suggestion-title">${escapeHtml(song.title.length > 12 ? song.title.substring(0,10)+'...' : song.title)}</div><div class="player-suggestion-plays">${plays} escuchas</div></div></div>`;
+      });
+      suggestionsTrack.innerHTML = html;
+      if (suggestionsHidden) { suggestionsTrack.classList.add('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Mostrar'; } else { suggestionsTrack.classList.remove('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Ocultar'; }
+      document.querySelectorAll('#playerSuggestionsTrack .player-suggestion-item').forEach(item => { item.addEventListener('click', (e) => { e.stopPropagation(); const id = parseInt(item.getAttribute('data-id')); const found = masterSongs.find(s => s.id === id); if(found) { updateQueueAndMode(); playSong(found); } }); });
+    }
+    
+    function toggleSuggestions() {
+      suggestionsHidden = !suggestionsHidden;
+      const track = document.getElementById('playerSuggestionsTrack');
+      const toggleBtn = document.getElementById('toggleSuggestionsBtn');
+      if (track) {
+        if (suggestionsHidden) { track.classList.add('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Mostrar'; } 
+        else { track.classList.remove('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Ocultar'; }
+      }
+    }
+    
+    let currentPlayQueue = [], currentQueueIndex = 0, currentSong = null, audio = new Audio(), isPlaying = false, currentSearch = '', shuffleActive = false, originalQueue = [], isPlaylistsMode = false;
+    const contentContainer = document.getElementById('contentContainer'), suggestionsContainer = document.getElementById('suggestionsContainer'), searchBadge = document.getElementById('searchBadge'), fullPlayer = document.getElementById('fullscreenPlayer'), miniPlayerDiv = document.getElementById('miniPlayer'), fullCover = document.getElementById('fullCover'), fullSongTitle = document.getElementById('fullSongTitle'), fullSongCategory = document.getElementById('fullSongCategory'), fullPlayPause = document.getElementById('fullPlayPauseBtn'), fullPrev = document.getElementById('fullPrevBtn'), fullNext = document.getElementById('fullNextBtn'), progressFill = document.getElementById('progressFill'), progressBarBg = document.getElementById('progressBarBg'), currentTimeSpan = document.getElementById('currentTime'), durationSpan = document.getElementById('durationTime'), favMainBtn = document.getElementById('favoriteBtnMain'), closePlayerBtn = document.getElementById('closePlayerBtn'), miniCover = document.getElementById('miniCover'), miniTitle = document.getElementById('miniTitle'), miniPlayPause = document.getElementById('miniPlayPauseBtn'), miniPrev = document.getElementById('miniPrevBtn'), miniNext = document.getElementById('miniNextBtn'), miniProgressFill = document.getElementById('miniProgressFill'), searchInput = document.getElementById('searchInput'), searchButton = document.getElementById('searchButton'), randomMatteBg = document.getElementById('randomMatteBg'), counterWrapper = document.getElementById('counterWrapper');
+    const sortChipsContainer = document.getElementById('sortChipsContainer');
+    const shuffleBtnPlayer = document.getElementById('shuffleBtnPlayer');
+    const toggleSuggestionsBtnElem = document.getElementById('toggleSuggestionsBtn');
+    
+    const mattePalette = ['#121212', '#181818', '#0F0F0F', '#1A1A1A', '#141414', '#161616', '#1C1C1C', '#111111'];
+    function getRandomMatteColor() { return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
+    function changeBackgroundRandomly() { randomMatteBg.style.backgroundColor = getRandomMatteColor(); }
+    let intervalBg = setInterval(() => changeBackgroundRandomly(), 7000);
+    function triggerBackgroundRefresh() { changeBackgroundRandomly(); }
+    
+    function shuffleArray(arr) { const array = [...arr]; for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+    
+    function toggleShuffle() {
+      shuffleActive = !shuffleActive;
+      if (shuffleActive) {
+        shuffleBtnPlayer.classList.add('active');
+        if (originalQueue.length === 0 && currentPlayQueue.length > 0) {
+          originalQueue = [...currentPlayQueue];
+        }
+        const currentSongId = currentSong ? currentSong.id : null;
+        let queueWithoutCurrent = currentPlayQueue.filter(s => s.id !== currentSongId);
+        let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent);
+        let newQueue = [];
+        if (currentSongId && currentPlayQueue.find(s => s.id === currentSongId)) {
+          newQueue = [currentSong, ...shuffledWithoutCurrent];
+          currentQueueIndex = 0;
+        } else {
+          newQueue = shuffledWithoutCurrent;
+          currentQueueIndex = 0;
+        }
+        currentPlayQueue = newQueue;
+      } else {
+        shuffleBtnPlayer.classList.remove('active');
+        if (originalQueue.length > 0) {
+          const currentSongId = currentSong ? currentSong.id : null;
+          let newIndex = originalQueue.findIndex(s => s.id === currentSongId);
+          if (newIndex === -1 && currentSong) newIndex = 0;
+          currentPlayQueue = originalQueue;
+          currentQueueIndex = newIndex !== -1 ? newIndex : 0;
+          originalQueue = [];
+        }
+      }
+    }
+    
+    function getActiveListForQueue(){
+      if(isPlaylistsMode) {
+        let base = getFavSongs();
+        if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase()) || (s.artist && s.artist.toLowerCase().includes(currentSearch.toLowerCase())));
+        return base;
+      } else {
+        let base = [...masterSongs];
+        if(currentSearch.trim() !== '') base = base.filter(s=>s.title.toLowerCase().includes(currentSearch.toLowerCase()) || (s.artist && s.artist.toLowerCase().includes(currentSearch.toLowerCase())));
+        return base;
+      }
+    }
+    
+    function buildBaseQueue(){ return getActiveListForQueue(); }
+    
+    function updateQueueAndMode(){ 
+      const newQueue = buildBaseQueue(); 
+      if (shuffleActive) { 
+        originalQueue = [...newQueue]; 
+        const currentSongId = currentSong ? currentSong.id : null; 
+        let queueWithoutCurrent = newQueue.filter(s => s.id !== currentSongId); 
+        let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent); 
+        let newQueueShuffled = []; 
+        if (currentSongId && newQueue.find(s => s.id === currentSongId)) { 
+          newQueueShuffled = [currentSong, ...shuffledWithoutCurrent]; 
+          currentQueueIndex = 0; 
+        } else { 
+          newQueueShuffled = shuffledWithoutCurrent; 
+          currentQueueIndex = 0; 
+        } 
+        currentPlayQueue = newQueueShuffled; 
+      } else { 
+        currentPlayQueue = newQueue; 
+        if(currentSong && currentPlayQueue.findIndex(s=>s.id===currentSong.id) !== -1) currentQueueIndex = currentPlayQueue.findIndex(s=>s.id===currentSong.id); 
+        else { 
+          currentQueueIndex = 0; 
+          if(currentPlayQueue.length) currentSong = currentPlayQueue[0]; 
+        } 
+      } 
+      if(currentPlayQueue.length === 0 && !isPlaylistsMode && masterSongs.length) { 
+        currentPlayQueue = [...masterSongs]; 
+        if(shuffleActive) { 
+          const currentSongId = currentSong ? currentSong.id : null; 
+          let queueWithoutCurrent = currentPlayQueue.filter(s => s.id !== currentSongId); 
+          let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent); 
+          if (currentSongId && currentPlayQueue.find(s => s.id === currentSongId)) { 
+            currentPlayQueue = [currentSong, ...shuffledWithoutCurrent]; 
+            currentQueueIndex = 0; 
+          } else { 
+            currentPlayQueue = shuffledWithoutCurrent; 
+            currentQueueIndex = 0; 
+          } 
+        } 
+      } 
+      if(currentPlayQueue.length && !currentSong) currentSong = currentPlayQueue[0]; 
+    }
+    
+    function playSong(song, customQueue = null){ if(!song) return; currentSong = song; incrementPlayCount(song.id); renderSuggestions(); renderTopArtists(); if(customQueue) { currentPlayQueue = customQueue; if(shuffleActive) { originalQueue = [...customQueue]; const currentSongId = song.id; let queueWithoutCurrent = customQueue.filter(s => s.id !== currentSongId); let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent); currentPlayQueue = [song, ...shuffledWithoutCurrent]; currentQueueIndex = 0; } else { currentQueueIndex = currentPlayQueue.findIndex(s=>s.id===song.id); } } else { updateQueueAndMode(); let idx = currentPlayQueue.findIndex(s=>s.id===song.id); if(idx !== -1) currentQueueIndex = idx; } if(song.music){ audio.src = song.music; audio.play().catch(e=>console.log); isPlaying = true; } else { audio.pause(); isPlaying = false; } updateUIWithSong(song); fullPlayer.classList.add('show'); miniPlayerDiv.classList.add('show'); updatePlayPauseIcon(); triggerBackgroundRefresh(); renderPlayerSuggestions(); }
+    function updateUIWithSong(song){ fullCover.src = song.url; fullSongTitle.innerText = song.title; fullSongCategory.innerText = song.category; miniCover.src = song.url; miniTitle.innerText = song.title; updateFavButtonUI(); renderPlayerSuggestions(); }
+    function updateFavButtonUI(){ if(currentSong){ favMainBtn.classList.toggle('active', isFav(currentSong.id)); favMainBtn.innerText = isFav(currentSong.id) ? '❤️' : '♡'; } }
+    function updatePlayPauseIcon(){ const icon = isPlaying ? '⏸' : '▶'; fullPlayPause.innerText = icon; miniPlayPause.innerText = icon; }
+    function nextTrack(){ if(!currentPlayQueue.length) return; let newIdx = (currentQueueIndex + 1) % currentPlayQueue.length; currentQueueIndex = newIdx; playSong(currentPlayQueue[newIdx]); }
+    function prevTrack(){ if(!currentPlayQueue.length) return; let newIdx = (currentQueueIndex - 1 + currentPlayQueue.length) % currentPlayQueue.length; currentQueueIndex = newIdx; playSong(currentPlayQueue[newIdx]); }
+    function togglePlayPause(){ isPlaying ? audio.pause() : audio.play(); }
+    
+    function renderSuggestions(){ 
+      if(isPlaylistsMode || currentSearch.trim() !== '') { 
+        suggestionsContainer.innerHTML = ''; 
+        return; 
+      } 
+      const leastPlayed = getLeastPlayedSuggestions(6); 
+      if(leastPlayed.length === 0){ suggestionsContainer.innerHTML = ''; return; } 
+      let html = `<div class="suggestions-horizontal">`; 
+      leastPlayed.forEach(song => { 
+        const plays = (playCount.get(song.id) || 0); 
+        const inviteMsg = plays === 0 ? '✨ Sin estrenar' : `🎧 ${plays} reproducción${plays !== 1 ? 'es' : ''}`; 
+        html += `<div class="suggestion-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="suggestion-info"><div class="suggestion-title">${escapeHtml(song.title)}</div><div class="suggestion-badge">${song.category}</div><div class="suggestion-invite"><span>▶</span> ${inviteMsg}</div></div></div>`; 
+      }); 
+      html += `</div>`; 
+      suggestionsContainer.innerHTML = html; 
+      document.querySelectorAll('.suggestion-card').forEach(card => { 
+        card.addEventListener('click', () => { 
+          const id = parseInt(card.dataset.id); 
+          const found = masterSongs.find(s => s.id === id); 
+          if(found){ updateQueueAndMode(); playSong(found); } 
+        }); 
+      }); 
+    }
+    
+    function updateCounterVisibility() { 
+      if (isPlaylistsMode || currentSearch.trim() !== '') { 
+        counterWrapper.classList.add('hidden-counter'); 
+      } else { 
+        counterWrapper.classList.remove('hidden-counter'); 
+      } 
+    }
+    
+    function renderContent(){ 
+      updateCounterVisibility(); 
+      renderTopArtists();
+      const items = getActiveListForQueue();
+      const isSearching = currentSearch.trim() !== ''; 
+      if(isSearching) searchBadge.innerHTML = `🔍 Resultados: "${escapeHtml(currentSearch)}" (${items.length})`; 
+      else if(isPlaylistsMode) searchBadge.innerHTML = `❤️ Tus Me gusta · ${items.length} canción${items.length !== 1 ? 'es' : ''}`; 
+      else searchBadge.innerHTML = ''; 
+      
+      if(items.length === 0){ 
+        if(isPlaylistsMode) contentContainer.innerHTML = '<div class="no-results">💔 No hay canciones guardadas. Dale like ❤️ a una canción para agregarla a "Tus Me gusta"</div>'; 
+        else contentContainer.innerHTML = '<div class="no-results">✨ No se encontraron canciones</div>'; 
+        return; 
+      } 
+      
+      let gridClass = 'gallery-grid' + (isSearching ? ' list-view' : ''); 
+      let html = `<div class="${gridClass}">`; 
+      items.forEach(song => { 
+        const favMarker = isFav(song.id) ? ' ❤️' : ''; 
+        if(isSearching) html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#b3b3b3;"> · ${song.category}${favMarker}</span></div></div>`; 
+        else html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${isPlaylistsMode ? ' ❤️' : ''}</div></div>`; 
+      }); 
+      html += `</div>`; 
+      contentContainer.innerHTML = html; 
+      document.querySelectorAll('.image-card').forEach(card => { 
+        card.addEventListener('click', () => { 
+          const id = parseInt(card.dataset.id); 
+          const found = masterSongs.find(s => s.id === id); 
+          if(found){ updateQueueAndMode(); playSong(found); } 
+        }); 
+      }); 
+      triggerBackgroundRefresh(); 
+    }
+    
+    function escapeHtml(str){ return str ? str.replace(/[&<>]/g, m => ({'&':'&', '<':'<', '>':'>'}[m] || m)) : ''; }
+    function applyFilters(){ renderContent(); renderSuggestions(); updateQueueAndMode(); }
+    
+    function updateSortChipsVisibility() { sortChipsContainer.style.display = isPlaylistsMode ? 'flex' : 'none'; }
+    function setSortMode(mode) { playlistsSortMode = mode; localStorage.setItem('kerim_playlists_sort_mode', mode); renderContent(); updateQueueAndMode(); document.querySelectorAll('.chip-sort').forEach(chip => chip.classList.remove('active')); const activeChip = document.querySelector(`.chip-sort[data-sort="${mode}"]`); if(activeChip) activeChip.classList.add('active'); }
+    function initChipsSortEvents() { document.querySelectorAll('.chip-sort').forEach(chip => { chip.addEventListener('click', (e) => { e.stopPropagation(); const mode = chip.getAttribute('data-sort'); setSortMode(mode); }); }); const activeChip = document.querySelector(`.chip-sort[data-sort="${playlistsSortMode}"]`); if(activeChip) activeChip.classList.add('active'); else document.querySelector('.chip-sort[data-sort="default"]')?.classList.add('active'); }
+    
+    // MANEJADORES DE LOS NUEVOS BOTONES DE FILTRO
+    const homeBtn = document.querySelector('[data-view="home"]');
+    const likesBtn = document.querySelector('[data-view="likes"]');
+    
+    homeBtn.addEventListener('click', () => {
+      homeBtn.classList.add('active');
+      likesBtn.classList.remove('active');
+      isPlaylistsMode = false;
+      updateSortChipsVisibility();
+      renderContent();
+      renderSuggestions();
+      updateQueueAndMode();
+    });
+    
+    likesBtn.addEventListener('click', () => {
+      likesBtn.classList.add('active');
+      homeBtn.classList.remove('active');
+      isPlaylistsMode = true;
+      updateSortChipsVisibility();
+      renderContent();
+      renderSuggestions();
+      updateQueueAndMode();
+    });
+    
+    function performSearch(){ currentSearch = searchInput.value.trim(); renderContent(); renderSuggestions(); updateQueueAndMode(); }
+    searchButton.addEventListener('click', performSearch);
+    searchInput.addEventListener('keyup', (e) => { if(e.key === 'Enter') performSearch(); });
+    
+    audio.addEventListener('timeupdate',()=>{ if(audio.duration && isFinite(audio.duration)){ let p = (audio.currentTime/audio.duration)*100; progressFill.style.width = `${p}%`; miniProgressFill.style.width = `${p}%`; currentTimeSpan.innerText = formatTime(audio.currentTime); if(durationSpan.innerText === '0:00') durationSpan.innerText = formatTime(audio.duration); } });
+    audio.addEventListener('loadedmetadata',()=>{ if(audio.duration) durationSpan.innerText = formatTime(audio.duration); });
+    audio.addEventListener('play',()=>{ isPlaying=true; updatePlayPauseIcon(); });
+    audio.addEventListener('pause',()=>{ isPlaying=false; updatePlayPauseIcon(); });
+    audio.addEventListener('ended',()=>{ nextTrack(); });
+    progressBarBg.addEventListener('click',(e)=>{ if(audio.duration){ let rect = progressBarBg.getBoundingClientRect(); let perc = (e.clientX - rect.left)/rect.width; audio.currentTime = perc * audio.duration; } });
+    
+    fullPlayPause.addEventListener('click', togglePlayPause);
+    fullNext.addEventListener('click', nextTrack);
+    fullPrev.addEventListener('click', prevTrack);
+    miniPlayPause.addEventListener('click', togglePlayPause);
+    miniNext.addEventListener('click', nextTrack);
+    miniPrev.addEventListener('click', prevTrack);
+    miniPlayerDiv.addEventListener('click',(e)=>{ if(!e.target.closest('.mini-btn')) fullPlayer.classList.add('show'); });
+    closePlayerBtn.addEventListener('click',()=>fullPlayer.classList.remove('show'));
+    favMainBtn.addEventListener('click',()=>{ if(currentSong){ toggleFav(currentSong.id); if(isPlaylistsMode) renderContent(); } });
+    shuffleBtnPlayer.addEventListener('click', toggleShuffle);
+    if (toggleSuggestionsBtnElem) toggleSuggestionsBtnElem.addEventListener('click', toggleSuggestions);
+    
+    function formatTime(sec){ if(isNaN(sec)) return '0:00'; let m=Math.floor(sec/60), s=Math.floor(sec%60); return `${m}:${s<10?'0':''}${s}`; }
+    
+    const welcomeModal = document.getElementById('welcomeModal'), acceptBtn = document.getElementById('acceptWelcomeBtn');
+    if (localStorage.getItem('kerim_welcome_accepted') === 'true') welcomeModal.classList.add('hidden');
+    else { welcomeModal.classList.remove('hidden'); acceptBtn.addEventListener('click', () => { localStorage.setItem('kerim_welcome_accepted', 'true'); welcomeModal.classList.add('hidden'); }); }
+    
+    changeBackgroundRandomly();
+    isPlaylistsMode = false; currentSearch = '';
+    updateSortChipsVisibility();
+    initChipsSortEvents();
+    renderContent(); renderSuggestions(); updateQueueAndMode(); renderTopArtists();
+    if(masterSongs.length) currentSong = masterSongs[0];
+    audio.volume = 0.9;
+  })();
+</script>
+</body>
+</html>
