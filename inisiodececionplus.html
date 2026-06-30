@@ -47,12 +47,12 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
-            opacity: 1;
+            opacity: 0;
             transition: opacity 0.8s ease;
         }
 
-        .main-container.hidden {
-            display: none;
+        .main-container.visible {
+            opacity: 1;
         }
 
         .legend-text {
@@ -159,6 +159,7 @@
             border-color: #ffffff;
         }
 
+        /* BOTÓN MEJORAR PLAN - VERSIÓN FLOTANTE CIRCULAR */
         .mejorar-plan-flotante {
             position: fixed;
             bottom: 30px;
@@ -585,110 +586,6 @@
                 font-size: 15px;
             }
         }
-
-        .bloqueo-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0.3s, opacity 0.3s ease;
-        }
-
-        .bloqueo-overlay.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .bloqueo-container {
-            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-            border-radius: 32px;
-            max-width: 400px;
-            width: 90%;
-            padding: 30px 24px 28px;
-            text-align: center;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(255, 215, 0, 0.2);
-            animation: modalAppear 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        .bloqueo-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            display: inline-block;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-        }
-
-        .bloqueo-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #ffd700;
-            margin-bottom: 12px;
-            letter-spacing: -0.3px;
-            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
-        }
-
-        .bloqueo-message {
-            font-size: 17px;
-            color: #e0e0e0;
-            line-height: 1.6;
-            margin: 14px 0 20px;
-            padding: 0 6px;
-        }
-
-        .bloqueo-message strong {
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .bloqueo-btn {
-            background: rgba(255, 215, 0, 0.15);
-            border: 2px solid #ffd700;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-size: 17px;
-            font-weight: 600;
-            color: #ffffff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 250px;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .bloqueo-btn:hover {
-            background: rgba(255, 215, 0, 0.3);
-            transform: scale(1.03);
-            border-color: #ffffff;
-        }
-
-        .bloqueo-btn:active {
-            transform: scale(0.97);
-        }
-
-        @media (max-width: 480px) {
-            .bloqueo-container {
-                padding: 24px 18px 22px;
-            }
-            .bloqueo-title {
-                font-size: 24px;
-            }
-            .bloqueo-message {
-                font-size: 15px;
-            }
-            .bloqueo-btn {
-                font-size: 15px;
-                padding: 12px 24px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -724,134 +621,62 @@
         </div>
     </div>
 
-    <!-- BLOQUEO POR EXPIRACIÓN -->
-    <div id="bloqueoOverlay" class="bloqueo-overlay">
-        <div class="bloqueo-container">
-            <div class="bloqueo-icon">⏳</div>
-            <div class="bloqueo-title">Acceso Expirado</div>
-            <div class="bloqueo-message">
-                Tu acceso ha expirado después de <strong>60 días</strong>.<br><br>
-                Por favor, <strong>regístrate nuevamente</strong> para continuar disfrutando de nuestros servicios.
-            </div>
-            <button id="bloqueoRegistrarBtn" class="bloqueo-btn">Registrarse</button>
-        </div>
-    </div>
-
     <script>
-        // ============================================================
-        // CONFIGURACIÓN
-        // ============================================================
-        const USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
-        const DIAS_ACCESO = 60;
-        const MILISEGUNDOS_POR_DIA = 24 * 60 * 60 * 1000;
+        // --- PERSISTENCIA DE SESIÓN (60 días) ---
+        const SESSION_KEY = 'usuario_autenticado';
+        const SESSION_EXPIRY_KEY = 'usuario_expiry';
+        const SESSION_DURATION_DAYS = 60;
 
-        // ============================================================
-        // REFERENCIAS DOM
-        // ============================================================
-        const mainContainer = document.getElementById('mainContainer');
-        const input = document.getElementById('textInput');
-        const enviarBtn = document.getElementById('submitBtn');
-        const registrarBtn = document.getElementById('registrarBtn');
-        const mejorarPlanBtn = document.getElementById('mejorarPlanBtn');
-        const modalOverlay = document.getElementById('customModal');
-        const modalMessageText = document.getElementById('modalMessageText');
-        const modalCloseBtn = document.getElementById('modalCloseBtn');
-        const bloqueoOverlay = document.getElementById('bloqueoOverlay');
-        const bloqueoRegistrarBtn = document.getElementById('bloqueoRegistrarBtn');
-
-        // ============================================================
-        // FUNCIONES DE GESTIÓN DE ACCESO
-        // ============================================================
-
-        // Calcula los días transcurridos desde la fecha de acceso
-        function getDiasTranscurridos(fechaAcceso) {
-            const fechaInicio = new Date(fechaAcceso);
-            const fechaActual = new Date();
-            return Math.floor((fechaActual - fechaInicio) / MILISEGUNDOS_POR_DIA);
-        }
-
-        // Verifica si el usuario tiene acceso válido
-        function tieneAccesoValido() {
-            const usuario = sessionStorage.getItem('usuarioAutenticado');
-            const fechaAcceso = sessionStorage.getItem('fechaAcceso');
+        // Verificar si ya hay una sesión activa
+        function verificarSesion() {
+            const usuarioGuardado = localStorage.getItem(SESSION_KEY);
+            const fechaExpiracion = localStorage.getItem(SESSION_EXPIRY_KEY);
             
-            // Si no hay datos de sesión, no tiene acceso
-            if (!usuario || !fechaAcceso) {
-                return false;
-            }
-
-            // Verificar si el usuario es válido
-            if (!USUARIOS_VALIDOS.includes(usuario)) {
-                sessionStorage.removeItem('usuarioAutenticado');
-                sessionStorage.removeItem('fechaAcceso');
-                return false;
-            }
-
-            // Calcular días transcurridos
-            const diasTranscurridos = getDiasTranscurridos(fechaAcceso);
-            
-            // Si pasaron 60 días o más, el acceso expiró
-            if (diasTranscurridos >= DIAS_ACCESO) {
-                // Limpiar sessionStorage
-                sessionStorage.removeItem('usuarioAutenticado');
-                sessionStorage.removeItem('fechaAcceso');
-                return false;
-            }
-
-            return true;
-        }
-
-        // Inicia sesión para un usuario válido
-        function iniciarSesion(usuario) {
-            // Guardar usuario y fecha de acceso
-            sessionStorage.setItem('usuarioAutenticado', usuario);
-            sessionStorage.setItem('fechaAcceso', new Date().toISOString());
-            
-            // Ocultar la página y redirigir
-            mainContainer.classList.add('hidden');
-            window.location.href = "menuplus.html";
-        }
-
-        // Verifica acceso al cargar la página
-        function verificarAccesoInicial() {
-            // Si el usuario ya está autenticado
-            if (sessionStorage.getItem('usuarioAutenticado')) {
-                if (tieneAccesoValido()) {
-                    // Si tiene acceso válido, redirigir a menuplus
-                    mainContainer.classList.add('hidden');
+            if (usuarioGuardado && fechaExpiracion) {
+                const expiracion = parseInt(fechaExpiracion);
+                const ahora = Date.now();
+                
+                if (ahora < expiracion) {
+                    // Sesión válida - redirigir automáticamente
+                    console.log(`Sesión activa para: ${usuarioGuardado}`);
                     window.location.href = "menuplus.html";
                     return true;
                 } else {
-                    // Si expiró, mostrar bloqueo
-                    mostrarBloqueo();
-                    return false;
+                    // Sesión expirada - limpiar
+                    localStorage.removeItem(SESSION_KEY);
+                    localStorage.removeItem(SESSION_EXPIRY_KEY);
+                    console.log('Sesión expirada');
                 }
             }
-            
-            // Si no hay sesión, mostrar la página normalmente
-            mainContainer.classList.remove('hidden');
             return false;
         }
 
-        // ============================================================
-        // FUNCIONES DE BLOQUEO
-        // ============================================================
-
-        function mostrarBloqueo() {
-            bloqueoOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            mainContainer.classList.add('hidden');
+        // Guardar sesión por 60 días
+        function guardarSesion(usuario) {
+            const ahora = Date.now();
+            const expiracion = ahora + (SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000);
+            localStorage.setItem(SESSION_KEY, usuario);
+            localStorage.setItem(SESSION_EXPIRY_KEY, expiracion.toString());
+            console.log(`Sesión guardada para: ${usuario} - Válida por ${SESSION_DURATION_DAYS} días`);
         }
 
-        function ocultarBloqueo() {
-            bloqueoOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-            mainContainer.classList.remove('hidden');
+        // Verificar al cargar la página
+        if (verificarSesion()) {
+            // Si hay sesión activa, la redirección ya ocurrió en verificarSesion()
+            // Este código solo se ejecuta si no hay sesión activa
         }
 
-        // ============================================================
-        // FUNCIONES DE MODAL
-        // ============================================================
+        // --- CÓDIGO DE VALIDACIÓN ---
+        var input = document.getElementById('textInput');
+        var enviarBtn = document.getElementById('submitBtn');
+        var registrarBtn = document.getElementById('registrarBtn');
+        var mainContainer = document.getElementById('mainContainer');
+        
+        var modalOverlay = document.getElementById('customModal');
+        var modalMessageText = document.getElementById('modalMessageText');
+        var modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        var USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
 
         function mostrarModalInvalido(usuarioIngresado) {
             if (usuarioIngresado === "") {
@@ -878,9 +703,27 @@
             document.body.style.overflow = '';
         }
 
-        // ============================================================
-        // FUNCIONES DE NAVEGACIÓN
-        // ============================================================
+        function verificarYRedirigir() {
+            var texto = input.value.trim();
+            
+            if (texto === "") {
+                mostrarModalInvalido("");
+                return;
+            } else if (USUARIOS_VALIDOS.indexOf(texto) === -1) {
+                mostrarModalInvalido(texto);
+                return;
+            } else {
+                // Guardar la sesión por 60 días
+                guardarSesion(texto);
+                
+                // Guardar en sessionStorage para la siguiente página (compatibilidad)
+                sessionStorage.setItem("textoEnviado", texto);
+                
+                // Ocultar el contenido y redirigir
+                mainContainer.style.display = 'none';
+                window.location.href = "menuplus.html";
+            }
+        }
 
         function irARegistro() {
             window.location.href = "registrorapidodewhatsapgratis.html";
@@ -890,103 +733,45 @@
             window.location.href = "index.html";
         }
 
-        // ============================================================
-        // VALIDACIÓN DE INGRESO
-        // ============================================================
+        // Mostrar la página inmediatamente (sin anuncios)
+        mainContainer.classList.add('visible');
 
-        function verificarYRedirigir() {
-            var texto = input.value.trim();
-            
-            if (texto === "") {
-                mostrarModalInvalido("");
-                return;
-            } else if (!USUARIOS_VALIDOS.includes(texto)) {
-                mostrarModalInvalido(texto);
-                return;
-            } else {
-                // Usuario válido: iniciar sesión
-                iniciarSesion(texto);
-            }
-        }
-
-        // ============================================================
-        // EVENTOS
-        // ============================================================
-
-        // Verificar acceso al cargar la página
-        verificarAccesoInicial();
-
-        // Eventos de los botones
         enviarBtn.addEventListener('click', verificarYRedirigir);
         registrarBtn.addEventListener('click', irARegistro);
-        mejorarPlanBtn.addEventListener('click', irAMejorarPlan);
-        bloqueoRegistrarBtn.addEventListener('click', irARegistro);
-
-        // Enter en el input
+        document.getElementById('mejorarPlanBtn').addEventListener('click', irAMejorarPlan);
+        
         input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 verificarYRedirigir();
             }
         });
-
-        // Touch para enfocar input en móviles
+        
         input.addEventListener('touchstart', function() {
             this.focus();
         });
-
-        // Cerrar modal
+        
         modalCloseBtn.addEventListener('click', cerrarModal);
+        
         modalOverlay.addEventListener('click', function(e) {
             if (e.target === modalOverlay) {
                 cerrarModal();
             }
         });
-
-        // Evitar que el click dentro del modal lo cierre
+        
         var modalContainer = document.querySelector('.modal-container');
         if (modalContainer) {
             modalContainer.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
         }
-
-        // Escape para cerrar modal
+        
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
                 cerrarModal();
                 e.preventDefault();
             }
         });
-
-        // ============================================================
-        // VERIFICACIÓN PERIÓDICA DE ACCESO (cada 30 segundos)
-        // ============================================================
-        setInterval(function() {
-            if (sessionStorage.getItem('usuarioAutenticado')) {
-                if (!tieneAccesoValido()) {
-                    sessionStorage.removeItem('usuarioAutenticado');
-                    sessionStorage.removeItem('fechaAcceso');
-                    mostrarBloqueo();
-                    mainContainer.classList.add('hidden');
-                }
-            }
-        }, 30000);
-
-        // ============================================================
-        // MOSTRAR TIEMPO RESTANTE EN CONSOLA (para debugging)
-        // ============================================================
-        function mostrarTiempoRestante() {
-            const fechaAcceso = sessionStorage.getItem('fechaAcceso');
-            if (fechaAcceso) {
-                const dias = getDiasTranscurridos(fechaAcceso);
-                const diasRestantes = Math.max(0, DIAS_ACCESO - dias);
-                console.log(`Días restantes de acceso: ${diasRestantes} de ${DIAS_ACCESO}`);
-            }
-        }
-
-        setInterval(mostrarTiempoRestante, 60000);
-        setTimeout(mostrarTiempoRestante, 1000);
     </script>
 </body>
 </html>
