@@ -159,9 +159,7 @@
             border-color: #ffffff;
         }
 
-        /* ============================================================
-           BOTÓN MEJORAR PLAN - VERSIÓN FLOTANTE CIRCULAR
-           ============================================================ */
+        /* BOTÓN MEJORAR PLAN - VERSIÓN FLOTANTE CIRCULAR */
         .mejorar-plan-flotante {
             position: fixed;
             bottom: 30px;
@@ -238,7 +236,6 @@
             background: rgba(255, 215, 0, 0.6);
         }
 
-        /* --- Tablets y pantallas medianas --- */
         @media (max-width: 900px) {
             .mejorar-plan-flotante {
                 bottom: 25px;
@@ -258,7 +255,6 @@
             }
         }
 
-        /* --- Móviles grandes (600px - 768px) --- */
         @media (max-width: 768px) {
             .mejorar-plan-flotante {
                 bottom: 22px;
@@ -276,9 +272,26 @@
                 bottom: 68px;
                 padding: 4px 10px;
             }
+            .main-container {
+                max-width: 90%;
+            }
+            .search-box {
+                gap: 10px;
+            }
+            input[type="text"] {
+                padding: 14px 18px;
+                font-size: 15px;
+            }
+            button {
+                padding: 14px 24px;
+                font-size: 15px;
+            }
+            .legend-text {
+                font-size: 14px;
+                line-height: 1.6;
+            }
         }
-
-        /* --- Móviles medianos (480px - 600px) --- */
+        
         @media (max-width: 600px) {
             .mejorar-plan-flotante {
                 bottom: 18px;
@@ -298,9 +311,22 @@
                 padding: 3px 8px;
                 border-radius: 16px;
             }
+            .search-box {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            input[type="text"] {
+                flex: 1 1 100%;
+                order: 1;
+            }
+            .enviar-btn {
+                order: 2;
+            }
+            .registrar-btn {
+                order: 3;
+            }
         }
-
-        /* --- Móviles pequeños (400px - 480px) --- */
+        
         @media (max-width: 480px) {
             .mejorar-plan-flotante {
                 bottom: 15px;
@@ -320,9 +346,37 @@
                 padding: 2px 7px;
                 border-radius: 14px;
             }
+            body {
+                padding: 12px;
+            }
+            .main-container {
+                max-width: 100%;
+                gap: 15px;
+            }
+            .search-box {
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+            }
+            input[type="text"] {
+                width: 100%;
+                padding: 16px 18px;
+                font-size: 16px;
+                text-align: left;
+            }
+            button {
+                width: 100%;
+                padding: 14px 20px;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            .legend-text {
+                font-size: 13px;
+                line-height: 1.5;
+                padding: 0 5px;
+            }
         }
-
-        /* --- Móviles muy pequeños (360px y menos) --- */
+        
         @media (max-width: 400px) {
             .mejorar-plan-flotante {
                 bottom: 12px;
@@ -342,8 +396,22 @@
                 padding: 2px 6px;
                 border-radius: 12px;
             }
+            input[type="text"] {
+                padding: 14px 16px;
+                font-size: 14px;
+            }
+            input[type="text"]::placeholder {
+                font-size: 13px;
+            }
+            button {
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+            .legend-text {
+                font-size: 12px;
+            }
         }
-
+        
         @media (max-width: 320px) {
             .mejorar-plan-flotante {
                 bottom: 10px;
@@ -362,7 +430,6 @@
             }
         }
 
-        /* --- Orientación horizontal (landscape) --- */
         @media (max-height: 500px) and (orientation: landscape) {
             .mejorar-plan-flotante {
                 bottom: 15px;
@@ -396,93 +463,6 @@
             }
             .mejorar-plan-flotante .tooltip-text {
                 display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-container {
-                max-width: 90%;
-            }
-            .search-box {
-                gap: 10px;
-            }
-            input[type="text"] {
-                padding: 14px 18px;
-                font-size: 15px;
-            }
-            button {
-                padding: 14px 24px;
-                font-size: 15px;
-            }
-            .legend-text {
-                font-size: 14px;
-                line-height: 1.6;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .search-box {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            input[type="text"] {
-                flex: 1 1 100%;
-                order: 1;
-            }
-            .enviar-btn {
-                order: 2;
-            }
-            .registrar-btn {
-                order: 3;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            .main-container {
-                max-width: 100%;
-                gap: 15px;
-            }
-            .search-box {
-                flex-direction: column;
-                gap: 12px;
-                width: 100%;
-            }
-            input[type="text"] {
-                width: 100%;
-                padding: 16px 18px;
-                font-size: 16px;
-                text-align: left;
-            }
-            button {
-                width: 100%;
-                padding: 14px 20px;
-                font-size: 16px;
-                font-weight: 600;
-            }
-            .legend-text {
-                font-size: 13px;
-                line-height: 1.5;
-                padding: 0 5px;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            input[type="text"] {
-                padding: 14px 16px;
-                font-size: 14px;
-            }
-            input[type="text"]::placeholder {
-                font-size: 13px;
-            }
-            button {
-                padding: 12px 18px;
-                font-size: 14px;
-            }
-            .legend-text {
-                font-size: 12px;
             }
         }
         
@@ -606,400 +586,9 @@
                 font-size: 15px;
             }
         }
-
-        /* Video intro con botón de play y leyenda "Anuncio" */
-        .video-intro {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: #000000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .video-intro video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #000000;
-        }
-
-        .video-intro.hidden {
-            display: none;
-        }
-
-        body.video-playing {
-            overflow: hidden;
-        }
-
-        /* Leyenda "Anuncio" */
-        .anuncio-label {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: 4px;
-            padding: 8px 28px;
-            border-radius: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.25);
-            text-transform: uppercase;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-            z-index: 10;
-            pointer-events: none;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Botón de Play personalizado */
-        .play-btn-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-            background: rgba(0, 0, 0, 0.3);
-            transition: opacity 0.3s ease;
-        }
-
-        .play-btn-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .play-btn {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            border: 3px solid rgba(255, 255, 255, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-        }
-
-        .play-btn:hover {
-            transform: scale(1.08);
-            background: rgba(255, 255, 255, 0.25);
-            border-color: #ffffff;
-            box-shadow: 0 0 60px rgba(255, 255, 255, 0.2);
-        }
-
-        .play-btn:active {
-            transform: scale(0.95);
-        }
-
-        .play-btn svg {
-            width: 50px;
-            height: 50px;
-            fill: #ffffff;
-            margin-left: 8px;
-        }
-
-        @media (max-width: 600px) {
-            .play-btn {
-                width: 80px;
-                height: 80px;
-            }
-            .play-btn svg {
-                width: 40px;
-                height: 40px;
-            }
-            .anuncio-label {
-                font-size: 14px;
-                padding: 6px 20px;
-                letter-spacing: 3px;
-                top: 14px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .play-btn {
-                width: 70px;
-                height: 70px;
-            }
-            .play-btn svg {
-                width: 35px;
-                height: 35px;
-            }
-            .anuncio-label {
-                font-size: 12px;
-                padding: 5px 16px;
-                letter-spacing: 2px;
-                top: 10px;
-            }
-        }
-
-        /* ============================================================
-           BOTÓN "SALTAR ANUNCIO" - CENTRADO, GRANDE Y RESPONSIVE
-           ============================================================ */
-        .skip-ad-btn {
-            position: absolute;
-            bottom: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: #ffffff;
-            border: 3px solid rgba(255, 255, 255, 0.7);
-            border-radius: 60px;
-            padding: 18px 40px;
-            font-size: 22px;
-            font-weight: 700;
-            cursor: pointer;
-            z-index: 30;
-            transition: all 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            min-height: 60px;
-            min-width: 200px;
-            line-height: 1.2;
-        }
-
-        .skip-ad-btn.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .skip-ad-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #ffffff;
-            transform: translateX(-50%) scale(1.05);
-            box-shadow: 0 8px 40px rgba(255, 255, 255, 0.15);
-        }
-
-        .skip-ad-btn:active {
-            transform: translateX(-50%) scale(0.95);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .skip-ad-btn .countdown {
-            font-weight: 500;
-            opacity: 0.9;
-            font-size: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 4px 14px;
-            border-radius: 30px;
-            min-width: 50px;
-            text-align: center;
-            line-height: 1.4;
-        }
-
-        /* --- Tablets / pantallas medianas --- */
-        @media (max-width: 900px) {
-            .skip-ad-btn {
-                bottom: 8%;
-                padding: 16px 32px;
-                font-size: 19px;
-                min-height: 54px;
-                min-width: 170px;
-                gap: 10px;
-                border-width: 2.5px;
-            }
-            .skip-ad-btn .countdown {
-                font-size: 17px;
-                padding: 3px 12px;
-                min-width: 44px;
-            }
-        }
-
-        /* --- Móviles grandes (600px - 768px) --- */
-        @media (max-width: 768px) {
-            .skip-ad-btn {
-                bottom: 8%;
-                padding: 14px 28px;
-                font-size: 17px;
-                min-height: 48px;
-                min-width: 150px;
-                gap: 8px;
-                border-width: 2px;
-                border-radius: 50px;
-            }
-            .skip-ad-btn .countdown {
-                font-size: 15px;
-                padding: 2px 10px;
-                min-width: 38px;
-            }
-        }
-
-        /* --- Móviles medianos (480px - 600px) --- */
-        @media (max-width: 600px) {
-            .skip-ad-btn {
-                bottom: 7%;
-                padding: 12px 24px;
-                font-size: 15px;
-                min-height: 42px;
-                min-width: 130px;
-                gap: 8px;
-                border-width: 2px;
-                border-radius: 40px;
-            }
-            .skip-ad-btn .countdown {
-                font-size: 13px;
-                padding: 2px 8px;
-                min-width: 32px;
-                border-radius: 20px;
-            }
-        }
-
-        /* --- Móviles pequeños (400px - 480px) --- */
-        @media (max-width: 480px) {
-            .skip-ad-btn {
-                bottom: 6%;
-                padding: 10px 20px;
-                font-size: 13px;
-                min-height: 36px;
-                min-width: 110px;
-                gap: 6px;
-                border-width: 1.8px;
-                border-radius: 34px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            }
-            .skip-ad-btn .countdown {
-                font-size: 11px;
-                padding: 1px 6px;
-                min-width: 28px;
-                border-radius: 16px;
-            }
-        }
-
-        /* --- Móviles muy pequeños (360px y menos) --- */
-        @media (max-width: 400px) {
-            .skip-ad-btn {
-                bottom: 5%;
-                padding: 8px 16px;
-                font-size: 11px;
-                min-height: 30px;
-                min-width: 90px;
-                gap: 5px;
-                border-width: 1.5px;
-                border-radius: 28px;
-                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
-            }
-            .skip-ad-btn .countdown {
-                font-size: 10px;
-                padding: 1px 5px;
-                min-width: 22px;
-                border-radius: 12px;
-            }
-        }
-
-        @media (max-width: 320px) {
-            .skip-ad-btn {
-                bottom: 4%;
-                padding: 6px 12px;
-                font-size: 9px;
-                min-height: 24px;
-                min-width: 70px;
-                gap: 4px;
-                border-width: 1.2px;
-                border-radius: 22px;
-            }
-            .skip-ad-btn .countdown {
-                font-size: 8px;
-                padding: 0px 4px;
-                min-width: 18px;
-                border-radius: 10px;
-            }
-        }
-
-        /* --- Orientación horizontal (landscape) en móviles --- */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .skip-ad-btn {
-                bottom: 5%;
-                padding: 8px 18px;
-                font-size: 12px;
-                min-height: 28px;
-                min-width: 100px;
-                gap: 6px;
-                border-radius: 30px;
-                border-width: 1.8px;
-            }
-            .skip-ad-btn .countdown {
-                font-size: 11px;
-                padding: 1px 6px;
-                min-width: 26px;
-            }
-        }
-
-        @media (max-height: 400px) and (orientation: landscape) {
-            .skip-ad-btn {
-                bottom: 4%;
-                padding: 6px 14px;
-                font-size: 10px;
-                min-height: 22px;
-                min-width: 80px;
-                gap: 4px;
-                border-radius: 24px;
-                border-width: 1.5px;
-            }
-            .skip-ad-btn .countdown {
-                font-size: 9px;
-                padding: 0px 4px;
-                min-width: 20px;
-            }
-        }
-
-        .timer-display {
-            display: none;
-        }
     </style>
 </head>
 <body>
-    <!-- VIDEO DE INTRO CON BOTÓN DE PLAY, LEYENDA "ANUNCIO" Y BOTÓN "SALTAR ANUNCIO" CENTRADO Y RESPONSIVE -->
-    <div class="video-intro hidden" id="videoIntro">
-        <!-- Leyenda "Anuncio" -->
-        <div class="anuncio-label">Anuncio</div>
-        
-        <!-- Botón de Play (superpuesto) -->
-        <div class="play-btn-overlay" id="playOverlay">
-            <div class="play-btn" id="playButton">
-                <svg viewBox="0 0 24 24">
-                    <polygon points="5,3 19,12 5,21" />
-                </svg>
-            </div>
-        </div>
-
-        <!-- Botón "Saltar anuncio" - CENTRADO, GRANDE Y RESPONSIVE -->
-        <button class="skip-ad-btn" id="skipAdBtn">
-            Saltar <span class="countdown" id="skipCountdown">33s</span>
-        </button>
-
-        <video id="introVideo" playsinline preload="auto">
-            <source src="https://www.dropbox.com/scl/fi/u8g3drfq5eg17jlth29gf/AQNNh-pvnGElBMOzs2TCWvS1Qg7-l6790vep4zd-gh7chug5cqDUambeDrsyVlUpXyXNAUSfr3XjPeRida7vBsfSEalNOo5RhwIgpKztNXzSdQ.mp4?rlkey=x0m5hp76feokbkpxxlty14swz&st=vpndoowb&raw=1" type="video/mp4">
-            Tu navegador no soporta el video.
-        </video>
-        <div class="timer-display" id="timerDisplay">0.00</div>
-    </div>
-
     <!-- CONTENIDO PRINCIPAL -->
     <div class="main-container" id="mainContainer">
         <div class="legend-text">
@@ -1015,7 +604,7 @@
         </div>
     </div>
 
-    <!-- BOTÓN MEJORAR PLAN - VERSIÓN FLOTANTE CIRCULAR (esquina inferior derecha) -->
+    <!-- BOTÓN MEJORAR PLAN -->
     <button id="mejorarPlanBtn" class="mejorar-plan-flotante" aria-label="Mejorar Plan">
         <span class="tooltip-text">Mejorar Plan</span>
     </button>
@@ -1033,204 +622,20 @@
     </div>
 
     <script>
-        // --- VIDEO CON BOTÓN DE PLAY, LEYENDA "ANUNCIO" Y SALTAR ANUNCIO (centrado y responsive) ---
-        const videoIntro = document.getElementById('videoIntro');
-        const introVideo = document.getElementById('introVideo');
-        const mainContainer = document.getElementById('mainContainer');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const playOverlay = document.getElementById('playOverlay');
-        const playButton = document.getElementById('playButton');
-        const skipAdBtn = document.getElementById('skipAdBtn');
-        const skipCountdown = document.getElementById('skipCountdown');
-
-        timerDisplay.textContent = '0.00';
-
-        let videoStarted = false;
-        let skipAdVisible = false;
-        let adSkipped = false;
-        const SKIP_APPEAR_TIME = 33;
-        const AD_INTERVAL_MINUTES = 60; // 60 minutos entre anuncios
-
-        // Verificar si es la primera visita
-        let isFirstVisit = true;
-        let adCompleted = false;
-
-        function iniciarVideoConSonido() {
-            if (videoStarted) return;
-            videoStarted = true;
-            
-            introVideo.muted = false;
-            introVideo.volume = 1.0;
-            
-            var promesa = introVideo.play();
-            if (promesa !== undefined) {
-                promesa.then(function() {
-                    console.log('Video iniciado con sonido');
-                    playOverlay.classList.add('hidden');
-                }).catch(function(error) {
-                    console.log('Error al reproducir con sonido:', error);
-                    introVideo.muted = true;
-                    introVideo.play().catch(function() {});
-                    alert('Para escuchar el audio, haga clic en el botón de play nuevamente.');
-                    videoStarted = false;
-                    playOverlay.classList.remove('hidden');
-                });
-            }
-        }
-
-        playButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            iniciarVideoConSonido();
-        });
-
-        playOverlay.addEventListener('click', function(e) {
-            if (e.target === playOverlay) {
-                iniciarVideoConSonido();
-            }
-        });
-
-        function saltarAnuncio() {
-            if (adSkipped) return;
-            adSkipped = true;
-            console.log('Anuncio saltado por el usuario');
-            introVideo.currentTime = introVideo.duration || 0;
-            introVideo.dispatchEvent(new Event('ended'));
-        }
-
-        skipAdBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            saltarAnuncio();
-        });
-
-        skipAdBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            saltarAnuncio();
-        }, { passive: false });
-
-        let anuncioActivo = false;
-
-        function mostrarAnuncio() {
-            if (anuncioActivo) return;
-            
-            // Si es la primera visita, siempre mostrar
-            // Si no es la primera, solo mostrar si ya pasó el tiempo
-            if (!isFirstVisit) {
-                const lastAdTime = localStorage.getItem('lastAdTime');
-                if (lastAdTime) {
-                    const elapsed = (Date.now() - parseInt(lastAdTime)) / 60000; // en minutos
-                    if (elapsed < AD_INTERVAL_MINUTES) {
-                        console.log(`Faltan ${Math.round(AD_INTERVAL_MINUTES - elapsed)} minutos para el próximo anuncio`);
-                        return;
-                    }
-                }
-            }
-            
-            anuncioActivo = true;
-            console.log('Mostrando anuncio');
-            introVideo.currentTime = 0;
-            adSkipped = false;
-            videoStarted = false;
-            videoIntro.classList.remove('hidden');
-            document.body.classList.add('video-playing');
-            skipAdBtn.classList.remove('visible');
-            skipAdVisible = false;
-            skipCountdown.textContent = '33s';
-            playOverlay.classList.remove('hidden');
-            mainContainer.classList.remove('visible');
-            videoStarted = false;
-            isFirstVisit = false;
-        }
-
-        function ocultarAnuncio() {
-            videoIntro.classList.add('hidden');
-            mainContainer.classList.add('visible');
-            document.body.classList.remove('video-playing');
-            anuncioActivo = false;
-            playOverlay.classList.add('hidden');
-            skipAdBtn.classList.remove('visible');
-            skipAdVisible = false;
-            // Guardar el momento en que se completó el anuncio
-            localStorage.setItem('lastAdTime', Date.now().toString());
-            console.log('Anuncio oculto - próximo en 1 minutos');
-        }
-
-        introVideo.addEventListener('ended', function() {
-            ocultarAnuncio();
-            if (!adSkipped) {
-                console.log('Anuncio visto completo');
-            }
-        });
-
-        // Mostrar el primer anuncio al cargar la página (solo si es primera visita)
-        setTimeout(function() {
-            // Verificar si es la primera visita
-            const lastAdTime = localStorage.getItem('lastAdTime');
-            if (!lastAdTime) {
-                // Primera visita - mostrar anuncio
-                mostrarAnuncio();
-            } else {
-                // No es primera visita - mostrar contenido directamente
-                mainContainer.classList.add('visible');
-                // Programar el próximo anuncio
-                const elapsed = (Date.now() - parseInt(lastAdTime)) / 60000;
-                const timeToNextAd = Math.max(0, AD_INTERVAL_MINUTES - elapsed);
-                console.log(`Próximo anuncio en ${Math.round(timeToNextAd)} minutos`);
-                setTimeout(function() {
-                    mostrarAnuncio();
-                }, timeToNextAd * 60000);
-            }
-        }, 100);
-
-        // Verificar cada minuto si ya pasó el tiempo para el próximo anuncio
-        setInterval(function() {
-            if (!anuncioActivo && videoIntro.classList.contains('hidden')) {
-                const lastAdTime = localStorage.getItem('lastAdTime');
-                if (lastAdTime) {
-                    const elapsed = (Date.now() - parseInt(lastAdTime)) / 60000;
-                    if (elapsed >= AD_INTERVAL_MINUTES) {
-                        mostrarAnuncio();
-                    }
-                }
-            }
-        }, 60000); // Verificar cada minuto
-
-        introVideo.addEventListener('timeupdate', function() {
-            if (!anuncioActivo) return;
-            const currentTime = introVideo.currentTime;
-            const duration = introVideo.duration || 0;
-            
-            if (currentTime >= SKIP_APPEAR_TIME && !skipAdVisible && !adSkipped && duration > 0) {
-                skipAdBtn.classList.add('visible');
-                skipAdVisible = true;
-                console.log('Botón "Saltar anuncio" visible (después de 33s)');
-            }
-            
-            if (skipAdVisible && !adSkipped) {
-                const restante = Math.ceil(duration - currentTime);
-                if (restante > 0) {
-                    skipCountdown.textContent = restante + 's';
-                } else {
-                    skipCountdown.textContent = '0s';
-                }
-            }
-        });
-
-        introVideo.addEventListener('error', function() {
-            ocultarAnuncio();
-        });
-
-        document.body.classList.add('video-playing');
-
-        // --- CÓDIGO DE VALIDACIÓN ---
+        // --- VALIDACIÓN DE USUARIO Y REDIRECCIÓN CON SESIÓN DE 60 DÍAS ---
         var input = document.getElementById('textInput');
         var enviarBtn = document.getElementById('submitBtn');
         var registrarBtn = document.getElementById('registrarBtn');
+        var mainContainer = document.getElementById('mainContainer');
         
         var modalOverlay = document.getElementById('customModal');
         var modalMessageText = document.getElementById('modalMessageText');
         var modalCloseBtn = document.getElementById('modalCloseBtn');
 
-        var USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain",];
+        var USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
+        const SESSION_KEY = 'usuario_autenticado';
+        const SESSION_EXPIRY_KEY = 'session_expiry';
+        const SESSION_DURATION_DAYS = 60;
 
         function mostrarModalInvalido(usuarioIngresado) {
             if (usuarioIngresado === "") {
@@ -1257,6 +662,13 @@
             document.body.style.overflow = '';
         }
 
+        function redirigirAMenuPlus() {
+            // Ocultar el contenido principal
+            mainContainer.style.display = 'none';
+            // Redirigir a la página siguiente
+            window.location.href = "menuplus.html";
+        }
+
         function verificarYRedirigir() {
             var texto = input.value.trim();
             
@@ -1267,8 +679,15 @@
                 mostrarModalInvalido(texto);
                 return;
             } else {
-                sessionStorage.setItem("textoEnviado", texto);
-                window.location.href = "menuplus.html";
+                // Usuario válido: guardar sesión por 60 días
+                const expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + SESSION_DURATION_DAYS);
+                
+                localStorage.setItem(SESSION_KEY, texto);
+                localStorage.setItem(SESSION_EXPIRY_KEY, expiryDate.getTime().toString());
+                
+                // Redirigir a la página siguiente
+                redirigirAMenuPlus();
             }
         }
 
@@ -1276,15 +695,44 @@
             window.location.href = "registrorapidodewhatsapgratis.html";
         }
 
-        // --- NUEVA FUNCIÓN PARA MEJORAR PLAN (FLOTANTE CIRCULAR) ---
         function irAMejorarPlan() {
             window.location.href = "index.html";
         }
 
+        // --- VERIFICAR SESIÓN AL CARGAR LA PÁGINA ---
+        function verificarSesion() {
+            const usuarioGuardado = localStorage.getItem(SESSION_KEY);
+            const expiryTime = localStorage.getItem(SESSION_EXPIRY_KEY);
+            
+            if (usuarioGuardado && expiryTime) {
+                const ahora = Date.now();
+                const expiracion = parseInt(expiryTime);
+                
+                // Si la sesión no ha expirado y el usuario es válido
+                if (ahora < expiracion && USUARIOS_VALIDOS.indexOf(usuarioGuardado) !== -1) {
+                    // Sesión activa: redirigir directamente a menuplus.html
+                    redirigirAMenuPlus();
+                    return true;
+                } else {
+                    // Sesión expirada o usuario inválido: limpiar datos
+                    localStorage.removeItem(SESSION_KEY);
+                    localStorage.removeItem(SESSION_EXPIRY_KEY);
+                }
+            }
+            return false;
+        }
+
+        // Verificar sesión al cargar la página
+        var sesionActiva = verificarSesion();
+
+        // Si no hay sesión activa, mostrar la página normalmente
+        if (!sesionActiva) {
+            mainContainer.classList.add('visible');
+        }
+
+        // --- EVENTOS ---
         enviarBtn.addEventListener('click', verificarYRedirigir);
         registrarBtn.addEventListener('click', irARegistro);
-        
-        // Evento para el botón Mejorar Plan flotante circular
         document.getElementById('mejorarPlanBtn').addEventListener('click', irAMejorarPlan);
         
         input.addEventListener('keypress', function(e) {
@@ -1319,20 +767,6 @@
                 e.preventDefault();
             }
         });
-
-        setInterval(function() {
-            if (!videoIntro.classList.contains('hidden') && anuncioActivo) {
-                if (introVideo.muted) {
-                    introVideo.muted = false;
-                }
-                if (introVideo.volume < 0.9) {
-                    introVideo.volume = 1.0;
-                }
-                if (introVideo.paused && !playOverlay.classList.contains('hidden') === false) {
-                    introVideo.play().catch(function() {});
-                }
-            }
-        }, 500);
     </script>
 </body>
 </html>
