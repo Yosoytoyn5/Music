@@ -622,61 +622,22 @@
     </div>
 
     <script>
-        // --- PERSISTENCIA DE SESIÓN (60 días) ---
-        const SESSION_KEY = 'usuario_autenticado';
-        const SESSION_EXPIRY_KEY = 'usuario_expiry';
-        const SESSION_DURATION_DAYS = 60;
+        // --- ELIMINACIÓN DE ANUNCIOS: no hay video ni sistema de anuncios ---
 
-        // Verificar si ya hay una sesión activa
-        function verificarSesion() {
-            const usuarioGuardado = localStorage.getItem(SESSION_KEY);
-            const fechaExpiracion = localStorage.getItem(SESSION_EXPIRY_KEY);
-            
-            if (usuarioGuardado && fechaExpiracion) {
-                const expiracion = parseInt(fechaExpiracion);
-                const ahora = Date.now();
-                
-                if (ahora < expiracion) {
-                    // Sesión válida - redirigir automáticamente
-                    console.log(`Sesión activa para: ${usuarioGuardado}`);
-                    window.location.href = "menuplus.html";
-                    return true;
-                } else {
-                    // Sesión expirada - limpiar
-                    localStorage.removeItem(SESSION_KEY);
-                    localStorage.removeItem(SESSION_EXPIRY_KEY);
-                    console.log('Sesión expirada');
-                }
-            }
-            return false;
-        }
-
-        // Guardar sesión por 60 días
-        function guardarSesion(usuario) {
-            const ahora = Date.now();
-            const expiracion = ahora + (SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000);
-            localStorage.setItem(SESSION_KEY, usuario);
-            localStorage.setItem(SESSION_EXPIRY_KEY, expiracion.toString());
-            console.log(`Sesión guardada para: ${usuario} - Válida por ${SESSION_DURATION_DAYS} días`);
-        }
-
-        // Verificar al cargar la página
-        if (verificarSesion()) {
-            // Si hay sesión activa, la redirección ya ocurrió en verificarSesion()
-            // Este código solo se ejecuta si no hay sesión activa
-        }
-
-        // --- CÓDIGO DE VALIDACIÓN ---
-        var input = document.getElementById('textInput');
-        var enviarBtn = document.getElementById('submitBtn');
-        var registrarBtn = document.getElementById('registrarBtn');
-        var mainContainer = document.getElementById('mainContainer');
+        // --- CÓDIGO DE VALIDACIÓN CON PERSISTENCIA DE 60 DÍAS ---
+        const input = document.getElementById('textInput');
+        const enviarBtn = document.getElementById('submitBtn');
+        const registrarBtn = document.getElementById('registrarBtn');
+        const mainContainer = document.getElementById('mainContainer');
         
-        var modalOverlay = document.getElementById('customModal');
-        var modalMessageText = document.getElementById('modalMessageText');
-        var modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalOverlay = document.getElementById('customModal');
+        const modalMessageText = document.getElementById('modalMessageText');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
 
-        var USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
+        const USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
+        const SESSION_KEY = 'usuario_autorizado';
+        const EXPIRY_KEY = 'usuario_autorizado_expiry';
+        const DURACION_DIAS = 60;
 
         function mostrarModalInvalido(usuarioIngresado) {
             if (usuarioIngresado === "") {
@@ -703,8 +664,32 @@
             document.body.style.overflow = '';
         }
 
+        function guardarSesion(usuario) {
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + DURACION_DIAS);
+            localStorage.setItem(SESSION_KEY, usuario);
+            localStorage.setItem(EXPIRY_KEY, expiryDate.toISOString());
+        }
+
+        function sesionExpirada() {
+            const expiry = localStorage.getItem(EXPIRY_KEY);
+            if (!expiry) return true;
+            return new Date(expiry) < new Date();
+        }
+
+        function verificarSesionExistente() {
+            const usuarioGuardado = localStorage.getItem(SESSION_KEY);
+            if (usuarioGuardado && !sesionExpirada()) {
+                // Usuario autorizado, ocultar página y redirigir
+                mainContainer.style.display = 'none';
+                window.location.href = "menuplus.html";
+                return true;
+            }
+            return false;
+        }
+
         function verificarYRedirigir() {
-            var texto = input.value.trim();
+            const texto = input.value.trim();
             
             if (texto === "") {
                 mostrarModalInvalido("");
@@ -713,19 +698,15 @@
                 mostrarModalInvalido(texto);
                 return;
             } else {
-                // Guardar la sesión por 60 días
+                // Guardar sesión y redirigir
                 guardarSesion(texto);
-                
-                // Guardar en sessionStorage para la siguiente página (compatibilidad)
-                sessionStorage.setItem("textoEnviado", texto);
-                
-                // Ocultar el contenido y redirigir
                 mainContainer.style.display = 'none';
                 window.location.href = "menuplus.html";
             }
         }
 
         function irARegistro() {
+            // Solo se puede usar el botón registrar SIEMPRE, pero no oculta la página
             window.location.href = "registrorapidodewhatsapgratis.html";
         }
 
@@ -733,9 +714,7 @@
             window.location.href = "index.html";
         }
 
-        // Mostrar la página inmediatamente (sin anuncios)
-        mainContainer.classList.add('visible');
-
+        // --- EVENTOS ---
         enviarBtn.addEventListener('click', verificarYRedirigir);
         registrarBtn.addEventListener('click', irARegistro);
         document.getElementById('mejorarPlanBtn').addEventListener('click', irAMejorarPlan);
@@ -759,7 +738,7 @@
             }
         });
         
-        var modalContainer = document.querySelector('.modal-container');
+        const modalContainer = document.querySelector('.modal-container');
         if (modalContainer) {
             modalContainer.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -772,6 +751,23 @@
                 e.preventDefault();
             }
         });
+
+        // --- AL CARGAR LA PÁGINA: verificar sesión y mostrar contenido ---
+        (function init() {
+            // Si hay sesión válida, redirige sin mostrar la página
+            if (verificarSesionExistente()) {
+                return;
+            }
+            // Si no hay sesión, mostramos la página
+            mainContainer.classList.add('visible');
+        })();
+
+        // --- NOTA: el botón "Entrar" solo redirige si el usuario es válido.
+        // Si el usuario ya está autorizado, la página se oculta y redirige al cargar.
+        // Si se ingresa un nombre válido NUEVAMENTE, la sesión se renueva por 60 días.
+        // Si se ingresa un nombre no válido, muestra modal y NO oculta la página.
+        // El botón "Registrar" siempre funciona y no oculta la página.
+
     </script>
 </body>
 </html>
