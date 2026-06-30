@@ -587,36 +587,24 @@
             }
         }
 
-        /* Estilo para ocultar el input y botón Entrar cuando solo se muestra Registrarse */
-        .hidden-element {
-            display: none !important;
-        }
-
-        /* El contenedor principal de la pantalla de login se mantiene visible */
-        #loginContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
+        .timer-display {
+            display: none;
         }
     </style>
 </head>
 <body>
     <!-- CONTENIDO PRINCIPAL -->
     <div class="main-container" id="mainContainer">
-        <div id="loginContainer">
-            <div class="legend-text" id="legendText">
-                Si su usuario ya está registrado,<br>
-                ingrese su información y presione <span class="highlight-action">Entrar</span>.<br>
-                En caso contrario, presione <span class="highlight-action">Registrar</span>.
-            </div>
+        <div class="legend-text">
+            Si su usuario ya está registrado,<br>
+            ingrese su información y presione <span class="highlight-action">Entrar</span>.<br>
+            En caso contrario, presione <span class="highlight-action">Registrar</span>.
+        </div>
 
-            <div class="search-box" id="searchBox">
-                <input type="text" id="textInput" placeholder="Ingrese su usuario...">
-                <button id="submitBtn" class="enviar-btn">Entrar</button>
-                <button id="registrarBtn" class="registrar-btn">Registrar</button>
-            </div>
+        <div class="search-box">
+            <input type="text" id="textInput" placeholder="Ingrese su usuario...">
+            <button id="submitBtn" class="enviar-btn">Entrar</button>
+            <button id="registrarBtn" class="registrar-btn">Registrar</button>
         </div>
     </div>
 
@@ -638,131 +626,17 @@
     </div>
 
     <script>
-        /**
-         * ============================================================
-         *  NUEVA LÓGICA DE INICIO DE SESIÓN CON ALMACENAMIENTO LOCAL
-         *  Y CONTROL DE 60 DÍAS
-         * ============================================================
-         */
+        // --- CÓDIGO DE VALIDACIÓN ---
+        var input = document.getElementById('textInput');
+        var enviarBtn = document.getElementById('submitBtn');
+        var registrarBtn = document.getElementById('registrarBtn');
+        
+        var modalOverlay = document.getElementById('customModal');
+        var modalMessageText = document.getElementById('modalMessageText');
+        var modalCloseBtn = document.getElementById('modalCloseBtn');
 
-        // --- CONSTANTES Y CLAVES PARA LOCALSTORAGE ---
-        const STORAGE_KEY_USER = 'app_user_username';
-        const STORAGE_KEY_DATE = 'app_user_login_date';
-        const DAYS_UNTIL_EXPIRY = 60;
+        var USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
 
-        /**
-         * 1. Obtener referencias a los elementos del DOM
-         */
-        const mainContainer = document.getElementById('mainContainer');
-        const loginContainer = document.getElementById('loginContainer');
-        const legendText = document.getElementById('legendText');
-        const searchBox = document.getElementById('searchBox');
-        const textInput = document.getElementById('textInput');
-        const submitBtn = document.getElementById('submitBtn');
-        const registrarBtn = document.getElementById('registrarBtn');
-        const modalOverlay = document.getElementById('customModal');
-        const modalMessageText = document.getElementById('modalMessageText');
-        const modalCloseBtn = document.getElementById('modalCloseBtn');
-        const mejorarPlanBtn = document.getElementById('mejorarPlanBtn');
-
-        // --- USUARIOS VÁLIDOS (mismos que antes) ---
-        const USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
-
-        /**
-         * 2. FUNCIÓN: Verificar si el usuario tiene sesión activa
-         *    Retorna true si el login sigue vigente (menos de 60 días)
-         */
-        function isSessionValid() {
-            const savedUsername = localStorage.getItem(STORAGE_KEY_USER);
-            const savedDate = localStorage.getItem(STORAGE_KEY_DATE);
-
-            // Si no hay datos guardados, no hay sesión activa
-            if (!savedUsername || !savedDate) {
-                return false;
-            }
-
-            // Calcular días transcurridos desde el último login
-            const lastLogin = new Date(parseInt(savedDate));
-            const now = new Date();
-            const diffTime = now.getTime() - lastLogin.getTime();
-            const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-            // Si han pasado menos de 60 días, la sesión es válida
-            if (diffDays < DAYS_UNTIL_EXPIRY) {
-                return true;
-            }
-
-            // Si pasaron 60 días o más, la sesión expiró
-            return false;
-        }
-
-        /**
-         * 3. FUNCIÓN: Guardar sesión con usuario y fecha actual
-         */
-        function saveSession(username) {
-            localStorage.setItem(STORAGE_KEY_USER, username);
-            localStorage.setItem(STORAGE_KEY_DATE, Date.now().toString());
-        }
-
-        /**
-         * 4. FUNCIÓN: Redirigir al contenido principal (menuplus.html)
-         */
-        function goToMainContent() {
-            // Guardar el usuario en sessionStorage (por compatibilidad con el código anterior)
-            const savedUser = localStorage.getItem(STORAGE_KEY_USER);
-            if (savedUser) {
-                sessionStorage.setItem("textoEnviado", savedUser);
-            }
-            // Redirigir al contenido principal
-            window.location.href = "menuplus.html";
-        }
-
-        /**
-         * 5. FUNCIÓN: Mostrar solo el botón "Registrar"
-         *    Oculta el input y el botón "Entrar"
-         */
-        function showOnlyRegisterButton() {
-            // Ocultar input y botón Entrar
-            textInput.classList.add('hidden-element');
-            submitBtn.classList.add('hidden-element');
-            
-            // Cambiar el texto de la leyenda
-            legendText.innerHTML = `
-                Su sesión ha expirado.<br>
-                Presione <span class="highlight-action">Registrar</span> para continuar.
-            `;
-            
-            // Asegurar que el botón Registrar sea el único visible
-            registrarBtn.classList.remove('hidden-element');
-            
-            // Mostrar el contenedor principal
-            mainContainer.classList.add('visible');
-        }
-
-        /**
-         * 6. FUNCIÓN: Mostrar el formulario de login completo
-         *    (input + botón Entrar + botón Registrar)
-         */
-        function showFullLoginForm() {
-            // Mostrar todos los elementos
-            textInput.classList.remove('hidden-element');
-            submitBtn.classList.remove('hidden-element');
-            registrarBtn.classList.remove('hidden-element');
-            
-            // Restaurar el texto de la leyenda original
-            legendText.innerHTML = `
-                Si su usuario ya está registrado,<br>
-                ingrese su información y presione <span class="highlight-action">Entrar</span>.<br>
-                En caso contrario, presione <span class="highlight-action">Registrar</span>.
-            `;
-            
-            // Mostrar el contenedor principal
-            mainContainer.classList.add('visible');
-        }
-
-        /**
-         * 7. FUNCIÓN: Mostrar modal de error
-         */
         function mostrarModalInvalido(usuarioIngresado) {
             if (usuarioIngresado === "") {
                 modalMessageText.innerHTML = "No ha ingresado ningún nombre.<br>Por favor, ingrese un usuario.";
@@ -773,17 +647,6 @@
             document.body.style.overflow = 'hidden';
         }
 
-        /**
-         * 8. FUNCIÓN: Cerrar modal
-         */
-        function cerrarModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        /**
-         * 9. FUNCIÓN: Escapar HTML para prevenir XSS
-         */
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/[&<>]/g, function(m) {
@@ -794,11 +657,13 @@
             });
         }
 
-        /**
-         * 10. FUNCIÓN: Verificar credenciales y procesar login
-         */
+        function cerrarModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
         function verificarYRedirigir() {
-            var texto = textInput.value.trim();
+            var texto = input.value.trim();
             
             if (texto === "") {
                 mostrarModalInvalido("");
@@ -807,96 +672,52 @@
                 mostrarModalInvalido(texto);
                 return;
             } else {
-                // --- LOGIN EXITOSO ---
-                // Guardar sesión en localStorage con fecha actual
-                saveSession(texto);
-                // Redirigir al contenido principal
-                goToMainContent();
+                // Guardar el usuario en sessionStorage para la siguiente página
+                sessionStorage.setItem("textoEnviado", texto);
+                // Ocultar el contenido y redirigir
+                mainContainer.style.display = 'none';
+                window.location.href = "menuplus.html";
             }
         }
 
-        /**
-         * 11. FUNCIÓN: Ir a la página de registro
-         *    NOTA: Cambié la URL a registrorapidodewhatsapplus.html según el requisito #6
-         */
         function irARegistro() {
             window.location.href = "registrorapidodewhatsapplus.html";
         }
 
-        /**
-         * 12. FUNCIÓN: Ir a Mejorar Plan
-         */
         function irAMejorarPlan() {
             window.location.href = "index.html";
         }
 
-        /**
-         * 13. FUNCIÓN PRINCIPAL: Control de flujo de la aplicación
-         *    Esta función se ejecuta al cargar la página
-         */
-        function initializeApp() {
-            // Verificar si la sesión es válida
-            if (isSessionValid()) {
-                // --- CASO 1: Sesión activa (menos de 60 días) ---
-                // Redirigir directamente al contenido principal
-                // No se muestra la pantalla de login
-                goToMainContent();
-                return;
-            }
-
-            // Si llegamos aquí, la sesión NO es válida o no existe
-            
-            // Verificar si existe un usuario guardado (sesión expirada)
-            const savedUsername = localStorage.getItem(STORAGE_KEY_USER);
-            const savedDate = localStorage.getItem(STORAGE_KEY_DATE);
-
-            if (savedUsername && savedDate) {
-                // --- CASO 2: Sesión expirada (pasaron 60 días o más) ---
-                // Mostrar solo el botón "Registrar" como pide el requisito #5
-                showOnlyRegisterButton();
-            } else {
-                // --- CASO 3: Primera vez que abre la aplicación ---
-                // Mostrar el formulario de login completo
-                showFullLoginForm();
-            }
-        }
-
-        /**
-         * 14. ASIGNACIÓN DE EVENTOS
-         */
-        // Evento para el botón Entrar
-        submitBtn.addEventListener('click', verificarYRedirigir);
-
-        // Evento para el botón Registrar
-        registrarBtn.addEventListener('click', function(e) {
-            // NOTA: Cuando el usuario presiona "Registrar", siempre va a la página de registro
-            // Si el usuario se registra y luego inicia sesión, se actualizará la sesión
-            irARegistro();
-        });
-
-        // Evento para el botón Mejorar Plan
-        mejorarPlanBtn.addEventListener('click', irAMejorarPlan);
-
-        // Evento para presionar Enter en el input
-        textInput.addEventListener('keypress', function(e) {
+        enviarBtn.addEventListener('click', verificarYRedirigir);
+        registrarBtn.addEventListener('click', irARegistro);
+        document.getElementById('mejorarPlanBtn').addEventListener('click', irAMejorarPlan);
+        
+        input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 verificarYRedirigir();
             }
         });
-
-        // Evento para enfocar el input en dispositivos táctiles
-        textInput.addEventListener('touchstart', function() {
+        
+        input.addEventListener('touchstart', function() {
             this.focus();
         });
-
-        // Eventos del modal
+        
         modalCloseBtn.addEventListener('click', cerrarModal);
+        
         modalOverlay.addEventListener('click', function(e) {
             if (e.target === modalOverlay) {
                 cerrarModal();
             }
         });
+        
+        var modalContainer = document.querySelector('.modal-container');
+        if (modalContainer) {
+            modalContainer.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+        
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
                 cerrarModal();
@@ -904,44 +725,8 @@
             }
         });
 
-        /**
-         * 15. INICIALIZAR LA APLICACIÓN
-         *     Se ejecuta al cargar la página
-         */
-        initializeApp();
-
-        /**
-         * ============================================================
-         *  EXPLICACIÓN DE LA IMPLEMENTACIÓN
-         * ============================================================
-         * 
-         * 1. Se utiliza localStorage para almacenar de forma persistente:
-         *    - app_user_username: nombre de usuario
-         *    - app_user_login_date: fecha del último login (timestamp)
-         * 
-         * 2. La función isSessionValid() verifica si han pasado menos de 60 días
-         *    desde el último login.
-         * 
-         * 3. Si la sesión es válida, se redirige automáticamente a menuplus.html
-         *    sin mostrar la pantalla de login.
-         * 
-         * 4. Si la sesión expiró (60 días o más), se muestra solo el botón
-         *    "Registrar" y se ocultan el input y el botón "Entrar".
-         * 
-         * 5. Si es la primera vez (no hay datos guardados), se muestra el
-         *    formulario completo con input, Entrar y Registrar.
-         * 
-         * 6. Cuando el usuario inicia sesión correctamente, se guarda la fecha
-         *    actual y el nombre de usuario, reiniciando el contador de 60 días.
-         * 
-         * 7. El botón "Registrar" siempre redirige a registrorapidodewhatsapplus.html
-         * 
-         * 8. Se mantiene el resto de la funcionalidad: modal de error, botón
-         *    "Mejorar Plan", diseño responsive, etc.
-         * 
-         * 9. Los comentarios en el código explican cada parte de la implementación.
-         * ============================================================
-         */
+        // Mostrar el contenido principal inmediatamente
+        document.getElementById('mainContainer').classList.add('visible');
     </script>
 </body>
-</html>
+</html>  
