@@ -990,6 +990,7 @@
       {id:7, url:'https://i.postimg.cc/MXJXxVL3/Te-estoy-llamando.jpg', category:'Musica', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/97yj1flb0bgaaedaxr9h1/Te_estoy_Llamando_lista.wav?rlkey=cn3oppwsfjv617hhcuy2rcga4&st=ipum1s6a&raw=1'}
     ];
     
+    // --- FUNCIÓN PARA MEZCLAR ARRAY ALEATORIAMENTE ---
     function shuffleArray(arr) {
       const array = [...arr];
       for (let i = array.length - 1; i > 0; i--) {
@@ -999,8 +1000,11 @@
       return array;
     }
     
-    // TODAS las canciones, sin límite de 20
-    let masterSongs = [...originalSongs];
+    // --- ORDEN ALEATORIO DE LAS CANCIONES (se genera al cargar) ---
+    const shuffledSongs = shuffleArray(originalSongs);
+    
+    // TODAS las canciones en orden aleatorio
+    let masterSongs = [...shuffledSongs];
     const allSongs = [...originalSongs];
     
     let favSet = new Set();
@@ -1602,7 +1606,8 @@
         );
         masterSongs = searchResults.length > 0 ? searchResults : [];
       } else {
-        masterSongs = [...originalSongs];
+        // Cuando se borra la búsqueda, se restaura el orden aleatorio
+        masterSongs = [...shuffledSongs];
       }
       renderContent(); 
       renderSuggestions(); 
