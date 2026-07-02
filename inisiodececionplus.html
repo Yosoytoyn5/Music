@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Acceso Usuario - Blanco y Negro</title>
+    <title>Acceso · Blanco & Negro</title>
     <style>
         * {
             margin: 0;
@@ -626,107 +626,137 @@
     </div>
 
     <script>
-        // --- CÓDIGO DE VALIDACIÓN ---
-        var input = document.getElementById('textInput');
-        var enviarBtn = document.getElementById('submitBtn');
-        var registrarBtn = document.getElementById('registrarBtn');
-        
-        var modalOverlay = document.getElementById('customModal');
-        var modalMessageText = document.getElementById('modalMessageText');
-        var modalCloseBtn = document.getElementById('modalCloseBtn');
+        (function(){
+            "use strict";
 
-        var USUARIOS_VALIDOS = ["MAMM9511036K6", "Sain"];
-
-        function mostrarModalInvalido(usuarioIngresado) {
-            if (usuarioIngresado === "") {
-                modalMessageText.innerHTML = "No ha ingresado ningún nombre.<br>Por favor, ingrese un usuario.";
-            } else {
-                modalMessageText.innerHTML = "“" + escapeHtml(usuarioIngresado) + "” no está autorizado.<br>Verifique su usuario o regístrese.";
-            }
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        function cerrarModal() {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function verificarYRedirigir() {
-            var texto = input.value.trim();
+            // --- ELEMENTOS DOM ---
+            var mainContainer = document.getElementById('mainContainer');
+            var input = document.getElementById('textInput');
+            var enviarBtn = document.getElementById('submitBtn');
+            var registrarBtn = document.getElementById('registrarBtn');
+            var mejorarPlanBtn = document.getElementById('mejorarPlanBtn');
             
-            if (texto === "") {
-                mostrarModalInvalido("");
-                return;
-            } else if (USUARIOS_VALIDOS.indexOf(texto) === -1) {
-                mostrarModalInvalido(texto);
-                return;
-            } else {
-                // Guardar el usuario en sessionStorage para la siguiente página
+            var modalOverlay = document.getElementById('customModal');
+            var modalMessageText = document.getElementById('modalMessageText');
+            var modalCloseBtn = document.getElementById('modalCloseBtn');
+
+            // --- LISTA DE USUARIOS VÁLIDOS (exactos) ---
+            var USUARIOS_VALIDOS = ["Marco", ""];
+
+            // --- FUNCIONES ---
+            function mostrarModalInvalido(usuarioIngresado) {
+                if (usuarioIngresado === "") {
+                    modalMessageText.innerHTML = "No ha ingresado ningún nombre.<br>Por favor, ingrese un usuario.";
+                } else {
+                    modalMessageText.innerHTML = "“" + escapeHtml(usuarioIngresado) + "” no está autorizado.<br>Verifique su usuario o regístrese.";
+                }
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return str.replace(/[&<>]/g, function(m) {
+                    if (m === '&') return '&amp;';
+                    if (m === '<') return '&lt;';
+                    if (m === '>') return '&gt;';
+                    return m;
+                });
+            }
+
+            function cerrarModal() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // --- FUNCIÓN PRINCIPAL DE VERIFICACIÓN Y REDIRECCIÓN ---
+            function verificarYRedirigir() {
+                var texto = input.value.trim();
+                
+                // Caso vacío
+                if (texto === "") {
+                    mostrarModalInvalido("");
+                    return;
+                }
+                
+                // Verificar si el texto coincide exactamente con algún usuario válido
+                var esValido = false;
+                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
+                    if (USUARIOS_VALIDOS[i] === texto) {
+                        esValido = true;
+                        break;
+                    }
+                }
+                
+                if (!esValido) {
+                    mostrarModalInvalido(texto);
+                    return;
+                }
+                
+                // --- USUARIO VÁLIDO: OCULTAR TODO Y REDIRIGIR ---
+                // Guardar en sessionStorage para la siguiente página
                 sessionStorage.setItem("textoEnviado", texto);
-                // Ocultar el contenido y redirigir
+                
+                // Ocultar el contenido principal y el botón flotante (opcional)
                 mainContainer.style.display = 'none';
+                mejorarPlanBtn.style.display = 'none';
+                
+                // Redirigir a la siguiente página (simulada con un hash o URL)
+                // En este ejemplo, usamos "menuplus.html" como destino.
                 window.location.href = "menuplus.html";
             }
-        }
 
-        function irARegistro() {
-            window.location.href = "registrorapidodewhatsapplus.html";
-        }
-
-        function irAMejorarPlan() {
-            window.location.href = "index.html";
-        }
-
-        enviarBtn.addEventListener('click', verificarYRedirigir);
-        registrarBtn.addEventListener('click', irARegistro);
-        document.getElementById('mejorarPlanBtn').addEventListener('click', irAMejorarPlan);
-        
-        input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                verificarYRedirigir();
+            // --- NAVEGACIÓN A REGISTRO Y MEJORAR PLAN ---
+            function irARegistro() {
+                window.location.href = "registrorapidodewhatsapplus.html";
             }
-        });
-        
-        input.addEventListener('touchstart', function() {
-            this.focus();
-        });
-        
-        modalCloseBtn.addEventListener('click', cerrarModal);
-        
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === modalOverlay) {
-                cerrarModal();
+
+            function irAMejorarPlan() {
+                window.location.href = "index.html";
             }
-        });
-        
-        var modalContainer = document.querySelector('.modal-container');
-        if (modalContainer) {
-            modalContainer.addEventListener('click', function(e) {
-                e.stopPropagation();
+
+            // --- EVENTOS ---
+            enviarBtn.addEventListener('click', verificarYRedirigir);
+            registrarBtn.addEventListener('click', irARegistro);
+            mejorarPlanBtn.addEventListener('click', irAMejorarPlan);
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    verificarYRedirigir();
+                }
             });
-        }
-        
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                cerrarModal();
-                e.preventDefault();
+            
+            input.addEventListener('touchstart', function() {
+                this.focus();
+            });
+            
+            modalCloseBtn.addEventListener('click', cerrarModal);
+            
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    cerrarModal();
+                }
+            });
+            
+            var modalContainer = document.querySelector('.modal-container');
+            if (modalContainer) {
+                modalContainer.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
             }
-        });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    cerrarModal();
+                    e.preventDefault();
+                }
+            });
 
-        // Mostrar el contenido principal inmediatamente
-        document.getElementById('mainContainer').classList.add('visible');
+            // Mostrar el contenido principal con animación
+            mainContainer.classList.add('visible');
+
+        })();
     </script>
 </body>
-</html>  
+</html>
