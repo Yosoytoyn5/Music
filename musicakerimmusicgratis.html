@@ -941,7 +941,7 @@
     // --- CONTROL DEL PLAN ---
     let hasKerimMusicPlus = false;
     
-    // --- ANUNCIOS ---
+    // --- ANUNCIOS (3 anuncios) ---
     const ads = [
       { id: 'ad1', url: 'https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg', title: '🎵 Anuncio 1', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/r5ro6ilq0ow1xtitdsskf/Anuncio-de-spotify.mp3?rlkey=psw7mem6m1ruj62e22ah162sj&st=qiagt6c3&raw=1', isAd: true },
       { id: 'ad2', url: 'https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg', title: '🎵 Anuncio 2', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/t57e6zgyylla42w1zcfn9/Anuncio-Tonny-Reyes.mp3?rlkey=fdrfdb7127qlqn2yn0z1ymd58&st=f0e8lplo&raw=1', isAd: true },
@@ -952,6 +952,9 @@
     let isAdPlaying = false;
     let previousSong = null;
     let pendingNextSong = null;
+    let adPlaylist = []; // Lista de anuncios a reproducir
+    let currentAdIndex = 0;
+    let adCallback = null;
     
     const originalSongs = [
       {id:34, url:'https://www.dropbox.com/scl/fi/ce5cvqnqfbmbasgswiz5u/J-V-zquez.jpg?rlkey=r4p0lh5s8bsz65l7omsteqd0j&st=u3e0szkd&raw=1', category:'Musica', title:'Me vuelve loco J Vazquez', music:'https://www.dropbox.com/scl/fi/5ojo4u3dak6gytmkcy605/j-vazquez-me-vuelve-loco-fusa-company.mp3?rlkey=ickcmbzdf3wi1k012e0mygo8e&st=q2zmxnh9&raw=1'},
@@ -1294,36 +1297,57 @@
       if(currentPlayQueue.length && !currentSong) currentSong = currentPlayQueue[0]; 
     }
     
-    // --- FUNCIÓN PARA REPRODUCIR ANUNCIO ---
-    function playAd(callback) {
+    // --- FUNCIÓN PARA REPRODUCIR 3 ANUNCIOS SEGUIDOS ---
+    function playAds(callback) {
       if (ads.length === 0 || isAdPlaying) {
         if (callback) callback();
         return;
       }
       
       isAdPlaying = true;
-      const randomAd = ads[Math.floor(Math.random() * ads.length)];
       
+      // Obtener 3 anuncios aleatorios (o menos si no hay suficientes)
+      let shuffledAds = shuffleArray([...ads]);
+      adPlaylist = shuffledAds.slice(0, Math.min(3, shuffledAds.length));
+      currentAdIndex = 0;
+      adCallback = callback;
+      
+      // Ocultar botones de navegación
       fullPrev.classList.add('hidden-nav');
       fullNext.classList.add('hidden-nav');
       miniPrev.classList.add('hidden-nav');
       miniNext.classList.add('hidden-nav');
       
-      const songBeforeAd = currentSong;
+      // Guardar la canción que se estaba reproduciendo
+      previousSong = currentSong;
+      
+      // Reproducir el primer anuncio
+      playNextAd();
+    }
+    
+    function playNextAd() {
+      if (currentAdIndex >= adPlaylist.length) {
+        // Todos los anuncios han terminado
+        finishAdPlaylist();
+        return;
+      }
+      
+      const ad = adPlaylist[currentAdIndex];
+      console.log(`Reproduciendo anuncio ${currentAdIndex + 1} de ${adPlaylist.length}: ${ad.title}`);
       
       const adSong = {
-        id: 'ad_' + Date.now(),
-        url: randomAd.url,
+        id: 'ad_' + Date.now() + '_' + currentAdIndex,
+        url: ad.url,
         category: 'ANUNCIO',
-        title: randomAd.title,
-        music: randomAd.music,
+        title: `${ad.title} (${currentAdIndex + 1}/${adPlaylist.length})`,
+        music: ad.music,
         isAd: true
       };
       
       currentSong = adSong;
       fullCover.src = adSong.url;
       fullSongTitle.innerText = adSong.title;
-      fullSongCategory.innerHTML = 'ANUNCIO <span class="ad-badge">AD</span>';
+      fullSongCategory.innerHTML = `ANUNCIO <span class="ad-badge">AD ${currentAdIndex + 1}/${adPlaylist.length}</span>`;
       miniCover.src = adSong.url;
       miniTitle.innerText = adSong.title;
       
@@ -1338,32 +1362,45 @@
       updatePlayPauseIcon();
       triggerBackgroundRefresh();
       
-      const onAdEnd = function() {
-        audio.removeEventListener('ended', onAdEnd);
-        isAdPlaying = false;
-        
-        fullPrev.classList.remove('hidden-nav');
-        fullNext.classList.remove('hidden-nav');
-        miniPrev.classList.remove('hidden-nav');
-        miniNext.classList.remove('hidden-nav');
-        
-        if (songBeforeAd && !songBeforeAd.isAd) {
-          let foundInQueue = currentPlayQueue.find(s => s.id === songBeforeAd.id);
-          if (foundInQueue) {
-            playSong(songBeforeAd);
-          } else {
-            currentPlayQueue.unshift(songBeforeAd);
-            currentQueueIndex = 0;
-            playSong(songBeforeAd);
-          }
-        } else if (currentPlayQueue.length > 0) {
-          playSong(currentPlayQueue[0]);
-        }
-        
-        if (callback) callback();
-      };
-      
+      // Escuchar cuando termine este anuncio
+      audio.removeEventListener('ended', onAdEnd);
       audio.addEventListener('ended', onAdEnd);
+    }
+    
+    function onAdEnd() {
+      audio.removeEventListener('ended', onAdEnd);
+      currentAdIndex++;
+      playNextAd();
+    }
+    
+    function finishAdPlaylist() {
+      isAdPlaying = false;
+      
+      // Restaurar botones de navegación
+      fullPrev.classList.remove('hidden-nav');
+      fullNext.classList.remove('hidden-nav');
+      miniPrev.classList.remove('hidden-nav');
+      miniNext.classList.remove('hidden-nav');
+      
+      // Restaurar la canción anterior
+      if (previousSong && !previousSong.isAd) {
+        let foundInQueue = currentPlayQueue.find(s => s.id === previousSong.id);
+        if (foundInQueue) {
+          playSongInternal(previousSong);
+        } else {
+          currentPlayQueue.unshift(previousSong);
+          currentQueueIndex = 0;
+          playSongInternal(previousSong);
+        }
+      } else if (currentPlayQueue.length > 0) {
+        playSongInternal(currentPlayQueue[0]);
+      }
+      
+      if (adCallback) {
+        const callback = adCallback;
+        adCallback = null;
+        callback();
+      }
     }
     
     function playSong(song, customQueue = null) {
@@ -1375,7 +1412,7 @@
         if (adCounter >= 3) {
           adCounter = 0;
           pendingNextSong = song;
-          playAd(function() {
+          playAds(function() {
             if (pendingNextSong) {
               const nextSong = pendingNextSong;
               pendingNextSong = null;
