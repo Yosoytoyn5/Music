@@ -20,6 +20,7 @@
       line-height: 1.4;
       overflow-x: hidden;
       width: 100%;
+      min-height: 100vh;
     }
 
     .top-bar {
@@ -92,6 +93,10 @@
       margin: 0.5rem auto 1rem auto;
       padding: 0 1rem;
       flex-wrap: wrap;
+      transition: all 0.3s ease;
+    }
+    .filter-buttons.hidden {
+      display: none;
     }
     .filter-main-btn {
       background: #232323;
@@ -271,6 +276,34 @@
       height: 100%;
       background: radial-gradient(circle at 20% 40%, rgba(30,215,96,0.05) 0%, rgba(0,0,0,0.4) 100%);
       pointer-events: none;
+    }
+    
+    /* Fondo de portada del artista (imagen vertical sin contenedor) */
+    .artist-cover-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+    .artist-cover-background.show {
+      opacity: 0.5;
+    }
+    .artist-cover-background::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
     }
     
     .gallery-grid {
@@ -496,6 +529,90 @@
       color: #b3b3b3;
       margin-bottom: 1rem;
       padding-left: 0.5rem;
+    }
+    
+    /* Perfil de artista en resultados de búsqueda - SOLO NOMBRE Y BOTÓN */
+    .artist-profile-result {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem 0 1rem 0;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .artist-profile-result .artist-name-large {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.9);
+      margin-bottom: 0.5rem;
+    }
+    .artist-profile-result .artist-listeners {
+      font-size: 0.9rem;
+      color: #b3b3b3;
+      margin-bottom: 0.8rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+    .artist-profile-result .artist-whatsapp-btn {
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 500px;
+      padding: 0.6rem 2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+    }
+    .artist-profile-result .artist-whatsapp-btn:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
+    }
+    .artist-profile-result .artist-whatsapp-btn.listening {
+      background: #ff4444;
+      box-shadow: 0 4px 20px rgba(255, 68, 68, 0.3);
+    }
+    .artist-profile-result .artist-whatsapp-btn.listening:hover:not(:disabled) {
+      box-shadow: 0 6px 30px rgba(255, 68, 68, 0.5);
+    }
+    .artist-profile-result .artist-whatsapp-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    .artist-profile-result .artist-whatsapp-btn .lock-icon {
+      font-size: 0.7rem;
+    }
+    /* Información adicional del artista debajo del botón */
+    .artist-info-extra {
+      margin-top: 0.8rem;
+      padding: 0.5rem 1rem;
+      background: rgba(0,0,0,0.5);
+      border-radius: 8px;
+      border-left: 2px solid #1ed760;
+      max-width: 400px;
+      width: 100%;
+      text-align: left;
+      font-size: 0.75rem;
+      color: #b3b3b3;
+      line-height: 1.5;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+    }
+    .artist-info-extra strong {
+      color: #1ed760;
+    }
+    /* Contador de días restantes */
+    .days-remaining {
+      font-size: 0.7rem;
+      color: #ff6b6b;
+      margin-top: 0.3rem;
+      font-weight: 500;
     }
     
     .fullscreen-player {
@@ -815,6 +932,9 @@
   </style>
 </head>
 <body>
+<!-- Fondo de portada del artista (imagen vertical sin contenedor) -->
+<div class="artist-cover-background" id="artistCoverBackground"></div>
+
 <div class="random-matte-bg" id="randomMatteBg"></div>
 
 <div class="welcome-modal" id="welcomeModal">
@@ -829,14 +949,14 @@
   </div>
 </header>
 
-<div class="filter-buttons">
+<div class="filter-buttons" id="filterButtons">
   <button class="filter-main-btn active" data-view="home">Inicio</button>
   <button class="filter-main-btn" data-view="likes">Tus Me gusta</button>
 </div>
 
 <main class="gallery-section">
   <div class="counter-wrapper" id="counterWrapper">
-    <span class="counter-label">👁️ VISITAS</span>
+    <span class="counter-label">VISITAS</span>
     <div class="counter-container">
       <a href="https://www.hitwebcounter.com/" target="_blank" rel="noopener" title="Web Counter">
         <img src="https://www.hitwebcounter.com/counter/counter.php?page=21497063&amp;style=0049&amp;nbdigits=1&amp;type=ip" alt="Web Counter" decoding="async" style="border:0;max-width:100%;height:auto;" />
@@ -883,7 +1003,7 @@
     
     <div class="player-suggestions" id="playerSuggestions">
       <div class="player-suggestions-header">
-        <div class="player-suggestions-title">🎧 Temas relacionados</div>
+        <div class="player-suggestions-title">Temas relacionados</div>
         <button class="toggle-suggestions-btn" id="toggleSuggestionsBtn">Ocultar</button>
       </div>
       <div class="player-suggestions-track" id="playerSuggestionsTrack"></div>
@@ -900,6 +1020,35 @@
 
 <script>
   (function(){
+   // Perfil de artista
+    // Oyentes manuales por artista - ¡MODIFICA AQUÍ LOS NÚMEROS DE OYENTES!
+    const artistListeners = {
+      'Sain Nt': 0,
+      'J Vazquez': 0,
+      'Dany Zm': 0,
+      'Tonny Reyes': 0,
+      'Emsek': 0,
+      'Prii Ramirez': 0,
+      'Aizber': 0,
+      'Clave 462': 0,
+      'Adan G': 0,
+      'Placoso de la L': 0
+    };
+
+    // Información adicional por artista (se muestra debajo del botón)
+    const artistExtraInfo = {
+      'Sain Nt': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'J Vazquez': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Dany Zm': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Tonny Reyes': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Emsek': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Prii Ramirez': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Aizber': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Clave 462': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Adan G': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Placoso de la L': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.'
+    };
+
     // DATOS ORIGINALES DE CANCIONES
     const originalSongs = [
       {id:48, url:'https://www.dropbox.com/scl/fi/2rhos68qocadmeqnry26z/Tonny-reyes.jpg?rlkey=rrn5f3bhmqojc7f7qtftskizx&st=i1kgehuz&raw=1', category:'Musica', title:'Linea de Meta Tonny Reyes', music:'https://www.dropbox.com/scl/fi/higcv4yxhf2z1exl4zovy/4-Linea-de-Meta-Tonny-Reyes.flac?rlkey=vkvhv5i73k8q3i25dx3vx9h7k&st=0h3mrbxl&raw=1'},
@@ -963,26 +1112,97 @@
     }
 
     // --- APLICAMOS EL ORDEN ALEATORIO A LA LISTA PRINCIPAL ---
-    // Esto hará que la galería se muestre siempre en orden aleatorio.
-    // Para mantener la consistencia, usamos una variable global que almacena el orden aleatorio.
-    // Cada vez que se necesite la lista, devolvemos esa lista mezclada.
-    let shuffledSongs = shuffleArray(originalSongs);
-
-    // También necesitamos que las funciones que acceden a masterSongs usen esta lista mezclada.
-    // Reemplazamos la variable masterSongs con una referencia a shuffledSongs.
-    // Pero como masterSongs se usa en muchos lugares, la redefinimos como una función que devuelve el array mezclado.
-    // O mejor, mantenemos masterSongs como un array y lo actualizamos.
-    // Para que la aleatoriedad se mantenga en toda la app, haremos que masterSongs sea una copia mezclada de originalSongs.
-    let masterSongs = shuffleArray(originalSongs);  // <--- ESTA ES LA LÍNEA CLAVE
-
-    // El resto del código permanece igual, pero ahora cada vez que se acceda a masterSongs
-    // obtendrá una lista con orden aleatorio. 
-    // Nota: originalSongs se mantiene intacto para referencia.
+    let masterSongs = shuffleArray(originalSongs);
 
     let favSet = new Set();
     let playCount = new Map();
     let artistPlayCount = new Map();
     let favOrder = [];
+    
+    // --- SISTEMA DE SEGUIMIENTO DE ARTISTAS (LISTENING) ---
+    // Estructura: { artistName: { startDate: timestamp, active: boolean } }
+    let listeningArtists = {};
+    const LISTENING_DURATION_DAYS = 15; // 15 días de duración
+    
+    // Cargar estado de seguimiento desde localStorage
+    try {
+      const savedListening = localStorage.getItem('kerim_listening_artists');
+      if (savedListening) {
+        listeningArtists = JSON.parse(savedListening);
+        // Verificar si algún seguimiento ha expirado
+        const now = Date.now();
+        for (let artist in listeningArtists) {
+          const data = listeningArtists[artist];
+          if (data.active) {
+            const elapsedDays = (now - data.startDate) / (1000 * 60 * 60 * 24);
+            if (elapsedDays >= LISTENING_DURATION_DAYS) {
+              data.active = false;
+            }
+          }
+        }
+        localStorage.setItem('kerim_listening_artists', JSON.stringify(listeningArtists));
+      }
+    } catch(e) {}
+    
+    // Función para verificar si un usuario está siguiendo a un artista
+    function isListeningToArtist(artistName) {
+      if (!artistName) return false;
+      const data = listeningArtists[artistName];
+      if (!data) return false;
+      if (!data.active) return false;
+      // Verificar si ha pasado el tiempo
+      const now = Date.now();
+      const elapsedDays = (now - data.startDate) / (1000 * 60 * 60 * 24);
+      if (elapsedDays >= LISTENING_DURATION_DAYS) {
+        data.active = false;
+        localStorage.setItem('kerim_listening_artists', JSON.stringify(listeningArtists));
+        return false;
+      }
+      return true;
+    }
+    
+    // Función para empezar a seguir a un artista
+    function startListeningToArtist(artistName) {
+      if (!artistName) return false;
+      // Si ya está siguiendo, no hacer nada
+      if (isListeningToArtist(artistName)) return false;
+      
+      listeningArtists[artistName] = {
+        startDate: Date.now(),
+        active: true
+      };
+      localStorage.setItem('kerim_listening_artists', JSON.stringify(listeningArtists));
+      return true;
+    }
+    
+    // Función para dejar de seguir a un artista (solo si ha pasado el tiempo)
+    function stopListeningToArtist(artistName) {
+      if (!artistName) return false;
+      const data = listeningArtists[artistName];
+      if (!data) return false;
+      
+      const now = Date.now();
+      const elapsedDays = (now - data.startDate) / (1000 * 60 * 60 * 24);
+      
+      if (elapsedDays >= LISTENING_DURATION_DAYS) {
+        // Si ya pasó el tiempo, se puede desactivar
+        data.active = false;
+        localStorage.setItem('kerim_listening_artists', JSON.stringify(listeningArtists));
+        return true;
+      }
+      // Si no ha pasado el tiempo, no se puede cambiar
+      return false;
+    }
+    
+    // Función para obtener días restantes de seguimiento
+    function getRemainingDays(artistName) {
+      const data = listeningArtists[artistName];
+      if (!data || !data.active) return 0;
+      const now = Date.now();
+      const elapsedDays = (now - data.startDate) / (1000 * 60 * 60 * 24);
+      const remaining = Math.ceil(LISTENING_DURATION_DAYS - elapsedDays);
+      return Math.max(0, remaining);
+    }
     
     function rebuildArtistCounts() {
       artistPlayCount.clear();
@@ -1105,6 +1325,8 @@
     const sortChipsContainer = document.getElementById('sortChipsContainer');
     const shuffleBtnPlayer = document.getElementById('shuffleBtnPlayer');
     const toggleSuggestionsBtnElem = document.getElementById('toggleSuggestionsBtn');
+    const artistCoverBg = document.getElementById('artistCoverBackground');
+    const filterButtons = document.getElementById('filterButtons');
     
     const mattePalette = ['#121212', '#181818', '#0F0F0F', '#1A1A1A', '#141414', '#161616', '#1C1C1C', '#111111'];
     function getRandomMatteColor() { return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
@@ -1242,14 +1464,137 @@
       } 
     }
     
+    // Función para obtener el artista de una canción (intentando extraerlo del título)
+    function extractArtistFromTitle(title) {
+      // Lista de artistas conocidos
+      const knownArtists = ['Sain Nt', 'J Vazquez', 'Dany Zm', 'Tonny Reyes', 'Emsek', 'Prii Ramirez','Aizber', 'Clave 462', 'Adan G', 'Placoso de la L'];
+      for (let artist of knownArtists) {
+        if (title.toLowerCase().includes(artist.toLowerCase())) {
+          return artist;
+        }
+      }
+      // Si no se encuentra, se usa el nombre del artista de la canción si existe
+      const song = originalSongs.find(s => s.title === title);
+      return song?.artist || 'Artista';
+    }
+    
+    // Función para actualizar el fondo con la portada del artista
+    function updateArtistBackground(imageUrl) {
+      if (imageUrl) {
+        artistCoverBg.style.backgroundImage = `url('${imageUrl}')`;
+        artistCoverBg.classList.add('show');
+      } else {
+        artistCoverBg.classList.remove('show');
+      }
+    }
+    
+    // Función para manejar el clic en el botón del artista
+    function handleArtistButtonClick(artistName, btnElement) {
+      if (!artistName) return;
+      
+      const isListening = isListeningToArtist(artistName);
+      
+      if (isListening) {
+        // Intentar dejar de seguir (solo si han pasado 15 días)
+        const stopped = stopListeningToArtist(artistName);
+        if (stopped) {
+          // Actualizar el botón
+          updateArtistButtonUI(btnElement, artistName);
+          // Actualizar el contador de oyentes (restar 1)
+          if (artistListeners[artistName] !== undefined) {
+            artistListeners[artistName] = Math.max(0, artistListeners[artistName] - 1);
+          }
+          // Actualizar la vista
+          renderContent();
+        } else {
+          // No se puede dejar de seguir aún
+          const remaining = getRemainingDays(artistName);
+          alert(`⏳ Debes esperar ${remaining} día${remaining !== 1 ? 's' : ''} para poder dejar de escuchar a ${artistName}.`);
+        }
+      } else {
+        // Empezar a seguir
+        const started = startListeningToArtist(artistName);
+        if (started) {
+          // Actualizar el botón
+          updateArtistButtonUI(btnElement, artistName);
+          // Actualizar el contador de oyentes (sumar 1)
+          if (artistListeners[artistName] !== undefined) {
+            artistListeners[artistName] = (artistListeners[artistName] || 0) + 1;
+          }
+          // Abrir WhatsApp con el mensaje
+          const phoneNumber = '524621098798';
+          const message = `Hola, soy de Kerim Music+ y quiero apoyar al artista ${artistName} con 5 puntos (equivalente a $0.01 MXN). ¡Sigue así! 🎵`;
+          const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+          window.open(url, '_blank');
+          // Actualizar la vista
+          renderContent();
+        }
+      }
+    }
+    
+    // Función para actualizar la UI del botón del artista
+    function updateArtistButtonUI(btnElement, artistName) {
+      if (!btnElement || !artistName) return;
+      
+      const isListening = isListeningToArtist(artistName);
+      
+      if (isListening) {
+        const remaining = getRemainingDays(artistName);
+        btnElement.innerText = `🔇 Dejar de escuchar`;
+        btnElement.classList.add('listening');
+        btnElement.disabled = false;
+        // Mostrar días restantes como atributo de datos
+        btnElement.dataset.remaining = remaining;
+        
+        // Agregar o actualizar el contador de días
+        let daysElement = btnElement.parentElement.querySelector('.days-remaining');
+        if (!daysElement) {
+          daysElement = document.createElement('div');
+          daysElement.className = 'days-remaining';
+          btnElement.parentElement.appendChild(daysElement);
+        }
+        daysElement.textContent = `⏳ ${remaining} día${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''}`;
+      } else {
+        btnElement.innerText = `🎧 Oyente +`;
+        btnElement.classList.remove('listening');
+        btnElement.disabled = false;
+        // Eliminar el contador de días
+        const daysElement = btnElement.parentElement.querySelector('.days-remaining');
+        if (daysElement) daysElement.remove();
+      }
+    }
+    
+    // Función para actualizar todos los botones de artista en la página
+    function updateAllArtistButtons() {
+      document.querySelectorAll('.artist-whatsapp-btn').forEach(btn => {
+        const artistName = btn.getAttribute('data-artist');
+        if (artistName) {
+          updateArtistButtonUI(btn, artistName);
+        }
+      });
+    }
+    
     function renderContent(){ 
       updateCounterVisibility(); 
       renderTopArtists();
       const items = getActiveListForQueue();
       const isSearching = currentSearch.trim() !== ''; 
+      
+      // Ocultar o mostrar los botones de filtro según si hay búsqueda activa
+      if (isSearching) {
+        filterButtons.classList.add('hidden');
+      } else {
+        filterButtons.classList.remove('hidden');
+      }
+      
       if(isSearching) searchBadge.innerHTML = `🔍 Resultados: "${escapeHtml(currentSearch)}" (${items.length})`; 
       else if(isPlaylistsMode) searchBadge.innerHTML = `❤️ Tus Me gusta · ${items.length} canción${items.length !== 1 ? 'es' : ''}`; 
       else searchBadge.innerHTML = ''; 
+      
+      // Limpiar el fondo si no hay búsqueda
+      if (!isSearching) {
+        updateArtistBackground(null);
+      }
       
       if(items.length === 0){ 
         if(isPlaylistsMode) contentContainer.innerHTML = '<div class="no-results">💔 No hay canciones guardadas. Dale like ❤️ a una canción para agregarla a "Tus Me gusta"</div>'; 
@@ -1257,15 +1602,123 @@
         return; 
       } 
       
-      let gridClass = 'gallery-grid' + (isSearching ? ' list-view' : ''); 
-      let html = `<div class="${gridClass}">`; 
-      items.forEach(song => { 
-        const favMarker = isFav(song.id) ? ' ❤️' : ''; 
-        if(isSearching) html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#b3b3b3;"> · ${song.category}${favMarker}</span></div></div>`; 
-        else html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${isPlaylistsMode ? ' ❤️' : ''}</div></div>`; 
-      }); 
-      html += `</div>`; 
-      contentContainer.innerHTML = html; 
+      // Si estamos en búsqueda y hay resultados, mostrar perfil del artista
+      if (isSearching) {
+        // Buscar el artista que coincida exactamente con la búsqueda
+        const searchLower = currentSearch.toLowerCase();
+        let foundArtist = null;
+        let foundSongs = [];
+        
+        // Buscar entre todas las canciones el artista que coincida
+        const artistSet = new Set();
+        items.forEach(song => {
+          const artist = extractArtistFromTitle(song.title);
+          if (artist.toLowerCase().includes(searchLower) || searchLower.includes(artist.toLowerCase())) {
+            artistSet.add(artist);
+          }
+        });
+        
+        // Si hay múltiples coincidencias, tomar la que coincida exactamente o la primera
+        if (artistSet.size > 0) {
+          // Buscar coincidencia exacta
+          for (let artist of artistSet) {
+            if (artist.toLowerCase() === searchLower) {
+              foundArtist = artist;
+              break;
+            }
+          }
+          // Si no hay coincidencia exacta, tomar la primera
+          if (!foundArtist) {
+            foundArtist = artistSet.values().next().value;
+          }
+          
+          // Obtener todas las canciones de ese artista
+          foundSongs = items.filter(song => {
+            const artist = extractArtistFromTitle(song.title);
+            return artist === foundArtist;
+          });
+        }
+        
+        // Si no se encontró ningún artista, mostrar todos los resultados en lista
+        if (!foundArtist || foundSongs.length === 0) {
+          let html = `<div class="gallery-grid list-view">`;
+          items.forEach(song => {
+            const favMarker = isFav(song.id) ? ' ❤️' : '';
+            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#b3b3b3;"> · ${song.category}${favMarker}</span></div></div>`;
+          });
+          html += `</div>`;
+          contentContainer.innerHTML = html;
+        } else {
+          // Obtener la última canción del artista para el fondo
+          const sortedSongs = foundSongs.sort((a, b) => b.id - a.id);
+          const lastSong = sortedSongs[0];
+          
+          // Establecer el fondo con la imagen de portada del artista
+          updateArtistBackground(lastSong.url);
+          
+          // Obtener el número de oyentes del artista (desde artistListeners)
+          const listeners = artistListeners[foundArtist] !== undefined ? artistListeners[foundArtist] : 0;
+          const listenersText = listeners === 1 ? 'oyente mensual' : 'oyentes mensuales';
+          
+          // Obtener la información extra del artista
+          const extraInfo = artistExtraInfo[foundArtist] || '🎤 Apoya a este artista convirtiéndote en oyente.';
+          
+          // Verificar si el usuario está escuchando al artista
+          const isListening = isListeningToArtist(foundArtist);
+          const buttonText = isListening ? '🔇 Dejar de escuchar' : '🎧 Oyente +';
+          const buttonClass = isListening ? 'artist-whatsapp-btn listening' : 'artist-whatsapp-btn';
+          
+          // Mostrar perfil del artista con nombre, oyentes, botón e información extra
+          let html = `
+            <div class="artist-profile-result">
+              <div class="artist-name-large">${escapeHtml(foundArtist)}</div>
+              <div class="artist-listeners">${listeners} ${listenersText}</div>
+              <button class="${buttonClass}" data-artist="${escapeHtml(foundArtist)}">
+                ${buttonText}
+              </button>
+              ${isListening ? `<div class="days-remaining">⏳ ${getRemainingDays(foundArtist)} día${getRemainingDays(foundArtist) !== 1 ? 's' : ''} restante${getRemainingDays(foundArtist) !== 1 ? 's' : ''}</div>` : ''}
+              <div class="artist-info-extra">
+                ${escapeHtml(extraInfo)}
+              </div>
+            </div>
+          `;
+          
+          // Mostrar las canciones del artista en lista
+          html += `<div class="gallery-grid list-view">`;
+          foundSongs.forEach(song => {
+            const favMarker = isFav(song.id) ? ' ❤️' : '';
+            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#b3b3b3;"> · ${song.category}${favMarker}</span></div></div>`;
+          });
+          html += `</div>`;
+          contentContainer.innerHTML = html;
+          
+          // Asignar eventos a los botones de artista
+          document.querySelectorAll('.artist-whatsapp-btn').forEach(btn => {
+            const artistName = btn.getAttribute('data-artist');
+            if (artistName) {
+              // Actualizar la UI del botón según el estado actual
+              updateArtistButtonUI(btn, artistName);
+              
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const name = btn.getAttribute('data-artist');
+                handleArtistButtonClick(name, btn);
+              });
+            }
+          });
+        }
+      } else {
+        // Vista normal (grid)
+        let gridClass = 'gallery-grid'; 
+        let html = `<div class="${gridClass}">`; 
+        items.forEach(song => { 
+          const favMarker = isFav(song.id) ? ' ❤️' : ''; 
+          html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${isPlaylistsMode ? ' ❤️' : ''}</div></div>`; 
+        }); 
+        html += `</div>`; 
+        contentContainer.innerHTML = html;
+      }
+      
       document.querySelectorAll('.image-card').forEach(card => { 
         card.addEventListener('click', () => { 
           const id = parseInt(card.dataset.id); 
@@ -1290,6 +1743,10 @@
       homeBtn.classList.add('active');
       likesBtn.classList.remove('active');
       isPlaylistsMode = false;
+      // Limpiar búsqueda al cambiar a Inicio
+      currentSearch = '';
+      searchInput.value = '';
+      filterButtons.classList.remove('hidden');
       updateSortChipsVisibility();
       renderContent();
       renderSuggestions();
@@ -1300,15 +1757,33 @@
       likesBtn.classList.add('active');
       homeBtn.classList.remove('active');
       isPlaylistsMode = true;
+      // Limpiar búsqueda al cambiar a Me gusta
+      currentSearch = '';
+      searchInput.value = '';
+      filterButtons.classList.remove('hidden');
       updateSortChipsVisibility();
       renderContent();
       renderSuggestions();
       updateQueueAndMode();
     });
     
-    function performSearch(){ currentSearch = searchInput.value.trim(); renderContent(); renderSuggestions(); updateQueueAndMode(); }
+    function performSearch(){ 
+      currentSearch = searchInput.value.trim(); 
+      // Si hay búsqueda, ocultar filtros; si no, mostrarlos
+      if (currentSearch !== '') {
+        filterButtons.classList.add('hidden');
+      } else {
+        filterButtons.classList.remove('hidden');
+      }
+      renderContent(); 
+      renderSuggestions(); 
+      updateQueueAndMode(); 
+    }
     searchButton.addEventListener('click', performSearch);
     searchInput.addEventListener('keyup', (e) => { if(e.key === 'Enter') performSearch(); });
+    
+    // También limpiar la búsqueda cuando se hace clic en Inicio o Me gusta
+    // ya está manejado arriba
     
     audio.addEventListener('timeupdate',()=>{ if(audio.duration && isFinite(audio.duration)){ let p = (audio.currentTime/audio.duration)*100; progressFill.style.width = `${p}%`; miniProgressFill.style.width = `${p}%`; currentTimeSpan.innerText = formatTime(audio.currentTime); if(durationSpan.innerText === '0:00') durationSpan.innerText = formatTime(audio.duration); } });
     audio.addEventListener('loadedmetadata',()=>{ if(audio.duration) durationSpan.innerText = formatTime(audio.duration); });
