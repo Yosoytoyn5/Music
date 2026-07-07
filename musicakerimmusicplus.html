@@ -1506,10 +1506,6 @@
           }
           // Actualizar la vista
           renderContent();
-        } else {
-          // No se puede dejar de seguir aún
-          const remaining = getRemainingDays(artistName);
-          alert(`⏳ Debes esperar ${remaining} día${remaining !== 1 ? 's' : ''} para poder dejar de escuchar a ${artistName}.`);
         }
       } else {
         // Empezar a seguir
