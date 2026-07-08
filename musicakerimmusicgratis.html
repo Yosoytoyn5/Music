@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -968,7 +967,8 @@
         <button class="ctrl-btn shuffle-btn-player" id="shuffleBtnPlayer">🔀</button>
       </div>
     </div>
-    <div class="progress-area"><div class="time-row"><span id="currentTime">0:00</span><span id="durationTime">0:00</span></div>
+    <div class="progress-area" id="progressArea">
+      <div class="time-row"><span id="currentTime">0:00</span><span id="durationTime">0:00</span></div>
       <div class="progress-bar-bg" id="progressBarBg"><div class="progress-fill" id="progressFill"></div></div>
     </div>
     <div class="controls">
@@ -1004,6 +1004,7 @@
     
     // --- ANUNCIOS (4) ---
     const ads = [
+      { id: 'ad5', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 5', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/ymz00x4bk0arik8vapgnd/11-de-abril-de-2026.mp3?rlkey=hafgkwkgt6tgyrryodqz2c6fy&st=p5vsj82t&raw=1', isAd: true },
       { id: 'ad1', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 1', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/z3fbqqzthhvvqt9275lc7/2-tema-grabados_1783188240865.mp3?rlkey=7v6ha18uxps052z43rty0d5jr&st=sam7gv97&raw=1', isAd: true },
       { id: 'ad2', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 2', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/xgl19r2bd49n5cdup93f4/Escucha-sin-anusios_1783188103278.mp3?rlkey=00usrx9c68td9pkqw6o2x1qct&st=4ck7wlz8&raw=1', isAd: true },
       { id: 'ad3', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 3', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/c57mxtk8nsgp5nbizxbvx/Suscriocion.-Anuncio_1783187878802.mp3?rlkey=jqcxfpzuqdg1l1gb62iz6oa93&st=dow06n0b&raw=1', isAd: true },
@@ -1272,6 +1273,7 @@
     const sortChipsContainer = document.getElementById('sortChipsContainer');
     const shuffleBtnPlayer = document.getElementById('shuffleBtnPlayer');
     const toggleSuggestionsBtnElem = document.getElementById('toggleSuggestionsBtn');
+    const progressArea = document.getElementById('progressArea');
     
     const mattePalette = ['#121212', '#181818', '#0F0F0F', '#1A1A1A', '#141414', '#161616', '#1C1C1C', '#111111'];
     function getRandomMatteColor() { return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
@@ -1407,6 +1409,10 @@
       fullSongCategory.innerHTML = `ANUNCIO <span class="ad-badge">AD ${currentAdIndex + 1}/${adPlaylist.length}</span>`;
       miniCover.src = adSong.url;
       miniTitle.innerText = adSong.title;
+      
+      // Ocultar la barra de progreso durante los anuncios
+      if (progressArea) progressArea.style.display = 'none';
+      
       if (adSong.music) {
         audio.src = adSong.music;
         audio.play().catch(e => console.log);
@@ -1432,6 +1438,10 @@
       fullNext.classList.remove('hidden-nav');
       miniPrev.classList.remove('hidden-nav');
       miniNext.classList.remove('hidden-nav');
+      
+      // Mostrar la barra de progreso nuevamente
+      if (progressArea) progressArea.style.display = 'block';
+      
       if (previousSong && !previousSong.isAd) {
         let foundInQueue = currentPlayQueue.find(s => s.id === previousSong.id);
         if (foundInQueue) {
@@ -1476,6 +1486,10 @@
       if (!song) return;
       if (isAdPlaying) return;
       currentSong = song;
+      
+      // Mostrar la barra de progreso para canciones normales
+      if (progressArea) progressArea.style.display = 'block';
+      
       if (!song.isAd) {
         incrementPlayCount(song.id);
         renderSuggestions();
