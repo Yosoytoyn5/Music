@@ -1020,8 +1020,10 @@
 
 <script>
   (function(){
+    // ==================== CONFIGURACIÓN ====================
     let hasKerimMusicPlus = false;
     
+    // ==================== ANUNCIOS ====================
     const ads = [
       { id: 'ad5', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 5', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/ymz00x4bk0arik8vapgnd/11-de-abril-de-2026.mp3?rlkey=hafgkwkgt6tgyrryodqz2c6fy&st=p5vsj82t&raw=1', isAd: true },
       { id: 'ad1', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 1', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/z3fbqqzthhvvqt9275lc7/2-tema-grabados_1783188240865.mp3?rlkey=7v6ha18uxps052z43rty0d5jr&st=sam7gv97&raw=1', isAd: true },
@@ -1038,6 +1040,7 @@
     let currentAdIndex = 0;
     let adCallback = null;
     
+    // ==================== CANCIONES ====================
     const originalSongs = [
       {id:48, url:'https://www.dropbox.com/scl/fi/2rhos68qocadmeqnry26z/Tonny-reyes.jpg?rlkey=rrn5f3bhmqojc7f7qtftskizx&st=i1kgehuz&raw=1', category:'Musica', title:'Linea de Meta Tonny Reyes', music:'https://www.dropbox.com/scl/fi/higcv4yxhf2z1exl4zovy/4-Linea-de-Meta-Tonny-Reyes.flac?rlkey=vkvhv5i73k8q3i25dx3vx9h7k&st=0h3mrbxl&raw=1'},
       {id:47, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Soy el mismo Sain Nt', music:'https://www.dropbox.com/scl/fi/j6gyofex4ilsg7ufqjynb/soy-el-mismo-sain-nt.mp3?rlkey=7z5hmjvtw6k7ycng1dtsbg8jh&st=xz3o7yai&raw=1'},
@@ -1089,6 +1092,7 @@
       {id:7, url:'https://i.postimg.cc/MXJXxVL3/Te-estoy-llamando.jpg', category:'Musica', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/97yj1flb0bgaaedaxr9h1/Te_estoy_Llamando_lista.wav?rlkey=cn3oppwsfjv617hhcuy2rcga4&st=ipum1s6a&raw=1'}
     ];
     
+    // ==================== FUNCIONES AUXILIARES ====================
     function shuffleArray(arr) {
       const array = [...arr];
       for (let i = array.length - 1; i > 0; i--) {
@@ -1098,55 +1102,12 @@
       return array;
     }
     
-    const shuffledSongs = shuffleArray(originalSongs);
-    let masterSongs = [...shuffledSongs];
-    const allSongs = [...originalSongs];
+    function escapeHtml(str){ return str ? str.replace(/[&<>]/g, m => ({'&':'&', '<':'<', '>':'>'}[m] || m)) : ''; }
     
-    let favSet = new Set();
-    let playCount = new Map();
-    let artistPlayCount = new Map();
-    let favOrder = [];
+    function formatTime(sec){ if(isNaN(sec)) return '0:00'; let m=Math.floor(sec/60), s=Math.floor(sec%60); return `${m}:${s<10?'0':''}${s}`; }
     
-    function updateUIPlan() {
-      const searchContainer = document.getElementById('searchContainer');
-      const searchInput = document.getElementById('searchInput');
-      const searchButton = document.getElementById('searchButton');
-      const planBadge = document.getElementById('planBadge');
-      const favBtn = document.getElementById('favoriteBtnMain');
-      const likesBtn = document.querySelector('[data-view="likes"]');
-      
-      if (hasKerimMusicPlus) {
-        searchContainer.classList.remove('locked');
-        searchInput.disabled = false;
-        searchInput.placeholder = '¿Qué quieres escuchar?';
-        searchButton.classList.remove('locked');
-        searchButton.disabled = false;
-        planBadge.textContent = 'PREMIUM';
-        planBadge.classList.remove('locked');
-        planBadge.style.background = '#1a4fd6';
-        planBadge.style.color = '#ffffff';
-        likesBtn.classList.remove('locked');
-        likesBtn.textContent = 'Tus Me gusta';
-        favBtn.classList.remove('locked');
-        favBtn.title = 'Agregar a favoritos';
-      } else {
-        searchContainer.classList.remove('locked');
-        searchInput.disabled = false;
-        searchInput.placeholder = '¿Qué quieres escuchar?';
-        searchButton.classList.remove('locked');
-        searchButton.disabled = false;
-        planBadge.textContent = 'FREE';
-        planBadge.classList.add('locked');
-        planBadge.style.background = '#1a2a5e';
-        planBadge.style.color = '#3a4a6a';
-        likesBtn.classList.add('locked');
-        likesBtn.textContent = 'Tus Me gusta 🔒';
-        favBtn.classList.add('locked');
-        favBtn.title = 'Solo disponible en Kerim Music+';
-      }
-    }
-    
-    function showToast(message, duration = 3000) {
+    // ==================== TOAST ====================
+    function showToast(message, duration = 2500) {
       const toast = document.getElementById('toastNotification');
       toast.textContent = message;
       toast.classList.add('show');
@@ -1156,17 +1117,17 @@
       }, duration);
     }
     
-    function rebuildArtistCounts() {
-      artistPlayCount.clear();
-      for (let song of masterSongs) {
-        let plays = playCount.get(song.id) || 0;
-        if(plays > 0){
-          let artist = song.artist || 'Artista';
-          artistPlayCount.set(artist, (artistPlayCount.get(artist) || 0) + plays);
-        }
-      }
-    }
+    // ==================== INICIALIZACIÓN ====================
+    const shuffledSongs = shuffleArray(originalSongs);
+    let masterSongs = [...shuffledSongs];
+    const allSongs = [...originalSongs];
     
+    let favSet = new Set();
+    let playCount = new Map();
+    let artistPlayCount = new Map();
+    let favOrder = [];
+    
+    // Cargar datos guardados
     try{ 
       let saved = localStorage.getItem('kerim_favs_set'); if(saved) JSON.parse(saved).forEach(id=>favSet.add(Number(id))); 
       let savedCounts = localStorage.getItem('kerim_play_counts');
@@ -1174,11 +1135,13 @@
       let savedOrder = localStorage.getItem('kerim_fav_order');
       if(savedOrder) favOrder = JSON.parse(savedOrder);
       else favOrder = [...favSet];
-      rebuildArtistCounts();
     } catch(e){}
     
+    // ==================== FUNCIONES DE ESTADO ====================
     function saveFavs(){ localStorage.setItem('kerim_favs_set', JSON.stringify([...favSet])); favOrder = favOrder.filter(id => favSet.has(id)); for(let id of favSet) if(!favOrder.includes(id)) favOrder.push(id); localStorage.setItem('kerim_fav_order', JSON.stringify(favOrder)); }
-    function savePlayCounts(){ let obj = {}; for(let [k,v] of playCount.entries()) obj[k] = v; localStorage.setItem('kerim_play_counts', JSON.stringify(obj)); rebuildArtistCounts(); renderTopArtists(); }
+    
+    function savePlayCounts(){ let obj = {}; for(let [k,v] of playCount.entries()) obj[k] = v; localStorage.setItem('kerim_play_counts', JSON.stringify(obj)); }
+    
     function incrementPlayCount(songId){ 
       let song = masterSongs.find(s => s.id === songId) || allSongs.find(s => s.id === songId);
       if(song) {
@@ -1192,7 +1155,9 @@
         savePlayCounts();
       }
     }
+    
     function isFav(id){ return favSet.has(id); }
+    
     function toggleFav(id){ 
       if (!hasKerimMusicPlus) {
         showToast('💎 Solo disponible en Kerim Music+');
@@ -1209,18 +1174,20 @@
       updateFavButtonUI(); 
       if(isPlaylistsMode) renderContent(); 
     }
+    
     function getFavSongsSorted(){ return favOrder.map(id => allSongs.find(s => s.id === id)).filter(Boolean); }
     
-    let playlistsSortMode = 'default';
-    const savedSortMode = localStorage.getItem('kerim_playlists_sort_mode');
-    if (savedSortMode && ['default', 'lastFirst', 'firstFirst'].includes(savedSortMode)) playlistsSortMode = savedSortMode;
-    function applyPlaylistsSort(songs){ 
-      if(playlistsSortMode === 'default') return songs; 
-      if(playlistsSortMode === 'lastFirst') return [...songs].reverse(); 
+    function getFavSongs(){ 
+      let songs = getFavSongsSorted();
+      if(playlistsSortMode === 'lastFirst') songs = [...songs].reverse();
       return songs; 
     }
-    function getFavSongs(){ return applyPlaylistsSort(getFavSongsSorted()); }
-    function getLeastPlayedSuggestions(limit = 6){ let songsWithCount = masterSongs.map(song => ({...song, plays: playCount.get(song.id) || 0})); songsWithCount.sort((a,b) => a.plays - b.plays); return songsWithCount.slice(0, limit); }
+    
+    function getLeastPlayedSuggestions(limit = 6){ 
+      let songsWithCount = masterSongs.map(song => ({...song, plays: playCount.get(song.id) || 0})); 
+      songsWithCount.sort((a,b) => a.plays - b.plays); 
+      return songsWithCount.slice(0, limit); 
+    }
     
     function getTopArtists(limit = 6) {
       let artistsArray = [];
@@ -1233,86 +1200,97 @@
       return artistsArray.slice(0, limit);
     }
     
-    function renderTopArtists() {
-      const topArtistsSection = document.getElementById('topArtistsSection');
-      const artistsContainer = document.getElementById('artistsContainer');
-      const shouldShow = (!isPlaylistsMode && currentSearch.trim() === '');
-      if (!shouldShow) { topArtistsSection.classList.add('hidden-artists'); return; }
-      topArtistsSection.classList.remove('hidden-artists');
-      const topArtists = getTopArtists(6);
-      if (topArtists.length === 0 || (topArtists.length === 1 && topArtists[0].plays === 0)) {
-        artistsContainer.innerHTML = '<div style="color:#5a7fc7; font-size:0.8rem; padding:0.5rem;">Escucha más canciones para ver tus artistas favoritos 🎧</div>';
-        return;
-      }
-      let html = '';
-      topArtists.forEach(artist => {
-        html += `<div class="artist-circle-card" data-artist="${escapeHtml(artist.name)}"><img class="artist-avatar" src="${artist.image}" alt="${escapeHtml(artist.name)}" loading="lazy"><div class="artist-name">${escapeHtml(artist.name.length > 15 ? artist.name.substring(0,12)+'...' : artist.name)}</div><div class="artist-plays">${artist.plays} reproducción${artist.plays !== 1 ? 'es' : ''}</div></div>`;
-      });
-      artistsContainer.innerHTML = html;
-      document.querySelectorAll('.artist-circle-card').forEach(card => { card.addEventListener('click', () => { const artistName = card.getAttribute('data-artist'); if(artistName){ if (!hasKerimMusicPlus) { showToast('💎 Búsqueda solo disponible en Kerim Music+'); return; } currentSearch = artistName; searchInput.value = artistName; performSearch(); } }); });
-    }
+    let playlistsSortMode = 'default';
+    const savedSortMode = localStorage.getItem('kerim_playlists_sort_mode');
+    if (savedSortMode && ['default', 'lastFirst', 'firstFirst'].includes(savedSortMode)) playlistsSortMode = savedSortMode;
     
-    function getPlayerSuggestions(currentSongObj, limit = 6) {
-      if (!currentSongObj) return [];
-      const sameArtist = masterSongs.filter(s => s.id !== currentSongObj.id && ((s.artist && currentSongObj.artist) && s.artist.toLowerCase() === currentSongObj.artist.toLowerCase()));
-      const others = masterSongs.filter(s => s.id !== currentSongObj.id && !sameArtist.includes(s));
-      let combined = [...sameArtist, ...others];
-      return combined.slice(0, limit);
-    }
-    
-    let suggestionsHidden = false;
-    function renderPlayerSuggestions() {
-      const suggestionsTrack = document.getElementById('playerSuggestionsTrack');
-      const toggleBtn = document.getElementById('toggleSuggestionsBtn');
-      if (!currentSong) { suggestionsTrack.innerHTML = ''; return; }
-      const suggestions = getPlayerSuggestions(currentSong);
-      if (suggestions.length === 0) { suggestionsTrack.innerHTML = '<div style="color:#5a7fc7; text-align:center; font-size:0.7rem;">No hay sugerencias disponibles</div>'; return; }
-      let html = '';
-      suggestions.forEach(song => {
-        const plays = playCount.get(song.id) || 0;
-        html += `<div class="player-suggestion-item" data-id="${song.id}"><img class="player-suggestion-img" src="${song.url}" loading="lazy"><div class="player-suggestion-info"><div class="player-suggestion-title">${escapeHtml(song.title.length > 12 ? song.title.substring(0,10)+'...' : song.title)}</div><div class="player-suggestion-plays">${plays} escuchas</div></div></div>`;
-      });
-      suggestionsTrack.innerHTML = html;
-      if (suggestionsHidden) { suggestionsTrack.classList.add('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Mostrar'; } else { suggestionsTrack.classList.remove('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Ocultar'; }
-      document.querySelectorAll('#playerSuggestionsTrack .player-suggestion-item').forEach(item => { item.addEventListener('click', (e) => { e.stopPropagation(); const id = parseInt(item.getAttribute('data-id')); const found = masterSongs.find(s => s.id === id) || allSongs.find(s => s.id === id); if(found) { updateQueueAndMode(); playSong(found); } }); });
-    }
-    
-    function toggleSuggestions() {
-      suggestionsHidden = !suggestionsHidden;
-      const track = document.getElementById('playerSuggestionsTrack');
-      const toggleBtn = document.getElementById('toggleSuggestionsBtn');
-      if (track) {
-        if (suggestionsHidden) { track.classList.add('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Mostrar'; } 
-        else { track.classList.remove('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Ocultar'; }
+    // ==================== UI ====================
+    function updateUIPlan() {
+      const planBadge = document.getElementById('planBadge');
+      const favBtn = document.getElementById('favoriteBtnMain');
+      const likesBtn = document.querySelector('[data-view="likes"]');
+      
+      if (hasKerimMusicPlus) {
+        planBadge.textContent = 'PREMIUM';
+        planBadge.classList.remove('locked');
+        planBadge.style.background = '#1a4fd6';
+        planBadge.style.color = '#ffffff';
+        likesBtn.classList.remove('locked');
+        likesBtn.textContent = 'Tus Me gusta';
+        favBtn.classList.remove('locked');
+        favBtn.title = 'Agregar a favoritos';
+      } else {
+        planBadge.textContent = 'FREE';
+        planBadge.classList.add('locked');
+        planBadge.style.background = '#1a2a5e';
+        planBadge.style.color = '#3a4a6a';
+        likesBtn.classList.add('locked');
+        likesBtn.textContent = 'Tus Me gusta 🔒';
+        favBtn.classList.add('locked');
+        favBtn.title = 'Solo disponible en Kerim Music+';
       }
     }
     
+    // ==================== REPRODUCCIÓN ====================
     let currentPlayQueue = [], currentQueueIndex = 0, currentSong = null, audio = new Audio(), isPlaying = false, currentSearch = '', shuffleActive = false, originalQueue = [], isPlaylistsMode = false;
-    const contentContainer = document.getElementById('contentContainer'), suggestionsContainer = document.getElementById('suggestionsContainer'), searchBadge = document.getElementById('searchBadge'), fullPlayer = document.getElementById('fullscreenPlayer'), miniPlayerDiv = document.getElementById('miniPlayer'), fullCover = document.getElementById('fullCover'), fullSongTitle = document.getElementById('fullSongTitle'), fullSongCategory = document.getElementById('fullSongCategory'), fullPlayPause = document.getElementById('fullPlayPauseBtn'), fullPrev = document.getElementById('fullPrevBtn'), fullNext = document.getElementById('fullNextBtn'), progressFill = document.getElementById('progressFill'), progressBarBg = document.getElementById('progressBarBg'), currentTimeSpan = document.getElementById('currentTime'), durationSpan = document.getElementById('durationTime'), favMainBtn = document.getElementById('favoriteBtnMain'), closePlayerBtn = document.getElementById('closePlayerBtn'), miniCover = document.getElementById('miniCover'), miniTitle = document.getElementById('miniTitle'), miniPlayPause = document.getElementById('miniPlayPauseBtn'), miniPrev = document.getElementById('miniPrevBtn'), miniNext = document.getElementById('miniNextBtn'), miniProgressFill = document.getElementById('miniProgressFill'), searchInput = document.getElementById('searchInput'), searchButton = document.getElementById('searchButton'), randomMatteBg = document.getElementById('randomMatteBg'), counterWrapper = document.getElementById('counterWrapper');
+    
+    // ==================== ELEMENTOS DOM ====================
+    const contentContainer = document.getElementById('contentContainer');
+    const suggestionsContainer = document.getElementById('suggestionsContainer');
+    const searchBadge = document.getElementById('searchBadge');
+    const fullPlayer = document.getElementById('fullscreenPlayer');
+    const miniPlayerDiv = document.getElementById('miniPlayer');
+    const fullCover = document.getElementById('fullCover');
+    const fullSongTitle = document.getElementById('fullSongTitle');
+    const fullSongCategory = document.getElementById('fullSongCategory');
+    const fullPlayPause = document.getElementById('fullPlayPauseBtn');
+    const fullPrev = document.getElementById('fullPrevBtn');
+    const fullNext = document.getElementById('fullNextBtn');
+    const progressFill = document.getElementById('progressFill');
+    const progressBarBg = document.getElementById('progressBarBg');
+    const currentTimeSpan = document.getElementById('currentTime');
+    const durationSpan = document.getElementById('durationTime');
+    const favMainBtn = document.getElementById('favoriteBtnMain');
+    const closePlayerBtn = document.getElementById('closePlayerBtn');
+    const miniCover = document.getElementById('miniCover');
+    const miniTitle = document.getElementById('miniTitle');
+    const miniPlayPause = document.getElementById('miniPlayPauseBtn');
+    const miniPrev = document.getElementById('miniPrevBtn');
+    const miniNext = document.getElementById('miniNextBtn');
+    const miniProgressFill = document.getElementById('miniProgressFill');
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const randomMatteBg = document.getElementById('randomMatteBg');
+    const counterWrapper = document.getElementById('counterWrapper');
     const sortChipsContainer = document.getElementById('sortChipsContainer');
     const shuffleBtnPlayer = document.getElementById('shuffleBtnPlayer');
     const toggleSuggestionsBtnElem = document.getElementById('toggleSuggestionsBtn');
     const progressArea = document.getElementById('progressArea');
     
+    // ==================== FONDO ====================
     const mattePalette = ['#0a0e1a', '#0d162b', '#111a33', '#0f1428', '#0b1222', '#0e1930', '#0c1528', '#09101e'];
     function getRandomMatteColor() { return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
     function changeBackgroundRandomly() { randomMatteBg.style.backgroundColor = getRandomMatteColor(); }
     let intervalBg = setInterval(() => changeBackgroundRandomly(), 7000);
     function triggerBackgroundRefresh() { changeBackgroundRandomly(); }
     
-    function shuffleArrayFn(arr) { const array = [...arr]; for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
-    
+    // ==================== SHUFFLE ====================
     function toggleShuffle() {
       shuffleActive = !shuffleActive;
+      
       if (shuffleActive) {
         shuffleBtnPlayer.classList.add('active');
+        showToast('🔀 Modo Aleatorio Activado', 2000);
+        
         if (originalQueue.length === 0 && currentPlayQueue.length > 0) {
           originalQueue = [...currentPlayQueue];
         }
+        
         const currentSongId = currentSong ? currentSong.id : null;
         let queueWithoutCurrent = currentPlayQueue.filter(s => s.id !== currentSongId);
-        let shuffledWithoutCurrent = shuffleArrayFn(queueWithoutCurrent);
+        let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent);
         let newQueue = [];
+        
         if (currentSongId && currentPlayQueue.find(s => s.id === currentSongId)) {
           newQueue = [currentSong, ...shuffledWithoutCurrent];
           currentQueueIndex = 0;
@@ -1321,8 +1299,11 @@
           currentQueueIndex = 0;
         }
         currentPlayQueue = newQueue;
+        
       } else {
         shuffleBtnPlayer.classList.remove('active');
+        showToast('🔀 Modo Aleatorio Desactivado', 2000);
+        
         if (originalQueue.length > 0) {
           const currentSongId = currentSong ? currentSong.id : null;
           let newIndex = originalQueue.findIndex(s => s.id === currentSongId);
@@ -1334,6 +1315,7 @@
       }
     }
     
+    // ==================== FUNCIONES DE COLA ====================
     function getActiveListForQueue(){
       if(isPlaylistsMode) {
         let base = getFavSongs();
@@ -1354,7 +1336,7 @@
         originalQueue = [...newQueue]; 
         const currentSongId = currentSong ? currentSong.id : null; 
         let queueWithoutCurrent = newQueue.filter(s => s.id !== currentSongId); 
-        let shuffledWithoutCurrent = shuffleArrayFn(queueWithoutCurrent); 
+        let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent); 
         let newQueueShuffled = []; 
         if (currentSongId && newQueue.find(s => s.id === currentSongId)) { 
           newQueueShuffled = [currentSong, ...shuffledWithoutCurrent]; 
@@ -1377,7 +1359,7 @@
         if(shuffleActive) { 
           const currentSongId = currentSong ? currentSong.id : null; 
           let queueWithoutCurrent = currentPlayQueue.filter(s => s.id !== currentSongId); 
-          let shuffledWithoutCurrent = shuffleArrayFn(queueWithoutCurrent); 
+          let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent); 
           if (currentSongId && currentPlayQueue.find(s => s.id === currentSongId)) { 
             currentPlayQueue = [currentSong, ...shuffledWithoutCurrent]; 
             currentQueueIndex = 0; 
@@ -1390,6 +1372,7 @@
       if(currentPlayQueue.length && !currentSong) currentSong = currentPlayQueue[0]; 
     }
     
+    // ==================== ANUNCIOS ====================
     function playAds(callback) {
       if (ads.length === 0 || isAdPlaying) {
         if (callback) callback();
@@ -1478,6 +1461,7 @@
       }
     }
     
+    // ==================== REPRODUCIR CANCIONES ====================
     function playSong(song, customQueue = null) {
       if (!song) return;
       if (isAdPlaying) return;
@@ -1518,7 +1502,7 @@
           originalQueue = [...customQueue];
           const currentSongId = song.id;
           let queueWithoutCurrent = customQueue.filter(s => s.id !== currentSongId);
-          let shuffledWithoutCurrent = shuffleArrayFn(queueWithoutCurrent);
+          let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent);
           currentPlayQueue = [song, ...shuffledWithoutCurrent];
           currentQueueIndex = 0;
         } else {
@@ -1598,6 +1582,7 @@
       isPlaying ? audio.pause() : audio.play(); 
     }
     
+    // ==================== SUGERENCIAS ====================
     function renderSuggestions(){ 
       if(isPlaylistsMode || currentSearch.trim() !== '') { 
         suggestionsContainer.innerHTML = ''; 
@@ -1622,6 +1607,64 @@
       }); 
     }
     
+    // ==================== SUGERENCIAS DEL REPRODUCTOR ====================
+    let suggestionsHidden = false;
+    
+    function getPlayerSuggestions(currentSongObj, limit = 6) {
+      if (!currentSongObj) return [];
+      const sameArtist = masterSongs.filter(s => s.id !== currentSongObj.id && ((s.artist && currentSongObj.artist) && s.artist.toLowerCase() === currentSongObj.artist.toLowerCase()));
+      const others = masterSongs.filter(s => s.id !== currentSongObj.id && !sameArtist.includes(s));
+      let combined = [...sameArtist, ...others];
+      return combined.slice(0, limit);
+    }
+    
+    function renderPlayerSuggestions() {
+      const suggestionsTrack = document.getElementById('playerSuggestionsTrack');
+      const toggleBtn = document.getElementById('toggleSuggestionsBtn');
+      if (!currentSong) { suggestionsTrack.innerHTML = ''; return; }
+      const suggestions = getPlayerSuggestions(currentSong);
+      if (suggestions.length === 0) { suggestionsTrack.innerHTML = '<div style="color:#5a7fc7; text-align:center; font-size:0.7rem;">No hay sugerencias disponibles</div>'; return; }
+      let html = '';
+      suggestions.forEach(song => {
+        const plays = playCount.get(song.id) || 0;
+        html += `<div class="player-suggestion-item" data-id="${song.id}"><img class="player-suggestion-img" src="${song.url}" loading="lazy"><div class="player-suggestion-info"><div class="player-suggestion-title">${escapeHtml(song.title.length > 12 ? song.title.substring(0,10)+'...' : song.title)}</div><div class="player-suggestion-plays">${plays} escuchas</div></div></div>`;
+      });
+      suggestionsTrack.innerHTML = html;
+      if (suggestionsHidden) { suggestionsTrack.classList.add('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Mostrar'; } else { suggestionsTrack.classList.remove('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Ocultar'; }
+      document.querySelectorAll('#playerSuggestionsTrack .player-suggestion-item').forEach(item => { item.addEventListener('click', (e) => { e.stopPropagation(); const id = parseInt(item.getAttribute('data-id')); const found = masterSongs.find(s => s.id === id) || allSongs.find(s => s.id === id); if(found) { updateQueueAndMode(); playSong(found); } }); });
+    }
+    
+    function toggleSuggestions() {
+      suggestionsHidden = !suggestionsHidden;
+      const track = document.getElementById('playerSuggestionsTrack');
+      const toggleBtn = document.getElementById('toggleSuggestionsBtn');
+      if (track) {
+        if (suggestionsHidden) { track.classList.add('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Mostrar'; } 
+        else { track.classList.remove('hidden-suggestions'); if(toggleBtn) toggleBtn.innerText = 'Ocultar'; }
+      }
+    }
+    
+    // ==================== RENDER TOP ARTISTS ====================
+    function renderTopArtists() {
+      const topArtistsSection = document.getElementById('topArtistsSection');
+      const artistsContainer = document.getElementById('artistsContainer');
+      const shouldShow = (!isPlaylistsMode && currentSearch.trim() === '');
+      if (!shouldShow) { topArtistsSection.classList.add('hidden-artists'); return; }
+      topArtistsSection.classList.remove('hidden-artists');
+      const topArtists = getTopArtists(6);
+      if (topArtists.length === 0 || (topArtists.length === 1 && topArtists[0].plays === 0)) {
+        artistsContainer.innerHTML = '<div style="color:#5a7fc7; font-size:0.8rem; padding:0.5rem;">Escucha más canciones para ver tus artistas favoritos 🎧</div>';
+        return;
+      }
+      let html = '';
+      topArtists.forEach(artist => {
+        html += `<div class="artist-circle-card" data-artist="${escapeHtml(artist.name)}"><img class="artist-avatar" src="${artist.image}" alt="${escapeHtml(artist.name)}" loading="lazy"><div class="artist-name">${escapeHtml(artist.name.length > 15 ? artist.name.substring(0,12)+'...' : artist.name)}</div><div class="artist-plays">${artist.plays} reproducción${artist.plays !== 1 ? 'es' : ''}</div></div>`;
+      });
+      artistsContainer.innerHTML = html;
+      document.querySelectorAll('.artist-circle-card').forEach(card => { card.addEventListener('click', () => { const artistName = card.getAttribute('data-artist'); if(artistName){ if (!hasKerimMusicPlus) { showToast('💎 Búsqueda solo disponible en Kerim Music+'); return; } currentSearch = artistName; searchInput.value = artistName; performSearch(); } }); });
+    }
+    
+    // ==================== RENDER CONTENIDO ====================
     function updateCounterVisibility() { 
       if (isPlaylistsMode || currentSearch.trim() !== '') { 
         counterWrapper.classList.add('hidden-counter'); 
@@ -1671,13 +1714,50 @@
       triggerBackgroundRefresh(); 
     }
     
-    function escapeHtml(str){ return str ? str.replace(/[&<>]/g, m => ({'&':'&', '<':'<', '>':'>'}[m] || m)) : ''; }
-    function applyFilters(){ renderContent(); renderSuggestions(); updateQueueAndMode(); }
-    
+    // ==================== FILTROS Y ORDEN ====================
     function updateSortChipsVisibility() { sortChipsContainer.style.display = isPlaylistsMode ? 'flex' : 'none'; }
-    function setSortMode(mode) { playlistsSortMode = mode; localStorage.setItem('kerim_playlists_sort_mode', mode); renderContent(); updateQueueAndMode(); document.querySelectorAll('.chip-sort').forEach(chip => chip.classList.remove('active')); const activeChip = document.querySelector(`.chip-sort[data-sort="${mode}"]`); if(activeChip) activeChip.classList.add('active'); }
-    function initChipsSortEvents() { document.querySelectorAll('.chip-sort').forEach(chip => { chip.addEventListener('click', (e) => { e.stopPropagation(); const mode = chip.getAttribute('data-sort'); setSortMode(mode); }); }); const activeChip = document.querySelector(`.chip-sort[data-sort="${playlistsSortMode}"]`); if(activeChip) activeChip.classList.add('active'); else document.querySelector('.chip-sort[data-sort="default"]')?.classList.add('active'); }
     
+    function setSortMode(mode) { 
+      playlistsSortMode = mode; 
+      localStorage.setItem('kerim_playlists_sort_mode', mode); 
+      renderContent(); 
+      updateQueueAndMode(); 
+      document.querySelectorAll('.chip-sort').forEach(chip => chip.classList.remove('active')); 
+      const activeChip = document.querySelector(`.chip-sort[data-sort="${mode}"]`); 
+      if(activeChip) activeChip.classList.add('active'); 
+    }
+    
+    function initChipsSortEvents() { 
+      document.querySelectorAll('.chip-sort').forEach(chip => { 
+        chip.addEventListener('click', (e) => { 
+          e.stopPropagation(); 
+          const mode = chip.getAttribute('data-sort'); 
+          setSortMode(mode); 
+        }); 
+      }); 
+      const activeChip = document.querySelector(`.chip-sort[data-sort="${playlistsSortMode}"]`); 
+      if(activeChip) activeChip.classList.add('active'); 
+      else document.querySelector('.chip-sort[data-sort="default"]')?.classList.add('active'); 
+    }
+    
+    // ==================== BÚSQUEDA ====================
+    function performSearch(){ 
+      currentSearch = searchInput.value.trim(); 
+      if(currentSearch !== '') {
+        const searchResults = allSongs.filter(s => 
+          s.title.toLowerCase().includes(currentSearch.toLowerCase()) || 
+          (s.artist && s.artist.toLowerCase().includes(currentSearch.toLowerCase()))
+        );
+        masterSongs = searchResults.length > 0 ? searchResults : [];
+      } else {
+        masterSongs = [...shuffledSongs];
+      }
+      renderContent(); 
+      renderSuggestions(); 
+      updateQueueAndMode(); 
+    }
+    
+    // ==================== EVENTOS ====================
     const homeBtn = document.querySelector('[data-view="home"]');
     const likesBtn = document.querySelector('[data-view="likes"]');
     
@@ -1705,43 +1785,50 @@
       updateQueueAndMode();
     });
     
-    function performSearch(){ 
-      currentSearch = searchInput.value.trim(); 
-      if(currentSearch !== '') {
-        const searchResults = allSongs.filter(s => 
-          s.title.toLowerCase().includes(currentSearch.toLowerCase()) || 
-          (s.artist && s.artist.toLowerCase().includes(currentSearch.toLowerCase()))
-        );
-        masterSongs = searchResults.length > 0 ? searchResults : [];
-      } else {
-        masterSongs = [...shuffledSongs];
-      }
-      renderContent(); 
-      renderSuggestions(); 
-      updateQueueAndMode(); 
-    }
-    
     searchButton.addEventListener('click', performSearch);
     searchInput.addEventListener('keyup', (e) => { if(e.key === 'Enter') performSearch(); });
     
-    audio.addEventListener('timeupdate',()=>{ if(audio.duration && isFinite(audio.duration)){ let p = (audio.currentTime/audio.duration)*100; progressFill.style.width = `${p}%`; miniProgressFill.style.width = `${p}%`; currentTimeSpan.innerText = formatTime(audio.currentTime); if(durationSpan.innerText === '0:00') durationSpan.innerText = formatTime(audio.duration); } });
+    // ==================== AUDIO EVENTOS ====================
+    audio.addEventListener('timeupdate',()=>{ 
+      if(audio.duration && isFinite(audio.duration)){ 
+        let p = (audio.currentTime/audio.duration)*100; 
+        progressFill.style.width = `${p}%`; 
+        miniProgressFill.style.width = `${p}%`; 
+        currentTimeSpan.innerText = formatTime(audio.currentTime); 
+        if(durationSpan.innerText === '0:00') durationSpan.innerText = formatTime(audio.duration); 
+      } 
+    });
+    
     audio.addEventListener('loadedmetadata',()=>{ if(audio.duration) durationSpan.innerText = formatTime(audio.duration); });
+    
     audio.addEventListener('play',()=>{ isPlaying=true; updatePlayPauseIcon(); });
     audio.addEventListener('pause',()=>{ isPlaying=false; updatePlayPauseIcon(); });
+    
     audio.addEventListener('ended',()=>{ 
       if (isAdPlaying) return;
       nextTrack(); 
     });
-    progressBarBg.addEventListener('click',(e)=>{ if(audio.duration){ let rect = progressBarBg.getBoundingClientRect(); let perc = (e.clientX - rect.left)/rect.width; audio.currentTime = perc * audio.duration; } });
     
+    // ==================== PROGRESS BAR ====================
+    progressBarBg.addEventListener('click',(e)=>{ 
+      if(audio.duration){ 
+        let rect = progressBarBg.getBoundingClientRect(); 
+        let perc = (e.clientX - rect.left)/rect.width; 
+        audio.currentTime = perc * audio.duration; 
+      } 
+    });
+    
+    // ==================== CONTROLES ====================
     fullPlayPause.addEventListener('click', togglePlayPause);
     fullNext.addEventListener('click', nextTrack);
     fullPrev.addEventListener('click', prevTrack);
     miniPlayPause.addEventListener('click', togglePlayPause);
     miniNext.addEventListener('click', nextTrack);
     miniPrev.addEventListener('click', prevTrack);
+    
     miniPlayerDiv.addEventListener('click',(e)=>{ if(!e.target.closest('.mini-btn')) fullPlayer.classList.add('show'); });
     closePlayerBtn.addEventListener('click',()=>fullPlayer.classList.remove('show'));
+    
     favMainBtn.addEventListener('click',()=>{ 
       if(currentSong && !currentSong.isAd){ 
         if (!hasKerimMusicPlus) {
@@ -1752,24 +1839,39 @@
         if(isPlaylistsMode) renderContent(); 
       } 
     });
+    
     shuffleBtnPlayer.addEventListener('click', toggleShuffle);
     if (toggleSuggestionsBtnElem) toggleSuggestionsBtnElem.addEventListener('click', toggleSuggestions);
     
-    function formatTime(sec){ if(isNaN(sec)) return '0:00'; let m=Math.floor(sec/60), s=Math.floor(sec%60); return `${m}:${s<10?'0':''}${s}`; }
-    
-    const welcomeModal = document.getElementById('welcomeModal'), acceptBtn = document.getElementById('acceptWelcomeBtn');
+    // ==================== WELCOME MODAL ====================
+    const welcomeModal = document.getElementById('welcomeModal');
+    const acceptBtn = document.getElementById('acceptWelcomeBtn');
     if (localStorage.getItem('kerim_welcome_accepted') === 'true') welcomeModal.classList.add('hidden');
-    else { welcomeModal.classList.remove('hidden'); acceptBtn.addEventListener('click', () => { localStorage.setItem('kerim_welcome_accepted', 'true'); welcomeModal.classList.add('hidden'); }); }
+    else { 
+      welcomeModal.classList.remove('hidden'); 
+      acceptBtn.addEventListener('click', () => { 
+        localStorage.setItem('kerim_welcome_accepted', 'true'); 
+        welcomeModal.classList.add('hidden'); 
+      }); 
+    }
     
+    // ==================== INICIALIZACIÓN FINAL ====================
     updateUIPlan();
-    
     changeBackgroundRandomly();
-    isPlaylistsMode = false; currentSearch = '';
+    isPlaylistsMode = false; 
+    currentSearch = '';
     updateSortChipsVisibility();
     initChipsSortEvents();
-    renderContent(); renderSuggestions(); updateQueueAndMode(); renderTopArtists();
+    renderContent(); 
+    renderSuggestions(); 
+    updateQueueAndMode(); 
+    renderTopArtists();
     if(masterSongs.length) currentSong = masterSongs[0];
     audio.volume = 0.9;
+    
+    console.log('🎵 Kerim Music+ iniciado correctamente');
+    console.log('🔀 Modo Aleatorio: haz clic en 🔀 para activarlo/desactivarlo');
+    
   })();
 </script>
 </body>
