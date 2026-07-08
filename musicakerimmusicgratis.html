@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Kerim Music+ · Spotify Style</title>
+  <title>Kerim Music+ · Royal Blue</title>
   <style>
     * {
       margin: 0;
@@ -12,15 +12,15 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background-color: #000000;
-      color: #ffffff;
+      background-color: #0a0e1a;
+      color: #e8ecf4;
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
       line-height: 1.4;
       overflow-x: hidden;
       width: 100%;
     }
     .top-bar {
-      background: #000000;
+      background: #0a0e1a;
       padding: 0.5rem 1rem;
       position: sticky;
       top: 0;
@@ -30,43 +30,47 @@
       justify-content: center;
       gap: 0.75rem;
       flex-wrap: wrap;
+      border-bottom: 1px solid #1a2a5e;
     }
     .top-bar h1 {
       font-weight: 700;
       font-size: 1.5rem;
-      background: linear-gradient(135deg, #1ed760, #1aa34a);
+      background: linear-gradient(135deg, #2b6df6, #1a4fd6);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       letter-spacing: -0.5px;
       white-space: nowrap;
+      text-shadow: 0 0 20px rgba(43, 109, 246, 0.3);
     }
     .search-container {
       display: flex;
       align-items: center;
-      background: #1f1f1f;
+      background: #111a33;
       border-radius: 500px;
       padding: 0.2rem 0.2rem 0.2rem 1rem;
       flex: 1;
       min-width: 140px;
       max-width: 300px;
       transition: all 0.2s;
+      border: 1px solid #1a2a5e;
     }
     .search-container:focus-within {
-      background: #2a2a2a;
-      border: 1px solid #1ed760;
+      background: #0d162b;
+      border: 1px solid #2b6df6;
+      box-shadow: 0 0 25px rgba(43, 109, 246, 0.15);
     }
     .search-container input {
       background: transparent;
       border: none;
-      color: white;
+      color: #e8ecf4;
       font-size: 0.85rem;
       padding: 0.6rem 0;
       width: 100%;
       outline: none;
     }
     .search-container input::placeholder {
-      color: rgba(255,255,255,0.4);
+      color: rgba(232, 236, 244, 0.35);
     }
     .search-container button {
       background: transparent;
@@ -75,11 +79,11 @@
       width: 38px;
       height: 38px;
       cursor: pointer;
-      color: #b3b3b3;
+      color: #5a7fc7;
       font-size: 1rem;
       transition: 0.2s;
     }
-    .search-container button:hover { color: white; }
+    .search-container button:hover { color: #2b6df6; }
     .filter-buttons {
       display: flex;
       justify-content: center;
@@ -89,24 +93,27 @@
       flex-wrap: wrap;
     }
     .filter-main-btn {
-      background: #232323;
-      border: none;
+      background: #111a33;
+      border: 1px solid #1a2a5e;
       border-radius: 500px;
       padding: 0.55rem 1.5rem;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
-      color: #f0f0f0;
+      color: #7a9ad6;
       letter-spacing: 0.3px;
     }
     .filter-main-btn.active {
-      background: #1ed760;
-      color: #000000;
+      background: #1a4fd6;
+      color: #ffffff;
+      border-color: #2b6df6;
+      box-shadow: 0 0 30px rgba(43, 109, 246, 0.25);
     }
     .filter-main-btn:hover:not(.active) {
-      background: #3a3a3a;
+      background: #1a2a5e;
       transform: scale(1.02);
+      color: #e8ecf4;
     }
     .filter-main-btn.locked {
       opacity: 0.5;
@@ -114,7 +121,7 @@
     }
     .filter-main-btn.locked:hover {
       transform: none;
-      background: #232323;
+      background: #111a33;
     }
     .gallery-section {
       max-width: 1400px;
@@ -127,18 +134,19 @@
       justify-content: center;
       align-items: center;
       margin: 0.5rem auto 1rem auto;
-      padding: 4px 12px;
-      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 16px;
+      background: rgba(10, 14, 26, 0.8);
       border-radius: 500px;
       width: fit-content;
       gap: 0.5rem;
+      border: 1px solid #1a2a5e;
     }
     .counter-wrapper.hidden-counter { display: none; }
     .counter-label {
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 1px;
-      color: #1ed760;
+      color: #2b6df6;
     }
     .top-artists-section {
       margin-bottom: 2rem;
@@ -156,10 +164,10 @@
     }
     .artists-horizontal::-webkit-scrollbar {
       height: 4px;
-      background: #282828;
+      background: #111a33;
     }
     .artists-horizontal::-webkit-scrollbar-thumb {
-      background: #1ed760;
+      background: #2b6df6;
       border-radius: 10px;
     }
     .artist-circle-card {
@@ -176,22 +184,22 @@
       transform: translateY(-4px);
     }
     .artist-circle-card:hover .artist-avatar {
-      box-shadow: 0 0 0 3px #1ed760;
+      box-shadow: 0 0 0 3px #2b6df6;
     }
     .artist-avatar {
       width: 80px;
       height: 80px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #282828;
+      border: 2px solid #1a2a5e;
       transition: all 0.2s ease;
-      background: #1a1a1a;
+      background: #0d162b;
     }
     .artist-name {
       font-size: 0.75rem;
       font-weight: 600;
       text-align: center;
-      color: #f0f0f0;
+      color: #e8ecf4;
       max-width: 90px;
       white-space: nowrap;
       overflow: hidden;
@@ -199,7 +207,7 @@
     }
     .artist-plays {
       font-size: 0.55rem;
-      color: #b3b3b3;
+      color: #5a7fc7;
     }
     .sort-chips-container {
       display: flex;
@@ -217,34 +225,37 @@
     }
     .sort-chips-container::-webkit-scrollbar {
       height: 3px;
-      background: #1e1e1e;
+      background: #111a33;
       border-radius: 10px;
     }
     .sort-chips-container::-webkit-scrollbar-thumb {
-      background: #1ed760;
+      background: #2b6df6;
       border-radius: 10px;
     }
     .chip-sort {
       flex: 0 0 auto;
-      background: #232323;
-      border: none;
+      background: #111a33;
+      border: 1px solid #1a2a5e;
       border-radius: 500px;
       padding: 0.55rem 1.3rem;
       font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
-      color: #f0f0f0;
+      color: #7a9ad6;
       letter-spacing: 0.3px;
       white-space: nowrap;
     }
     .chip-sort.active {
-      background: #1ed760;
-      color: #000000;
+      background: #1a4fd6;
+      color: #ffffff;
+      border-color: #2b6df6;
+      box-shadow: 0 0 20px rgba(43, 109, 246, 0.2);
     }
     .chip-sort:hover:not(.active) {
-      background: #3a3a3a;
+      background: #1a2a5e;
       transform: scale(1.02);
+      color: #e8ecf4;
     }
     .random-matte-bg {
       position: fixed;
@@ -253,7 +264,7 @@
       width: 100%;
       height: 100%;
       z-index: -2;
-      transition: background-color 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      transition: background-color 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       pointer-events: none;
     }
     .random-matte-bg::after {
@@ -263,17 +274,16 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 40%, rgba(30,215,96,0.05) 0%, rgba(0,0,0,0.4) 100%);
+      background: radial-gradient(circle at 20% 40%, rgba(43,109,246,0.08) 0%, rgba(0,0,0,0.6) 100%);
       pointer-events: none;
     }
-    /* PORTADA FIJA - CARRUSEL HORIZONTAL CON IMÁGENES COMPLETAS */
     .portada-fija {
       width: 100%;
       border-radius: 12px;
       overflow: hidden;
       margin: 0.5rem 0 1.5rem 0;
-      background: #0a0a0a;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      background: #0a0e1a;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.6), 0 0 40px rgba(43,109,246,0.05);
     }
     .portada-track {
       display: flex;
@@ -287,10 +297,10 @@
     }
     .portada-track::-webkit-scrollbar {
       height: 4px;
-      background: #1a1a1a;
+      background: #111a33;
     }
     .portada-track::-webkit-scrollbar-thumb {
-      background: #1ed760;
+      background: #2b6df6;
       border-radius: 10px;
     }
     .portada-item {
@@ -299,14 +309,14 @@
       scroll-snap-align: start;
       border-radius: 10px;
       overflow: hidden;
-      background: #121212;
+      background: #0d162b;
       transition: transform 0.2s ease;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 1px solid #1a2a5e;
     }
-    /* Enlace que cubre toda la imagen */
     .portada-item a {
       display: block;
       width: 100%;
@@ -314,7 +324,6 @@
       text-decoration: none;
       position: relative;
     }
-    /* IMAGEN COMPLETA, SIN RECORTE, MANTIENE PROPORCIÓN */
     .portada-item img {
       width: 100%;
       height: auto;
@@ -322,7 +331,7 @@
       object-fit: contain;
       display: block;
       transition: transform 0.3s ease;
-      background: #0a0a0a;
+      background: #0a0e1a;
     }
     .portada-item:hover img {
       transform: scale(1.02);
@@ -332,9 +341,9 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      background: linear-gradient(transparent, rgba(10,14,26,0.85));
       padding: 1rem 0.8rem 0.6rem;
-      color: white;
+      color: #e8ecf4;
       font-size: 0.8rem;
       font-weight: 500;
       letter-spacing: 0.3px;
@@ -346,7 +355,6 @@
     @media (min-width: 1024px) {
       .portada-item { flex: 0 0 32%; max-width: 32%; }
     }
-    /* Galería */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -366,7 +374,8 @@
       gap: 1rem;
       padding: 0.5rem;
       border-radius: 8px;
-      background: rgba(18, 18, 18, 0.95);
+      background: rgba(17, 26, 51, 0.95);
+      border: 1px solid #1a2a5e;
     }
     .gallery-grid.list-view .image-card img {
       width: 48px;
@@ -384,7 +393,7 @@
       padding: 0;
       font-size: 0.85rem;
       font-weight: 500;
-      color: white;
+      color: #e8ecf4;
     }
     .suggestions-section {
       margin-bottom: 2rem;
@@ -400,23 +409,25 @@
     }
     .suggestions-horizontal::-webkit-scrollbar {
       height: 4px;
-      background: #282828;
+      background: #111a33;
     }
     .suggestions-horizontal::-webkit-scrollbar-thumb {
-      background: #1ed760;
+      background: #2b6df6;
       border-radius: 10px;
     }
     .suggestion-card {
       flex: 0 0 160px;
-      background: #181818;
+      background: #0d162b;
       border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.2s ease;
+      border: 1px solid #1a2a5e;
     }
     .suggestion-card:hover {
-      background: #282828;
+      background: #1a2a5e;
       transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(43,109,246,0.15);
     }
     .suggestion-card img {
       width: 100%;
@@ -434,37 +445,39 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: #f0f0f0;
+      color: #e8ecf4;
       margin-bottom: 4px;
     }
     .suggestion-badge {
       font-size: 0.55rem;
-      color: #1ed760;
+      color: #2b6df6;
       display: inline-block;
       padding: 2px 8px;
       border-radius: 20px;
-      background: rgba(30,215,96,0.1);
+      background: rgba(43,109,246,0.12);
     }
     .suggestion-invite {
       font-size: 0.6rem;
-      color: #b3b3b3;
+      color: #5a7fc7;
       margin-top: 4px;
       display: flex;
       align-items: center;
       gap: 4px;
     }
     .image-card {
-      background: #181818;
+      background: #0d162b;
       border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
+      border: 1px solid #1a2a5e;
     }
     .image-card:hover {
-      background: #282828;
+      background: #1a2a5e;
       transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(43,109,246,0.1);
     }
     .image-card img {
       width: 100%;
@@ -481,7 +494,7 @@
       text-align: left;
       font-size: 0.8rem;
       font-weight: 600;
-      color: #f0f0f0;
+      color: #e8ecf4;
       background: transparent;
       white-space: nowrap;
       overflow: hidden;
@@ -502,13 +515,14 @@
     .no-results {
       text-align: center;
       padding: 3rem;
-      color: #b3b3b3;
-      background: rgba(24,24,24,0.8);
+      color: #5a7fc7;
+      background: rgba(13,22,43,0.9);
       border-radius: 8px;
+      border: 1px solid #1a2a5e;
     }
     .search-badge {
       font-size: 0.8rem;
-      color: #b3b3b3;
+      color: #5a7fc7;
       margin-bottom: 1rem;
       padding-left: 0.5rem;
     }
@@ -518,7 +532,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+      background: linear-gradient(180deg, #0d162b 0%, #0a0e1a 100%);
       backdrop-filter: blur(0);
       z-index: 3000;
       display: flex;
@@ -544,7 +558,8 @@
       margin: 0 auto 1.5rem auto;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 60px rgba(43,109,246,0.08);
+      border: 1px solid #1a2a5e;
     }
     .player-cover img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
     .song-details {
@@ -556,8 +571,9 @@
       font-weight: 700;
       letter-spacing: -0.3px;
       margin-bottom: 0.3rem;
+      color: #e8ecf4;
     }
-    .song-category { color: #1ed760; font-size: 0.75rem; font-weight: 500; }
+    .song-category { color: #2b6df6; font-size: 0.75rem; font-weight: 500; }
     .fav-shuffle-row {
       display: flex;
       justify-content: center;
@@ -574,20 +590,20 @@
       font-size: 1.4rem;
       cursor: pointer;
       transition: 0.2s;
-      color: #b3b3b3;
+      color: #5a7fc7;
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
-    .fav-btn-player.active { color: #1ed760; }
-    .fav-btn-player:hover { color: white; transform: scale(1.05); }
+    .fav-btn-player.active { color: #2b6df6; }
+    .fav-btn-player:hover { color: #e8ecf4; transform: scale(1.05); }
     .fav-btn-player.locked {
-      color: #666;
+      color: #3a4a6a;
       cursor: not-allowed;
       opacity: 0.5;
     }
     .fav-btn-player.locked:hover {
-      color: #666;
+      color: #3a4a6a;
       transform: none;
     }
     .ctrl-btn.shuffle-btn-player {
@@ -599,23 +615,23 @@
       font-size: 1.2rem;
       cursor: pointer;
       transition: 0.2s;
-      color: #b3b3b3;
+      color: #5a7fc7;
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
-    .ctrl-btn.shuffle-btn-player.active { color: #1ed760; }
-    .ctrl-btn.shuffle-btn-player:hover { color: white; transform: scale(1.05); }
+    .ctrl-btn.shuffle-btn-player.active { color: #2b6df6; }
+    .ctrl-btn.shuffle-btn-player:hover { color: #e8ecf4; transform: scale(1.05); }
     .progress-area { width: 100%; margin: 1.5rem 0; }
-    .time-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: #b3b3b3; margin-bottom: 5px; }
+    .time-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: #5a7fc7; margin-bottom: 5px; }
     .progress-bar-bg {
       width: 100%;
       height: 4px;
-      background: #282828;
+      background: #111a33;
       border-radius: 2px;
       cursor: pointer;
     }
-    .progress-fill { width: 0%; height: 100%; background: #1ed760; border-radius: 2px; }
+    .progress-fill { width: 0%; height: 100%; background: #2b6df6; border-radius: 2px; box-shadow: 0 0 15px rgba(43,109,246,0.3); }
     .controls {
       display: flex;
       align-items: center;
@@ -632,26 +648,27 @@
       font-size: 1.2rem;
       cursor: pointer;
       transition: all 0.2s ease;
-      color: #b3b3b3;
+      color: #5a7fc7;
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
     .ctrl-btn:hover {
-      color: white;
+      color: #e8ecf4;
       transform: scale(1.05);
     }
     .ctrl-btn.play-pause {
       width: 64px;
       height: 64px;
-      background: #1ed760;
-      color: #000000;
+      background: #1a4fd6;
+      color: #ffffff;
       font-size: 1.8rem;
+      box-shadow: 0 0 40px rgba(43,109,246,0.25);
     }
     .ctrl-btn.play-pause:hover {
-      background: #1ed760;
+      background: #2b6df6;
       transform: scale(1.05);
-      color: #000000;
+      color: #ffffff;
     }
     .ctrl-btn.hidden-nav {
       visibility: hidden;
@@ -661,7 +678,7 @@
       position: absolute;
       top: 20px;
       right: 20px;
-      background: rgba(0,0,0,0.7);
+      background: rgba(10,14,26,0.8);
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -671,11 +688,13 @@
       font-size: 1.1rem;
       cursor: pointer;
       transition: all 0.2s ease;
-      color: #b3b3b3;
+      color: #5a7fc7;
+      border: 1px solid #1a2a5e;
     }
     .close-player:hover {
-      color: white;
+      color: #e8ecf4;
       transform: scale(1.05);
+      border-color: #2b6df6;
     }
     .player-suggestions {
       margin-top: 1.5rem;
@@ -689,22 +708,22 @@
     .player-suggestions-title {
       font-size: 0.75rem;
       font-weight: 600;
-      color: #b3b3b3;
+      color: #5a7fc7;
       letter-spacing: 0.5px;
     }
     .toggle-suggestions-btn {
       background: transparent;
-      border: 1px solid #3a3a3a;
+      border: 1px solid #1a2a5e;
       border-radius: 500px;
       padding: 0.25rem 0.8rem;
       font-size: 0.6rem;
       cursor: pointer;
-      color: #b3b3b3;
+      color: #5a7fc7;
       transition: all 0.2s ease;
     }
     .toggle-suggestions-btn:hover {
-      border-color: #1ed760;
-      color: white;
+      border-color: #2b6df6;
+      color: #e8ecf4;
     }
     .player-suggestions-track {
       display: flex;
@@ -718,16 +737,18 @@
     .player-suggestion-item {
       flex: 0 0 min(22vw, 100px);
       min-width: 80px;
-      background: #181818;
+      background: #0d162b;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
       overflow: hidden;
+      border: 1px solid #1a2a5e;
     }
     .player-suggestion-item:hover {
-      background: #282828;
+      background: #1a2a5e;
       transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(43,109,246,0.1);
     }
     .player-suggestion-img {
       width: 100%;
@@ -744,19 +765,19 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: #f0f0f0;
+      color: #e8ecf4;
     }
     .player-suggestion-plays {
       font-size: 0.45rem;
-      color: #b3b3b3;
+      color: #5a7fc7;
     }
     .mini-player {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: #000000;
-      border-top: 1px solid #282828;
+      background: #0a0e1a;
+      border-top: 1px solid #1a2a5e;
       padding: 0.75rem 1rem;
       display: flex;
       align-items: center;
@@ -767,10 +788,10 @@
       cursor: pointer;
     }
     .mini-player.show { transform: translateY(0); }
-    .mini-cover { width: 48px; height: 48px; border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+    .mini-cover { width: 48px; height: 48px; border-radius: 4px; overflow: hidden; flex-shrink: 0; border: 1px solid #1a2a5e; }
     .mini-cover img { width: 100%; height: 100%; object-fit: cover; }
     .mini-info { flex: 1; min-width: 0; }
-    .mini-title { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: white; }
+    .mini-title { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #e8ecf4; }
     .mini-controls { display: flex; gap: 8px; flex-shrink: 0; }
     .mini-btn {
       background: transparent;
@@ -780,9 +801,9 @@
       border-radius: 50%;
       font-size: 0.9rem;
       cursor: pointer;
-      color: #b3b3b3;
+      color: #5a7fc7;
     }
-    .mini-btn:hover { color: white; }
+    .mini-btn:hover { color: #e8ecf4; }
     .mini-btn.hidden-nav { display: none; }
     .mini-progress-bg {
       position: absolute;
@@ -790,13 +811,13 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: #282828;
+      background: #111a33;
     }
-    .mini-progress-fill { width: 0%; height: 100%; background: #1ed760; }
+    .mini-progress-fill { width: 0%; height: 100%; background: #2b6df6; box-shadow: 0 0 15px rgba(43,109,246,0.3); }
     .welcome-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.95);
+      background: rgba(10,14,26,0.95);
       backdrop-filter: blur(8px);
       z-index: 5000;
       display: flex;
@@ -806,28 +827,29 @@
     }
     .welcome-modal.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .welcome-card {
-      background: #121212;
+      background: #0d162b;
       border-radius: 8px;
       padding: 2rem 1.5rem;
       text-align: center;
       max-width: 320px;
       width: 85%;
+      border: 1px solid #1a2a5e;
     }
-    .welcome-card h2 { color: #1ed760; margin-bottom: 0.5rem; }
-    .accept-btn { background: #1ed760; color: black; border: none; padding: 0.8rem 2rem; border-radius: 500px; font-weight: bold; margin-top: 1rem; cursor: pointer; transition: 0.2s; }
-    .accept-btn:hover { transform: scale(1.02); background: #1aa34a; }
-    .attribution { text-align: center; margin-top: 2rem; font-size: 0.6rem; color: #5a5a5a; }
+    .welcome-card h2 { color: #2b6df6; margin-bottom: 0.5rem; }
+    .accept-btn { background: #1a4fd6; color: #ffffff; border: none; padding: 0.8rem 2rem; border-radius: 500px; font-weight: bold; margin-top: 1rem; cursor: pointer; transition: 0.2s; box-shadow: 0 0 30px rgba(43,109,246,0.15); }
+    .accept-btn:hover { transform: scale(1.02); background: #2b6df6; }
+    .attribution { text-align: center; margin-top: 2rem; font-size: 0.6rem; color: #3a4a6a; }
     .toast-notification {
       position: fixed;
       bottom: 80px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: #1a1a1a;
-      color: #ffffff;
+      background: #0d162b;
+      color: #e8ecf4;
       padding: 12px 24px;
       border-radius: 500px;
-      border: 1px solid #1ed760;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      border: 1px solid #2b6df6;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 40px rgba(43,109,246,0.05);
       z-index: 6000;
       opacity: 0;
       transition: all 0.4s ease;
@@ -843,8 +865,8 @@
     }
     .plan-badge {
       display: inline-block;
-      background: #1ed760;
-      color: #000000;
+      background: #1a4fd6;
+      color: #ffffff;
       font-size: 0.55rem;
       font-weight: 700;
       padding: 2px 10px;
@@ -853,8 +875,8 @@
       letter-spacing: 0.5px;
     }
     .plan-badge.locked {
-      background: #444;
-      color: #888;
+      background: #1a2a5e;
+      color: #3a4a6a;
     }
     .ad-badge {
       display: inline-block;
@@ -887,7 +909,7 @@
 <div class="random-matte-bg" id="randomMatteBg"></div>
 
 <div class="welcome-modal" id="welcomeModal">
-  <div class="welcome-card"><h2>Kerim Music+</h2><p style="color:#b3b3b3">Disfruta tu música</p><button class="accept-btn" id="acceptWelcomeBtn">COMENZAR</button></div>
+  <div class="welcome-card"><h2>Kerim Music+</h2><p style="color:#5a7fc7">Disfruta tu música</p><button class="accept-btn" id="acceptWelcomeBtn">COMENZAR</button></div>
 </div>
 
 <div class="toast-notification" id="toastNotification">💎 Solo disponible en Kerim Music+</div>
@@ -925,7 +947,6 @@
     <button class="chip-sort" data-sort="firstFirst">Más antiguas</button>
   </div>
   
-  <!-- PORTADA FIJA - CARRUSEL HORIZONTAL CON IMÁGENES COMPLETAS -->
   <div class="portada-fija">
     <div class="portada-track" id="portadaTrack">
       <div class="portada-item">
@@ -999,10 +1020,8 @@
 
 <script>
   (function(){
-    // --- CONTROL DEL PLAN ---
     let hasKerimMusicPlus = false;
     
-    // --- ANUNCIOS (4) ---
     const ads = [
       { id: 'ad5', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 5', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/ymz00x4bk0arik8vapgnd/11-de-abril-de-2026.mp3?rlkey=hafgkwkgt6tgyrryodqz2c6fy&st=p5vsj82t&raw=1', isAd: true },
       { id: 'ad1', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 1', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/z3fbqqzthhvvqt9275lc7/2-tema-grabados_1783188240865.mp3?rlkey=7v6ha18uxps052z43rty0d5jr&st=sam7gv97&raw=1', isAd: true },
@@ -1104,8 +1123,8 @@
         searchButton.disabled = false;
         planBadge.textContent = 'PREMIUM';
         planBadge.classList.remove('locked');
-        planBadge.style.background = '#1ed760';
-        planBadge.style.color = '#000000';
+        planBadge.style.background = '#1a4fd6';
+        planBadge.style.color = '#ffffff';
         likesBtn.classList.remove('locked');
         likesBtn.textContent = 'Tus Me gusta';
         favBtn.classList.remove('locked');
@@ -1118,8 +1137,8 @@
         searchButton.disabled = false;
         planBadge.textContent = 'FREE';
         planBadge.classList.add('locked');
-        planBadge.style.background = '#444';
-        planBadge.style.color = '#888';
+        planBadge.style.background = '#1a2a5e';
+        planBadge.style.color = '#3a4a6a';
         likesBtn.classList.add('locked');
         likesBtn.textContent = 'Tus Me gusta 🔒';
         favBtn.classList.add('locked');
@@ -1222,7 +1241,7 @@
       topArtistsSection.classList.remove('hidden-artists');
       const topArtists = getTopArtists(6);
       if (topArtists.length === 0 || (topArtists.length === 1 && topArtists[0].plays === 0)) {
-        artistsContainer.innerHTML = '<div style="color:#b3b3b3; font-size:0.8rem; padding:0.5rem;">Escucha más canciones para ver tus artistas favoritos 🎧</div>';
+        artistsContainer.innerHTML = '<div style="color:#5a7fc7; font-size:0.8rem; padding:0.5rem;">Escucha más canciones para ver tus artistas favoritos 🎧</div>';
         return;
       }
       let html = '';
@@ -1247,7 +1266,7 @@
       const toggleBtn = document.getElementById('toggleSuggestionsBtn');
       if (!currentSong) { suggestionsTrack.innerHTML = ''; return; }
       const suggestions = getPlayerSuggestions(currentSong);
-      if (suggestions.length === 0) { suggestionsTrack.innerHTML = '<div style="color:#b3b3b3; text-align:center; font-size:0.7rem;">No hay sugerencias disponibles</div>'; return; }
+      if (suggestions.length === 0) { suggestionsTrack.innerHTML = '<div style="color:#5a7fc7; text-align:center; font-size:0.7rem;">No hay sugerencias disponibles</div>'; return; }
       let html = '';
       suggestions.forEach(song => {
         const plays = playCount.get(song.id) || 0;
@@ -1275,7 +1294,7 @@
     const toggleSuggestionsBtnElem = document.getElementById('toggleSuggestionsBtn');
     const progressArea = document.getElementById('progressArea');
     
-    const mattePalette = ['#121212', '#181818', '#0F0F0F', '#1A1A1A', '#141414', '#161616', '#1C1C1C', '#111111'];
+    const mattePalette = ['#0a0e1a', '#0d162b', '#111a33', '#0f1428', '#0b1222', '#0e1930', '#0c1528', '#09101e'];
     function getRandomMatteColor() { return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
     function changeBackgroundRandomly() { randomMatteBg.style.backgroundColor = getRandomMatteColor(); }
     let intervalBg = setInterval(() => changeBackgroundRandomly(), 7000);
@@ -1410,7 +1429,6 @@
       miniCover.src = adSong.url;
       miniTitle.innerText = adSong.title;
       
-      // Ocultar la barra de progreso durante los anuncios
       if (progressArea) progressArea.style.display = 'none';
       
       if (adSong.music) {
@@ -1439,7 +1457,6 @@
       miniPrev.classList.remove('hidden-nav');
       miniNext.classList.remove('hidden-nav');
       
-      // Mostrar la barra de progreso nuevamente
       if (progressArea) progressArea.style.display = 'block';
       
       if (previousSong && !previousSong.isAd) {
@@ -1487,7 +1504,6 @@
       if (isAdPlaying) return;
       currentSong = song;
       
-      // Mostrar la barra de progreso para canciones normales
       if (progressArea) progressArea.style.display = 'block';
       
       if (!song.isAd) {
@@ -1640,7 +1656,7 @@
       let html = `<div class="${gridClass}">`; 
       items.forEach(song => { 
         const favMarker = isFav(song.id) ? ' ❤️' : ''; 
-        if(isSearching) html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#b3b3b3;"> · ${song.category}${favMarker}</span></div></div>`; 
+        if(isSearching) html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#5a7fc7;"> · ${song.category}${favMarker}</span></div></div>`; 
         else html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${isPlaylistsMode ? ' ❤️' : ''}</div></div>`; 
       }); 
       html += `</div>`; 
