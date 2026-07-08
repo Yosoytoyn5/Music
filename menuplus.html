@@ -167,6 +167,28 @@
             pointer-events: none;
         }
 
+        /* ===== LEYENDA ESPECÍFICA PARA KERIM MUSIC (SOLO TEXTO) ===== */
+        .leyenda-kerim {
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            font-weight: 300;
+            text-transform: uppercase;
+            padding: 0 10px 12px 10px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(6px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         .carrusel-slide .button1 {
             width: 100%;
             padding: 0 10px;
@@ -339,6 +361,12 @@
                 width: 40px;
                 margin-top: 8px;
             }
+
+            .leyenda-kerim {
+                font-size: 10px;
+                letter-spacing: 1px;
+                padding: 0 10px 8px 10px;
+            }
         }
 
         @media (max-width: 380px) {
@@ -355,6 +383,12 @@
             .leyenda {
                 font-size: 10px;
                 letter-spacing: 1.5px;
+            }
+
+            .leyenda-kerim {
+                font-size: 9px;
+                letter-spacing: 0.8px;
+                padding: 0 8px 6px 8px;
             }
         }
 
@@ -381,6 +415,12 @@
                 max-width: 750px;
                 letter-spacing: 4px;
             }
+
+            .leyenda-kerim {
+                font-size: 13px;
+                letter-spacing: 1.8px;
+                padding: 0 10px 14px 10px;
+            }
         }
 
         @media (min-width: 1200px) {
@@ -391,6 +431,12 @@
             .leyenda {
                 max-width: 850px;
                 font-size: 17px;
+            }
+
+            .leyenda-kerim {
+                font-size: 14px;
+                letter-spacing: 2px;
+                padding: 0 10px 16px 10px;
             }
         }
     </style>
@@ -446,11 +492,13 @@
                     </div>
                 </div>
 
-                <!-- Slide 4 -->
+                <!-- Slide 4 (Kerim Music) con leyenda profesional -->
                 <div class="carrusel-slide">
                     <div class="mini-img">
                         <img src="https://www.dropbox.com/scl/fi/bf60dftx3xarwa9bxvu4l/gustavorezende-audio-4919.gif?rlkey=n9azy9ivi6414a3a34w64tcll&st=xm5tdx4v&raw=1" alt="Kerim Music">
                     </div>
+                    <!-- Leyenda específica para Kerim Music, solo texto -->
+                    <div class="leyenda-kerim">MANTENGA LA APP ABIERTA PARA TENER UNA REPRODUCCIÓN FLUIDA SIN CORTE</div>
                     <div class="button1">
                         <a href="musicakerimmusicplus.html">
                             <button>Kerim Music</button>
