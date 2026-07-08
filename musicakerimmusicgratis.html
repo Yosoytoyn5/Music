@@ -11,7 +11,6 @@
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
-
     body {
       background-color: #000000;
       color: #ffffff;
@@ -20,7 +19,6 @@
       overflow-x: hidden;
       width: 100%;
     }
-
     .top-bar {
       background: #000000;
       padding: 0.5rem 1rem;
@@ -31,10 +29,8 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      border-bottom: none;
       flex-wrap: wrap;
     }
-
     .top-bar h1 {
       font-weight: 700;
       font-size: 1.5rem;
@@ -45,19 +41,16 @@
       letter-spacing: -0.5px;
       white-space: nowrap;
     }
-
     .search-container {
       display: flex;
       align-items: center;
       background: #1f1f1f;
-      border: none;
       border-radius: 500px;
       padding: 0.2rem 0.2rem 0.2rem 1rem;
       flex: 1;
       min-width: 140px;
       max-width: 300px;
       transition: all 0.2s;
-      position: relative;
     }
     .search-container:focus-within {
       background: #2a2a2a;
@@ -87,7 +80,6 @@
       transition: 0.2s;
     }
     .search-container button:hover { color: white; }
-
     .filter-buttons {
       display: flex;
       justify-content: center;
@@ -124,14 +116,12 @@
       transform: none;
       background: #232323;
     }
-
     .gallery-section {
       max-width: 1400px;
       margin: 0.5rem auto;
       padding: 0 1rem 6rem;
       position: relative;
     }
-    
     .counter-wrapper {
       display: flex;
       justify-content: center;
@@ -143,23 +133,18 @@
       width: fit-content;
       gap: 0.5rem;
     }
-    .counter-wrapper.hidden-counter {
-      display: none;
-    }
+    .counter-wrapper.hidden-counter { display: none; }
     .counter-label {
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 1px;
       color: #1ed760;
     }
-    
     .top-artists-section {
       margin-bottom: 2rem;
       padding: 0;
     }
-    .top-artists-section.hidden-artists {
-      display: none;
-    }
+    .top-artists-section.hidden-artists { display: none; }
     .artists-horizontal {
       display: flex;
       gap: 1.5rem;
@@ -216,7 +201,6 @@
       font-size: 0.55rem;
       color: #b3b3b3;
     }
-
     .sort-chips-container {
       display: flex;
       flex-wrap: nowrap;
@@ -262,7 +246,6 @@
       background: #3a3a3a;
       transform: scale(1.02);
     }
-    
     .random-matte-bg {
       position: fixed;
       top: 0;
@@ -283,7 +266,87 @@
       background: radial-gradient(circle at 20% 40%, rgba(30,215,96,0.05) 0%, rgba(0,0,0,0.4) 100%);
       pointer-events: none;
     }
-    
+    /* PORTADA FIJA - CARRUSEL HORIZONTAL CON IMÁGENES COMPLETAS */
+    .portada-fija {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 0.5rem 0 1.5rem 0;
+      background: #0a0a0a;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .portada-track {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 0.75rem 0.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .portada-track::-webkit-scrollbar {
+      height: 4px;
+      background: #1a1a1a;
+    }
+    .portada-track::-webkit-scrollbar-thumb {
+      background: #1ed760;
+      border-radius: 10px;
+    }
+    .portada-item {
+      flex: 0 0 80%;
+      max-width: 80%;
+      scroll-snap-align: start;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #121212;
+      transition: transform 0.2s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Enlace que cubre toda la imagen */
+    .portada-item a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      position: relative;
+    }
+    /* IMAGEN COMPLETA, SIN RECORTE, MANTIENE PROPORCIÓN */
+    .portada-item img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: auto;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.3s ease;
+      background: #0a0a0a;
+    }
+    .portada-item:hover img {
+      transform: scale(1.02);
+    }
+    .portada-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      padding: 1rem 0.8rem 0.6rem;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      pointer-events: none;
+    }
+    @media (min-width: 640px) {
+      .portada-item { flex: 0 0 55%; max-width: 55%; }
+    }
+    @media (min-width: 1024px) {
+      .portada-item { flex: 0 0 32%; max-width: 32%; }
+    }
+    /* Galería */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -291,7 +354,6 @@
       opacity: 0;
       animation: fadeUp 0.4s forwards;
     }
-    
     .gallery-grid.list-view {
       display: flex;
       flex-direction: column;
@@ -324,7 +386,6 @@
       font-weight: 500;
       color: white;
     }
-    
     .suggestions-section {
       margin-bottom: 2rem;
       padding: 0;
@@ -392,14 +453,12 @@
       align-items: center;
       gap: 4px;
     }
-    
     .image-card {
       background: #181818;
       border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.25s ease;
-      border: none;
       display: flex;
       flex-direction: column;
     }
@@ -413,7 +472,6 @@
       object-fit: cover;
       transition: transform 0.3s ease;
       display: block;
-      border-radius: 0px;
     }
     .image-card:hover img {
       transform: scale(1.02);
@@ -429,7 +487,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
     @media (min-width: 500px) {
       .gallery-grid:not(.list-view) { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     }
@@ -442,7 +499,6 @@
     @media (min-width: 1200px) {
       .gallery-grid:not(.list-view) { grid-template-columns: repeat(6, 1fr); }
     }
-    
     .no-results {
       text-align: center;
       padding: 3rem;
@@ -456,7 +512,6 @@
       margin-bottom: 1rem;
       padding-left: 0.5rem;
     }
-    
     .fullscreen-player {
       position: fixed;
       top: 0;
@@ -492,18 +547,17 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
     .player-cover img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
-    .song-details { 
-      text-align: center; 
+    .song-details {
+      text-align: center;
       margin-bottom: 1rem;
     }
-    .song-details h2 { 
-      font-size: clamp(1rem, 5vw, 1.3rem); 
-      font-weight: 700; 
-      letter-spacing: -0.3px; 
+    .song-details h2 {
+      font-size: clamp(1rem, 5vw, 1.3rem);
+      font-weight: 700;
+      letter-spacing: -0.3px;
       margin-bottom: 0.3rem;
     }
     .song-category { color: #1ed760; font-size: 0.75rem; font-weight: 500; }
-    
     .fav-shuffle-row {
       display: flex;
       justify-content: center;
@@ -536,7 +590,6 @@
       color: #666;
       transform: none;
     }
-    
     .ctrl-btn.shuffle-btn-player {
       background: transparent;
       border: none;
@@ -553,7 +606,6 @@
     }
     .ctrl-btn.shuffle-btn-player.active { color: #1ed760; }
     .ctrl-btn.shuffle-btn-player:hover { color: white; transform: scale(1.05); }
-    
     .progress-area { width: 100%; margin: 1.5rem 0; }
     .time-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: #b3b3b3; margin-bottom: 5px; }
     .progress-bar-bg {
@@ -564,7 +616,6 @@
       cursor: pointer;
     }
     .progress-fill { width: 0%; height: 100%; background: #1ed760; border-radius: 2px; }
-    
     .controls {
       display: flex;
       align-items: center;
@@ -606,7 +657,6 @@
       visibility: hidden;
       pointer-events: none;
     }
-    
     .close-player {
       position: absolute;
       top: 20px;
@@ -627,7 +677,6 @@
       color: white;
       transform: scale(1.05);
     }
-    
     .player-suggestions {
       margin-top: 1.5rem;
     }
@@ -665,9 +714,7 @@
       padding-bottom: 0.6rem;
       transition: opacity 0.2s ease;
     }
-    .player-suggestions-track.hidden-suggestions {
-      display: none;
-    }
+    .player-suggestions-track.hidden-suggestions { display: none; }
     .player-suggestion-item {
       flex: 0 0 min(22vw, 100px);
       min-width: 80px;
@@ -703,7 +750,6 @@
       font-size: 0.45rem;
       color: #b3b3b3;
     }
-    
     .mini-player {
       position: fixed;
       bottom: 0;
@@ -737,9 +783,7 @@
       color: #b3b3b3;
     }
     .mini-btn:hover { color: white; }
-    .mini-btn.hidden-nav {
-      display: none;
-    }
+    .mini-btn.hidden-nav { display: none; }
     .mini-progress-bg {
       position: absolute;
       top: 0;
@@ -749,7 +793,6 @@
       background: #282828;
     }
     .mini-progress-fill { width: 0%; height: 100%; background: #1ed760; }
-    
     .welcome-modal {
       position: fixed;
       inset: 0;
@@ -773,9 +816,7 @@
     .welcome-card h2 { color: #1ed760; margin-bottom: 0.5rem; }
     .accept-btn { background: #1ed760; color: black; border: none; padding: 0.8rem 2rem; border-radius: 500px; font-weight: bold; margin-top: 1rem; cursor: pointer; transition: 0.2s; }
     .accept-btn:hover { transform: scale(1.02); background: #1aa34a; }
-    
     .attribution { text-align: center; margin-top: 2rem; font-size: 0.6rem; color: #5a5a5a; }
-    
     .toast-notification {
       position: fixed;
       bottom: 80px;
@@ -800,7 +841,6 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-    
     .plan-badge {
       display: inline-block;
       background: #1ed760;
@@ -816,7 +856,6 @@
       background: #444;
       color: #888;
     }
-    
     .ad-badge {
       display: inline-block;
       background: #ff5500;
@@ -828,7 +867,6 @@
       margin-left: 6px;
       letter-spacing: 0.5px;
     }
-    
     @media (max-width: 480px) {
       .top-bar h1 { font-size: 1.2rem; }
       .artist-avatar { width: 65px; height: 65px; }
@@ -839,7 +877,6 @@
         max-width: 200px;
       }
     }
-    
     @keyframes fadeUp {
       0% { opacity: 0; transform: translateY(10px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -870,7 +907,7 @@
 
 <main class="gallery-section">
   <div class="counter-wrapper" id="counterWrapper">
-    <span class="counter-label">👁️ VISITAS</span>
+    <span class="counter-label">VISITAS</span>
     <div class="counter-container">
       <a href="https://www.hitwebcounter.com/" target="_blank" rel="noopener" title="Web Counter">
         <img src="https://www.hitwebcounter.com/counter/counter.php?page=21497063&amp;style=0049&amp;nbdigits=1&amp;type=ip" alt="Web Counter" decoding="async" style="border:0;max-width:100%;height:auto;" />
@@ -888,6 +925,30 @@
     <button class="chip-sort" data-sort="firstFirst">Más antiguas</button>
   </div>
   
+  <!-- PORTADA FIJA - CARRUSEL HORIZONTAL CON IMÁGENES COMPLETAS -->
+  <div class="portada-fija">
+    <div class="portada-track" id="portadaTrack">
+      <div class="portada-item">
+        <a href="menuplus.html">
+          <img src="https://www.dropbox.com/scl/fi/ps4vwau7do3dp81s8nxr1/plus-1.jpg?rlkey=6imcp5t21h6kd4z7pk0zyeme6&st=ykmeggaz&raw=1" alt="Portada 1" loading="lazy">
+          <div class="portada-caption">Lo más nuevo</div>
+        </a>
+      </div>
+      <div class="portada-item">
+        <a href="menuplus.html">
+          <img src="https://www.dropbox.com/scl/fi/o8shz044qoda4j639mpm7/plus-2.jpg?rlkey=p2ym5tuqbjylxh2zchfhxeuir&st=flxtunhm&raw=1" alt="Portada 2" loading="lazy">
+          <div class="portada-caption">Descubre Kerim</div>
+        </a>
+      </div>
+      <div class="portada-item">
+        <a href="menuplus.html">
+          <img src="https://www.dropbox.com/scl/fi/ps4vwau7do3dp81s8nxr1/plus-1.jpg?rlkey=6imcp5t21h6kd4z7pk0zyeme6&st=ykmeggaz&raw=1" alt="Portada 3" loading="lazy">
+          <div class="portada-caption">Solo para ti</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <div id="searchBadge" class="search-badge"></div>
   <div id="suggestionsContainer" class="suggestions-section"></div>
   <div id="contentContainer"></div>
@@ -914,7 +975,6 @@
       <button class="ctrl-btn play-pause" id="fullPlayPauseBtn">▶</button>
       <button class="ctrl-btn" id="fullNextBtn">⏭</button>
     </div>
-    
     <div class="player-suggestions" id="playerSuggestions">
       <div class="player-suggestions-header">
         <div class="player-suggestions-title">🎧 Temas relacionados</div>
@@ -941,7 +1001,7 @@
     // --- CONTROL DEL PLAN ---
     let hasKerimMusicPlus = false;
     
-    // --- ANUNCIOS (3 anuncios) ---
+    // --- ANUNCIOS (4) ---
     const ads = [
       { id: 'ad1', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 1', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/z3fbqqzthhvvqt9275lc7/2-tema-grabados_1783188240865.mp3?rlkey=7v6ha18uxps052z43rty0d5jr&st=sam7gv97&raw=1', isAd: true },
       { id: 'ad2', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 2', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/xgl19r2bd49n5cdup93f4/Escucha-sin-anusios_1783188103278.mp3?rlkey=00usrx9c68td9pkqw6o2x1qct&st=4ck7wlz8&raw=1', isAd: true },
@@ -953,7 +1013,7 @@
     let isAdPlaying = false;
     let previousSong = null;
     let pendingNextSong = null;
-    let adPlaylist = []; // Lista de anuncios a reproducir
+    let adPlaylist = [];
     let currentAdIndex = 0;
     let adCallback = null;
     
@@ -1008,7 +1068,6 @@
       {id:7, url:'https://i.postimg.cc/MXJXxVL3/Te-estoy-llamando.jpg', category:'Musica', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/97yj1flb0bgaaedaxr9h1/Te_estoy_Llamando_lista.wav?rlkey=cn3oppwsfjv617hhcuy2rcga4&st=ipum1s6a&raw=1'}
     ];
     
-    // --- FUNCIÓN PARA MEZCLAR ARRAY ALEATORIAMENTE ---
     function shuffleArray(arr) {
       const array = [...arr];
       for (let i = array.length - 1; i > 0; i--) {
@@ -1018,10 +1077,7 @@
       return array;
     }
     
-    // --- ORDEN ALEATORIO DE LAS CANCIONES (se genera al cargar) ---
     const shuffledSongs = shuffleArray(originalSongs);
-    
-    // TODAS las canciones en orden aleatorio
     let masterSongs = [...shuffledSongs];
     const allSongs = [...originalSongs];
     
@@ -1312,44 +1368,30 @@
       if(currentPlayQueue.length && !currentSong) currentSong = currentPlayQueue[0]; 
     }
     
-    // --- FUNCIÓN PARA REPRODUCIR 3 ANUNCIOS SEGUIDOS ---
     function playAds(callback) {
       if (ads.length === 0 || isAdPlaying) {
         if (callback) callback();
         return;
       }
-      
       isAdPlaying = true;
-      
-      // Obtener 3 anuncios aleatorios (o menos si no hay suficientes)
       let shuffledAds = shuffleArray([...ads]);
       adPlaylist = shuffledAds.slice(0, Math.min(3, shuffledAds.length));
       currentAdIndex = 0;
       adCallback = callback;
-      
-      // Ocultar botones de navegación
       fullPrev.classList.add('hidden-nav');
       fullNext.classList.add('hidden-nav');
       miniPrev.classList.add('hidden-nav');
       miniNext.classList.add('hidden-nav');
-      
-      // Guardar la canción que se estaba reproduciendo
       previousSong = currentSong;
-      
-      // Reproducir el primer anuncio
       playNextAd();
     }
     
     function playNextAd() {
       if (currentAdIndex >= adPlaylist.length) {
-        // Todos los anuncios han terminado
         finishAdPlaylist();
         return;
       }
-      
       const ad = adPlaylist[currentAdIndex];
-      console.log(`Reproduciendo anuncio ${currentAdIndex + 1} de ${adPlaylist.length}: ${ad.title}`);
-      
       const adSong = {
         id: 'ad_' + Date.now() + '_' + currentAdIndex,
         url: ad.url,
@@ -1358,26 +1400,21 @@
         music: ad.music,
         isAd: true
       };
-      
       currentSong = adSong;
       fullCover.src = adSong.url;
       fullSongTitle.innerText = adSong.title;
       fullSongCategory.innerHTML = `ANUNCIO <span class="ad-badge">AD ${currentAdIndex + 1}/${adPlaylist.length}</span>`;
       miniCover.src = adSong.url;
       miniTitle.innerText = adSong.title;
-      
       if (adSong.music) {
         audio.src = adSong.music;
         audio.play().catch(e => console.log);
         isPlaying = true;
       }
-      
       fullPlayer.classList.add('show');
       miniPlayerDiv.classList.add('show');
       updatePlayPauseIcon();
       triggerBackgroundRefresh();
-      
-      // Escuchar cuando termine este anuncio
       audio.removeEventListener('ended', onAdEnd);
       audio.addEventListener('ended', onAdEnd);
     }
@@ -1390,14 +1427,10 @@
     
     function finishAdPlaylist() {
       isAdPlaying = false;
-      
-      // Restaurar botones de navegación
       fullPrev.classList.remove('hidden-nav');
       fullNext.classList.remove('hidden-nav');
       miniPrev.classList.remove('hidden-nav');
       miniNext.classList.remove('hidden-nav');
-      
-      // Restaurar la canción anterior
       if (previousSong && !previousSong.isAd) {
         let foundInQueue = currentPlayQueue.find(s => s.id === previousSong.id);
         if (foundInQueue) {
@@ -1410,7 +1443,6 @@
       } else if (currentPlayQueue.length > 0) {
         playSongInternal(currentPlayQueue[0]);
       }
-      
       if (adCallback) {
         const callback = adCallback;
         adCallback = null;
@@ -1421,7 +1453,6 @@
     function playSong(song, customQueue = null) {
       if (!song) return;
       if (isAdPlaying) return;
-      
       if (!song.isAd) {
         adCounter++;
         if (adCounter >= 3) {
@@ -1437,23 +1468,19 @@
           return;
         }
       }
-      
       playSongInternal(song, customQueue);
     }
     
     function playSongInternal(song, customQueue = null) {
       if (!song) return;
       if (isAdPlaying) return;
-      
       currentSong = song;
-      
       if (!song.isAd) {
         incrementPlayCount(song.id);
         renderSuggestions();
         renderTopArtists();
         fullSongCategory.innerHTML = song.category || '';
       }
-      
       if (customQueue) {
         currentPlayQueue = customQueue;
         if (shuffleActive) {
@@ -1471,7 +1498,6 @@
         let idx = currentPlayQueue.findIndex(s => s.id === song.id);
         if (idx !== -1) currentQueueIndex = idx;
       }
-      
       if (song.music) {
         audio.src = song.music;
         audio.play().catch(e => console.log);
@@ -1480,7 +1506,6 @@
         audio.pause();
         isPlaying = false;
       }
-      
       updateUIWithSong(song);
       fullPlayer.classList.add('show');
       miniPlayerDiv.classList.add('show');
@@ -1658,7 +1683,6 @@
         );
         masterSongs = searchResults.length > 0 ? searchResults : [];
       } else {
-        // Cuando se borra la búsqueda, se restaura el orden aleatorio
         masterSongs = [...shuffledSongs];
       }
       renderContent(); 
