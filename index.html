@@ -19,78 +19,82 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: #0a0e1a; /* negro con matiz azul profundo */
-      color: #f0f4ff;
+      background: #0b0b0b; /* Fondo negro sólido */
+      color: #f0f0f0;
       padding: 2rem 1rem;
     }
 
-    /* Tarjetas: fondo negro-azulado, texto y acentos en azul rey */
+    /* ===== TARJETAS (estilo moderno: negro + azul rey) ===== */
     .card {
-      background: #11162b;
+      background: #121212;          /* Negro elegante */
       backdrop-filter: blur(4px);
       border-radius: 32px;
       padding: 2rem 1.8rem 2.2rem;
-      box-shadow: 0 20px 40px -10px rgba(0, 20, 80, 0.8);
-      border: 1px solid rgba(30, 70, 200, 0.25);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.9);
+      border: 1px solid #1e2a47;    /* Azul rey muy oscuro */
       display: flex;
       flex-direction: column;
       transition: all 0.25s ease;
-      color: #e8edff;
+      color: #e8edf5;              /* Texto claro con tono azulado */
       flex: 1 1 280px;
       max-width: 340px;
     }
 
     .card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 28px 50px -14px rgba(0, 40, 180, 0.9);
-      border-color: #1e4aff;
+      box-shadow: 0 28px 50px -14px rgba(0, 40, 104, 0.5);
+      border-color: #2a4a8f;        /* Azul rey más brillante al hover */
     }
 
     .card .precio {
-      color: #ffffff;
+      color: #b8d0ff;              /* Azul rey claro para precio */
     }
 
     .card ul li i {
-      color: #3b7bff; /* azul rey brillante */
+      color: #3b6bc4;              /* Azul rey vibrante para iconos */
     }
 
     .card .btn-plan {
-      background: #0a1a4a;
+      background: #0a1a3a;          /* Azul rey profundo */
       color: white;
-      border: none;
-      box-shadow: 0 0 12px rgba(30, 80, 255, 0.3);
+      border: 1px solid #1f3a7a;
     }
 
     .card .btn-plan:hover {
-      background: #1a3b8a;
-      box-shadow: 0 0 20px #1e4aff;
+      background: #1f3f7a;
+      border-color: #4a7dff;
+      box-shadow: 0 0 12px rgba(46, 106, 255, 0.3);
     }
 
     .card .badge-gratis {
-      background: #1a254a;
+      background: #1a2744;
       color: #b0ccff;
+      border: 1px solid #2a4a8f;
     }
 
+    /* Tarjeta destacada (más énfasis en azul rey) */
     .card.destacado {
-      border: 2px solid #1e4aff;
-      box-shadow: 0 20px 40px -10px rgba(30, 70, 255, 0.3);
+      border: 2px solid #3b6bc4;
+      box-shadow: 0 20px 40px -10px rgba(30, 80, 200, 0.25);
+      background: #101b30;
     }
 
     .card.destacado .badge-gratis {
-      background: #0a1a5a;
-      color: #d6e4ff;
+      background: #0a1a3a;
+      color: #b8d0ff;
+      border-color: #4a7dff;
     }
 
-    /* Leyenda superior */
+    /* ===== LEYENDA SUPERIOR ===== */
     .leyenda {
       text-align: center;
       margin-bottom: 2.5rem;
       font-size: 1.25rem;
       font-weight: 400;
       letter-spacing: 0.3px;
-      color: #b8ccff;
+      color: #b0caf5;
       opacity: 0.9;
-      border-bottom: 2px solid rgba(30, 70, 255, 0.2);
+      border-bottom: 2px solid #1a2a4a;
       padding-bottom: 0.75rem;
       width: 100%;
       max-width: 700px;
@@ -98,14 +102,14 @@
 
     .leyenda span {
       font-weight: 600;
-      background: linear-gradient(135deg, #3b7bff, #1e4aff);
+      background: linear-gradient(135deg, #3b6bc4, #6a9aff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .leyenda i {
-      color: #1e4aff;
+      color: #3b6bc4;
       margin-right: 8px;
       opacity: 0.9;
     }
@@ -126,22 +130,22 @@
       scroll-snap-type: x mandatory;
       scroll-padding: 0 50%;
       scrollbar-width: thin;
-      scrollbar-color: #1e4aff transparent;
+      scrollbar-color: #1f3a7a transparent;
     }
 
     .packages-grid::-webkit-scrollbar {
       height: 6px;
     }
     .packages-grid::-webkit-scrollbar-track {
-      background: #0d1330;
+      background: #0a0f1a;
       border-radius: 12px;
     }
     .packages-grid::-webkit-scrollbar-thumb {
-      background: #1e4aff;
+      background: #1f3a7a;
       border-radius: 12px;
     }
     .packages-grid::-webkit-scrollbar-thumb:hover {
-      background: #3b7bff;
+      background: #3b6bc4;
     }
 
     .packages-grid .card {
@@ -169,7 +173,7 @@
       font-size: 1.6rem;
       font-weight: 600;
       letter-spacing: -0.5px;
-      color: #ffffff;
+      color: #c8ddff;             /* Azul muy claro */
     }
 
     .badge-gratis {
@@ -179,7 +183,6 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      border: 1px solid rgba(30, 74, 255, 0.3);
     }
 
     .precio {
@@ -187,14 +190,13 @@
       font-weight: 700;
       margin: 0.4rem 0 1rem 0;
       letter-spacing: -0.02em;
-      color: #d6e4ff;
     }
 
     .precio small {
       font-size: 0.9rem;
       font-weight: 400;
       opacity: 0.7;
-      color: #8899dd;
+      color: #8aacf0;
     }
 
     .card ul {
@@ -209,14 +211,14 @@
       align-items: center;
       gap: 10px;
       font-size: 0.95rem;
-      border-bottom: 1px solid rgba(30, 74, 255, 0.15);
-      color: #d0ddff;
+      border-bottom: 1px solid rgba(60, 100, 200, 0.15);
+      color: #d0dff5;
     }
 
     .card ul li i {
       width: 20px;
       font-size: 1rem;
-      color: #3b7bff;
+      color: #3b6bc4;
     }
 
     .btn-plan {
@@ -232,23 +234,17 @@
       cursor: pointer;
       transition: 0.2s;
       border: 1px solid transparent;
-      background: #0a1a4a;
-      color: white;
-      box-shadow: 0 0 12px rgba(30, 80, 255, 0.3);
     }
 
     .btn-plan i {
       font-size: 0.9rem;
-      color: #7aa3ff;
     }
 
     .btn-plan:hover {
       transform: scale(0.98);
-      background: #1a3b8a;
-      box-shadow: 0 0 20px #1e4aff;
     }
 
-    /* responsive */
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 700px) {
       .packages-grid {
         gap: 1rem;
@@ -310,7 +306,7 @@
   <!-- LEYENDA CENTRADA -->
   <div class="leyenda">
     <i class="fas fa-check-circle"></i>
-    Si ya tiene un plan, elige el correcto
+    Si ya tiene un plan, elige el <span>correcto</span>
   </div>
 
   <div class="packages-grid">
@@ -334,11 +330,11 @@
       </a>
     </div>
 
-    <!-- PAQUETE 2: PLUS $199 -->
+    <!-- PAQUETE 2: PLUS $199 (destacado) -->
     <div class="card destacado">
       <div class="card-header">
         <h3>Plus</h3>
-        <span class="badge-gratis" style="background: #0a1a5a; color: #d6e4ff;">Popular</span>
+        <span class="badge-gratis" style="background: #0f224a; color: #b8d0ff; border-color: #3b6bc4;">Popular</span>
       </div>
       <div class="precio">$199 <small>MXN</small></div>
       <ul>
@@ -358,7 +354,7 @@
     <div class="card">
       <div class="card-header">
         <h3>Kerim Music +</h3>
-        <span class="badge-gratis" style="background: #0a1a5a; color: #d6e4ff;">Pro</span>
+        <span class="badge-gratis" style="background: #0f1f3a; color: #b8d0ff; border-color: #2a4a8f;">Pro</span>
       </div>
       <div class="precio">$700 <small>MXN</small></div>
       <ul>
