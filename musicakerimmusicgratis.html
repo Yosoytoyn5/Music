@@ -266,7 +266,7 @@
       background: radial-gradient(circle at 20% 40%, rgba(30,215,96,0.05) 0%, rgba(0,0,0,0.4) 100%);
       pointer-events: none;
     }
-    /* PORTADA FIJA - CARRUSEL HORIZONTAL CON IMÁGENES COMPLETAS */
+    /* PORTADA FIJA - CARRUSEL RESPONSIVE */
     .portada-fija {
       width: 100%;
       border-radius: 12px;
@@ -274,6 +274,8 @@
       margin: 0.5rem 0 1.5rem 0;
       background: #0a0a0a;
       box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      position: relative;
+      touch-action: pan-y;
     }
     .portada-track {
       display: flex;
@@ -283,19 +285,17 @@
       scroll-behavior: smooth;
       padding: 0.75rem 0.5rem;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
+      scrollbar-width: none;
+      transition: transform 0.5s ease;
     }
     .portada-track::-webkit-scrollbar {
-      height: 4px;
-      background: #1a1a1a;
-    }
-    .portada-track::-webkit-scrollbar-thumb {
-      background: #1ed760;
-      border-radius: 10px;
+      display: none;
+      width: 0;
+      height: 0;
     }
     .portada-item {
-      flex: 0 0 80%;
-      max-width: 80%;
+      flex: 0 0 85%;
+      max-width: 85%;
       scroll-snap-align: start;
       border-radius: 10px;
       overflow: hidden;
@@ -305,8 +305,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      aspect-ratio: 16/9;
     }
-    /* Enlace que cubre toda la imagen */
     .portada-item a {
       display: block;
       width: 100%;
@@ -314,12 +314,10 @@
       text-decoration: none;
       position: relative;
     }
-    /* IMAGEN COMPLETA, SIN RECORTE, MANTIENE PROPORCIÓN */
     .portada-item img {
       width: 100%;
-      height: auto;
-      aspect-ratio: auto;
-      object-fit: contain;
+      height: 100%;
+      object-fit: cover;
       display: block;
       transition: transform 0.3s ease;
       background: #0a0a0a;
@@ -332,19 +330,137 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
       padding: 1rem 0.8rem 0.6rem;
       color: white;
-      font-size: 0.8rem;
+      font-size: clamp(0.7rem, 2.5vw, 0.9rem);
       font-weight: 500;
       letter-spacing: 0.3px;
       pointer-events: none;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
-    @media (min-width: 640px) {
-      .portada-item { flex: 0 0 55%; max-width: 55%; }
+    /* Indicadores del carrusel */
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 0 8px 0;
+      position: relative;
+      z-index: 10;
     }
-    @media (min-width: 1024px) {
-      .portada-item { flex: 0 0 32%; max-width: 32%; }
+    .carousel-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0;
+      min-width: 10px;
+      min-height: 10px;
+    }
+    .carousel-indicator.active {
+      background: #1ed760;
+      width: 28px;
+      border-radius: 5px;
+    }
+    .carousel-indicator:hover {
+      background: #1ed760;
+      transform: scale(1.1);
+    }
+    /* Flechas de navegación */
+    .carousel-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 20;
+      opacity: 0.7;
+    }
+    .carousel-nav-btn:hover {
+      background: rgba(30,215,96,0.3);
+      opacity: 1;
+      transform: translateY(-50%) scale(1.1);
+    }
+    .carousel-nav-btn.prev {
+      left: 8px;
+    }
+    .carousel-nav-btn.next {
+      right: 8px;
+    }
+    /* RESPONSIVE - Móviles */
+    @media (max-width: 480px) {
+      .portada-item {
+        flex: 0 0 92%;
+        max-width: 92%;
+        aspect-ratio: 16/9;
+      }
+      .portada-track {
+        padding: 0.5rem 0.3rem;
+        gap: 0.5rem;
+      }
+      .portada-caption {
+        font-size: 0.65rem;
+        padding: 0.8rem 0.6rem 0.4rem;
+      }
+      .carousel-indicators {
+        gap: 8px;
+        padding: 8px 0 4px 0;
+      }
+      .carousel-indicator {
+        width: 8px;
+        height: 8px;
+        min-width: 8px;
+        min-height: 8px;
+      }
+      .carousel-indicator.active {
+        width: 20px;
+      }
+      .carousel-nav-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+      .carousel-nav-btn.prev {
+        left: 4px;
+      }
+      .carousel-nav-btn.next {
+        right: 4px;
+      }
+    }
+    @media (min-width: 481px) and (max-width: 768px) {
+      .portada-item {
+        flex: 0 0 75%;
+        max-width: 75%;
+        aspect-ratio: 16/9;
+      }
+    }
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .portada-item {
+        flex: 0 0 55%;
+        max-width: 55%;
+        aspect-ratio: 16/9;
+      }
+    }
+    @media (min-width: 1025px) {
+      .portada-item {
+        flex: 0 0 32%;
+        max-width: 32%;
+        aspect-ratio: 16/9;
+      }
     }
     /* Galería */
     .gallery-grid {
@@ -925,12 +1041,14 @@
     <button class="chip-sort" data-sort="firstFirst">Más antiguas</button>
   </div>
   
-  <!-- PORTADA FIJA - CARRUSEL HORIZONTAL CON IMÁGENES COMPLETAS -->
-  <div class="portada-fija">
+  <!-- PORTADA FIJA - CARRUSEL RESPONSIVE CON NAVEGACIÓN -->
+  <div class="portada-fija" id="portadaFija">
+    <button class="carousel-nav-btn prev" id="carouselPrev">‹</button>
+    <button class="carousel-nav-btn next" id="carouselNext">›</button>
     <div class="portada-track" id="portadaTrack">
       <div class="portada-item">
-        <a href="inisiodececionplus.html">
-          <img src="https://www.dropbox.com/scl/fi/ps4vwau7do3dp81s8nxr1/plus-1.jpg?rlkey=6imcp5t21h6kd4z7pk0zyeme6&st=ykmeggaz&raw=1" alt="Portada 1" loading="lazy">
+        <a href="https://www.youtube.com/@Emsekhm.462Official">
+          <img src="https://www.dropbox.com/scl/fi/yhidp4hq90ecuhzfoguxz/Screenshot_20260707_191149.jpg?rlkey=suinvcdzgcetq19hrt1zyrxem&st=shqq02zd&raw=1" alt="Portada 1" loading="lazy">
           <div class="portada-caption">Lo más nuevo</div>
         </a>
       </div>
@@ -947,6 +1065,8 @@
         </a>
       </div>
     </div>
+    <!-- Indicadores del carrusel -->
+    <div class="carousel-indicators" id="carouselIndicators"></div>
   </div>
 
   <div id="searchBadge" class="search-badge"></div>
@@ -1279,6 +1399,145 @@
     function triggerBackgroundRefresh() { changeBackgroundRandomly(); }
     
     function shuffleArrayFn(arr) { const array = [...arr]; for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+    
+    // --- CARRUSEL AUTOMÁTICO Y RESPONSIVE ---
+    const portadaTrack = document.getElementById('portadaTrack');
+    const portadaItems = portadaTrack.querySelectorAll('.portada-item');
+    const indicatorsContainer = document.getElementById('carouselIndicators');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    const portadaFija = document.getElementById('portadaFija');
+    let currentSlide = 0;
+    let autoSlideInterval = null;
+    const AUTO_SLIDE_DELAY = 4000;
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    
+    // Crear indicadores
+    function createIndicators() {
+      indicatorsContainer.innerHTML = '';
+      portadaItems.forEach((_, index) => {
+        const indicator = document.createElement('button');
+        indicator.className = 'carousel-indicator' + (index === 0 ? ' active' : '');
+        indicator.setAttribute('data-index', index);
+        indicator.setAttribute('aria-label', `Ir a slide ${index + 1}`);
+        indicator.addEventListener('click', () => {
+          goToSlide(index);
+          resetAutoSlide();
+        });
+        indicatorsContainer.appendChild(indicator);
+      });
+    }
+    
+    function updateIndicators() {
+      const indicators = indicatorsContainer.querySelectorAll('.carousel-indicator');
+      indicators.forEach((ind, index) => {
+        ind.classList.toggle('active', index === currentSlide);
+      });
+    }
+    
+    function goToSlide(index) {
+      const items = portadaTrack.querySelectorAll('.portada-item');
+      if (index >= items.length) index = 0;
+      if (index < 0) index = items.length - 1;
+      currentSlide = index;
+      const item = items[index];
+      if (item) {
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      }
+      updateIndicators();
+    }
+    
+    function nextSlide() {
+      goToSlide(currentSlide + 1);
+    }
+    
+    function prevSlide() {
+      goToSlide(currentSlide - 1);
+    }
+    
+    function startAutoSlide() {
+      stopAutoSlide();
+      autoSlideInterval = setInterval(nextSlide, AUTO_SLIDE_DELAY);
+    }
+    
+    function stopAutoSlide() {
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = null;
+      }
+    }
+    
+    function resetAutoSlide() {
+      stopAutoSlide();
+      startAutoSlide();
+    }
+    
+    // Navegación con botones
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetAutoSlide();
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetAutoSlide();
+    });
+    
+    // Detectar scroll manual
+    portadaTrack.addEventListener('scroll', () => {
+      const containerRect = portadaTrack.getBoundingClientRect();
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+      
+      portadaItems.forEach((item, index) => {
+        const itemRect = item.getBoundingClientRect();
+        const center = itemRect.left + itemRect.width / 2;
+        const containerCenter = containerRect.left + containerRect.width / 2;
+        const distance = Math.abs(center - containerCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+      
+      if (closestIndex !== currentSlide) {
+        currentSlide = closestIndex;
+        updateIndicators();
+        resetAutoSlide();
+      }
+    });
+    
+    // Drag para móviles - mejor experiencia táctil
+    portadaTrack.addEventListener('touchstart', (e) => {
+      stopAutoSlide();
+      isDragging = true;
+      startX = e.touches[0].pageX - portadaTrack.offsetLeft;
+      scrollLeft = portadaTrack.scrollLeft;
+    }, { passive: true });
+    
+    portadaTrack.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const x = e.touches[0].pageX - portadaTrack.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      portadaTrack.scrollLeft = scrollLeft - walk;
+    }, { passive: true });
+    
+    portadaTrack.addEventListener('touchend', () => {
+      isDragging = false;
+      setTimeout(startAutoSlide, 3000);
+    }, { passive: true });
+    
+    // Pausar con mouse
+    portadaFija.addEventListener('mouseenter', stopAutoSlide);
+    portadaFija.addEventListener('mouseleave', startAutoSlide);
+    
+    // Inicializar
+    createIndicators();
+    setTimeout(startAutoSlide, 2000);
+    
+    // --- FIN CARRUSEL RESPONSIVE ---
     
     function toggleShuffle() {
       shuffleActive = !shuffleActive;
