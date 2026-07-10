@@ -303,7 +303,7 @@
 
     // ---------- DATOS ----------
     const artistListeners = {
-      'Sain Nt': 0, 'J Vazquez': 0, 'Dany Zm': 0, 'Tonny Reyes': 0, 'Emsek': 0,
+      'Sain Nt': 0, 'J Vazquez': 0, 'Escribo': 0, 'Dany Zm': 0, 'Tonny Reyes': 0, 'Emsek': 0,
       'Prii Ramirez': 0, 'Aizber': 0, 'Clave 462': 0, 'Adan G': 0, 'Placoso de la L': 0
     };
     const artistExtraInfo = {
@@ -316,10 +316,15 @@
       'Aizber': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
       'Clave 462': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
       'Adan G': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
+      'Escribo': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.',
       'Placoso de la L': 'Si te conviertes en oyente estás apoyando al artista. Los datos los capturamos por medio de WhatsApp privado seguro.'
+      
     };
 
     const originalSongs = [
+      {id:62, url:'https://www.dropbox.com/scl/fi/cc8365qf2ie3rjdlkwp0f/Escribo.jpg?rlkey=je5mgu7vxre0psjxaent3a1zd&st=rlmq7zas&raw=1', category:'Musica', album:'Único lanzamiento', title:'Pensando Escribo', music:'https://www.dropbox.com/scl/fi/7ydiw8abe4r4fxfiiz5ij/Pensando-Escribo.wav?rlkey=elx3ydjh5rkfz2qcqekbgc9yp&st=b7fbkmq5&raw=1'},
+      {id:61, url:'https://www.dropbox.com/scl/fi/cc8365qf2ie3rjdlkwp0f/Escribo.jpg?rlkey=je5mgu7vxre0psjxaent3a1zd&st=rlmq7zas&raw=1', category:'Musica', album:'Único lanzamiento', title:'Me siento mal Escribo', music:'https://www.dropbox.com/scl/fi/xojiflo0c5ydogct9j40v/Escribo.wav?rlkey=wmpwws77lgru2oniwrak9vv8r&st=z2zm9toa&raw=1'},
+      {id:60, url:'https://www.dropbox.com/scl/fi/cc8365qf2ie3rjdlkwp0f/Escribo.jpg?rlkey=je5mgu7vxre0psjxaent3a1zd&st=rlmq7zas&raw=1', category:'Musica', album:'Único lanzamiento', title:'Cosa de la vida Escribo', music:'https://www.dropbox.com/scl/fi/dxhc72dtjjadyzrwupddg/Cosas-de-la-vida-Escribo.wav?rlkey=li3bvmvax97t2f4ion1oiffw8&st=5sasiwzf&raw=1'},
       {id:59, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Todo acabo Emsek', music:'https://www.dropbox.com/scl/fi/8rxh1zmz1jnbw3jnyw30u/Todo-se-Acabo-Emsek.wav?rlkey=gdjt2d5ixehg02f66zrmn2oo4&st=11wubvyf&raw=1'},
       {id:58, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Perdondame Emsek', music:'https://www.dropbox.com/scl/fi/09x3ro2pgjk5uytus7qnf/perdoname-emsek-video-oficial.mp3?rlkey=w5wnge74deqrg9j5cugdgso93&st=l9jqz3s2&raw=1'},
       {id:57, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Nada es sencillo Emsek', music:'https://www.dropbox.com/scl/fi/0b08k7lmf6bi3unghwi0o/Nada-es-secillo-Oswaldo.wav?rlkey=00zjb5omwsyc7lpa4epk2dxzx&st=owffemlr&raw=1'},
@@ -750,7 +755,7 @@
     }
 
     function extractArtistFromTitle(title) {
-      const known = ['Sain Nt','J Vazquez','Dany Zm','Tonny Reyes','Emsek','Prii Ramirez','Aizber','Clave 462','Adan G','Placoso de la L'];
+      const known = [ 'Escribo','Sain Nt','J Vazquez','Dany Zm','Tonny Reyes','Emsek','Prii Ramirez','Aizber','Clave 462','Adan G','Placoso de la L'];
       for(let a of known) if(title.toLowerCase().includes(a.toLowerCase())) return a;
       const song = originalSongs.find(s => s.title === title);
       return song?.artist || 'Artista';
