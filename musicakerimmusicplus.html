@@ -76,6 +76,26 @@
     .image-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; transition: transform 0.3s ease; display: block; border-radius: 0px; }
     .image-card:hover img { transform: scale(1.02); }
     .card-title { padding: 0.75rem 0.5rem; text-align: left; font-size: 0.8rem; font-weight: 600; color: #c0cfff; background: transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .album-card { background: #0d0d22; border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.25s ease; border: 1px solid #1e3a6b; display: flex; flex-direction: column; }
+    .album-card:hover { background: #1a1a35; transform: translateY(-4px); border-color: #1e90ff; box-shadow: 0 0 30px rgba(30,144,255,0.15); }
+    .album-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+    .album-card .album-title { padding: 0.75rem 0.5rem; text-align: left; font-size: 0.8rem; font-weight: 600; color: #c0cfff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .album-card .album-badge { font-size: 0.6rem; color: #6a8abf; padding: 0 0.5rem 0.5rem; }
+    .back-button { background: #14142a; border: 1px solid #1e3a6b; border-radius: 500px; padding: 0.55rem 1.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; color: #8a9abf; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .back-button:hover { background: #1a1a35; border-color: #1e90ff; color: #e0e8ff; }
+    .album-view-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .album-view-title { font-size: 1.5rem; font-weight: 700; color: #e0e8ff; }
+    .play-album-btn { background: #1e90ff; color: #0a0a1a; border: none; border-radius: 500px; padding: 0.6rem 2rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 20px rgba(30,144,255,0.3); }
+    .play-album-btn:hover { transform: scale(1.05); box-shadow: 0 6px 30px rgba(30,144,255,0.5); }
+    .album-track-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+    .album-track-item { background: rgba(10,10,26,0.95); border-radius: 8px; border: 1px solid #1e3a6b; display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1rem; cursor: pointer; transition: all 0.2s ease; }
+    .album-track-item:hover { background: #1a1a35; transform: scale(1.01); }
+    .album-track-item img { width: 48px; height: 48px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+    .album-track-info { flex: 1; }
+    .album-track-title { font-weight: 600; font-size: 0.85rem; color: #e0e8ff; }
+    .album-track-sub { font-size: 0.7rem; color: #6a8abf; }
+    .album-track-play-icon { font-size: 1.2rem; opacity: 0; transition: opacity 0.2s; color: #1e90ff; }
+    .album-track-item:hover .album-track-play-icon { opacity: 1; }
     @media (min-width:500px){ .gallery-grid:not(.list-view){ grid-template-columns:repeat(3,1fr); gap:1rem; } }
     @media (min-width:640px){ .gallery-grid:not(.list-view){ grid-template-columns:repeat(4,1fr); } }
     @media (min-width:900px){ .gallery-grid:not(.list-view){ grid-template-columns:repeat(5,1fr); } }
@@ -154,8 +174,6 @@
     .attribution { text-align: center; margin-top: 2rem; font-size: 0.6rem; color: #3a4a6a; }
     @media (max-width:480px){ .top-bar h1{font-size:1.2rem;} .artist-avatar{width:65px;height:65px;} .artist-circle-card{width:75px;} .suggestion-card{flex:0 0 130px;} }
     @keyframes fadeUp { 0% { opacity:0; transform:translateY(10px); } 100% { opacity:1; transform:translateY(0); } }
-
-    /* Notificación tipo toast */
     .toast-notification {
       position: fixed;
       bottom: 80px;
@@ -188,7 +206,6 @@
 <div class="artist-cover-background" id="artistCoverBackground"></div>
 <div class="random-matte-bg" id="randomMatteBg"></div>
 
-<!-- Toast notificación -->
 <div class="toast-notification" id="toastNotification">Modo Aleatorio Activado</div>
 
 <div class="welcome-modal" id="welcomeModal">
@@ -274,7 +291,7 @@
 
 <script>
   (function(){
-    // TOAST para notificaciones
+    // TOAST
     const toast = document.getElementById('toastNotification');
     let toastTimer = null;
     function showToast(msg) {
@@ -284,7 +301,7 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    // ---------- DATOS Y CONFIGURACIÓN ----------
+    // ---------- DATOS ----------
     const artistListeners = {
       'Sain Nt': 0, 'J Vazquez': 0, 'Dany Zm': 0, 'Tonny Reyes': 0, 'Emsek': 0,
       'Prii Ramirez': 0, 'Aizber': 0, 'Clave 462': 0, 'Adan G': 0, 'Placoso de la L': 0
@@ -303,68 +320,68 @@
     };
 
     const originalSongs = [
-      {id:59, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Todo acabo Emsek', music:'https://www.dropbox.com/scl/fi/8rxh1zmz1jnbw3jnyw30u/Todo-se-Acabo-Emsek.wav?rlkey=gdjt2d5ixehg02f66zrmn2oo4&st=11wubvyf&raw=1'},
-      {id:58, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Perdondame Emsek', music:'https://www.dropbox.com/scl/fi/09x3ro2pgjk5uytus7qnf/perdoname-emsek-video-oficial.mp3?rlkey=w5wnge74deqrg9j5cugdgso93&st=l9jqz3s2&raw=1'},
-      {id:57, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Nada es sencillo Emsek', music:'https://www.dropbox.com/scl/fi/0b08k7lmf6bi3unghwi0o/Nada-es-secillo-Oswaldo.wav?rlkey=00zjb5omwsyc7lpa4epk2dxzx&st=owffemlr&raw=1'},
-      {id:56, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Musa Emsek', music:'https://www.dropbox.com/scl/fi/vyrkq3cz1d32v6cbrml99/Mi-mussa-Emsek-HFcompany-Estudios.wav?rlkey=8mzfyjhjbqasi7cvcynku8e29&st=f6rkh9hu&raw=1'},
-      {id:55, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Los tiempos cambiasn Emsek ft Charles wed', music:'https://www.dropbox.com/scl/fi/scvt36sujqhsk7abj4q9g/Los-tiempos-cambian-Emsek-ft-Charl-s-weed.wav?rlkey=hbvmut3vj4wyx166y6nv53vi9&st=7ytsyfvs&raw=1'},
-      {id:54, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Tus errores Emsek', music:'https://www.dropbox.com/scl/fi/4q3fc1b7dcbm3s0irdriy/Emsek-tus-errores.wav?rlkey=dn1bgzk4im7jwxo5p46osot4h&st=bs9g15gb&raw=1'},
-      {id:53, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'No fue lo mismo Emsek', music:'https://www.dropbox.com/scl/fi/rv1nm22lnovi1phko6ufn/Emsek-No-fue-lo-mismo.wav?rlkey=ojx6h1hpudu8q9v4h0b5ncm77&st=fawt5ksq&raw=1'},
-      {id:52, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'En busca de la bictoria Emsek', music:'https://www.dropbox.com/scl/fi/veoiwn4fh0ikcb6rqn39y/Emsek-len-busca-de-labictoria.wav?rlkey=40y7btf8uvd4bxxpk4uaogiwv&st=fhihmz7c&raw=1'},
-      {id:51, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'El fin de la historia Emsek', music:'https://www.dropbox.com/scl/fi/jk2c7g0fixoaqv5e5ajri/El-fin-de-hiastoria-EMSEK.wav?rlkey=kxgq808oded0cdhcd6woh3tdz&st=vkmutc4j&raw=1'},
-      {id:50, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Donde estan Emsek', music:'https://www.dropbox.com/scl/fi/1cryb2i8f0nrl9e1jrqs6/Donde-estan-Emsek-1.wav?rlkey=2diknqmy040c6nqsmud6gk4y5&st=3i6gcor1&raw=1'},
-      {id:49, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', title:'Dicen de mi Emsek', music:'https://www.dropbox.com/scl/fi/yhwywjevsxs0b6dx94o9p/DICE3N-DEMI-EMSEK.wav?rlkey=2qrzmoa94dmd6ytnq2jdvdxgw&st=79muug4k&raw=1'},
-      {id:48, url:'https://www.dropbox.com/scl/fi/2rhos68qocadmeqnry26z/Tonny-reyes.jpg?rlkey=rrn5f3bhmqojc7f7qtftskizx&st=i1kgehuz&raw=1', category:'Musica', title:'Linea de Meta Tonny Reyes', music:'https://www.dropbox.com/scl/fi/higcv4yxhf2z1exl4zovy/4-Linea-de-Meta-Tonny-Reyes.flac?rlkey=vkvhv5i73k8q3i25dx3vx9h7k&st=0h3mrbxl&raw=1'},
-      {id:47, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Soy el mismo Sain Nt', music:'https://www.dropbox.com/scl/fi/j6gyofex4ilsg7ufqjynb/soy-el-mismo-sain-nt.mp3?rlkey=7z5hmjvtw6k7ycng1dtsbg8jh&st=xz3o7yai&raw=1'},
-      {id:46, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Mi culpa Sain Nt', music:'https://www.dropbox.com/scl/fi/w32a11405ox96obylj3yw/Sain-Nt-Mi-Culpa-Video-Oficial.mp3?rlkey=kebnf2oetl34p4ayog4r75ssx&st=xsntmuco&raw=1'},
-      {id:45, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Eres Sain Nt', music:'https://www.dropbox.com/scl/fi/rmxtxpsgh49u3eskxgnzx/sain-nt-heres.mp3?rlkey=bv6mtagzb2xxomq31myux706e&st=r90wlvvo&raw=1'},
-      {id:44, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Dicen Sain Nt', music:'https://www.dropbox.com/scl/fi/olkvysubz3soqc91onk3g/sain-nt-dicen.mp3?rlkey=l22zxk15yhha0foujp3x57dkt&st=09uwkg66&raw=1'},
-      {id:43, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Diabla Sain Nt', music:'https://www.dropbox.com/scl/fi/oxi6rp0eo55ipvudq0i01/sain-nt-diabla.mp3?rlkey=t9ehha82pjsvl8gvwk21fegde&st=pxxmobd6&raw=1'},
-      {id:42, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Chanveale Sain Nt', music:'https://www.dropbox.com/scl/fi/6fzs4cb946l5u5w98tp76/sain-nt-chanveale.mp3?rlkey=pp0i29n0ymcajrfunho7tcm4j&st=19zhfget&raw=1'},
-      {id:41, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Devuelveme la sonrisa Sain Nt', music:'https://www.dropbox.com/scl/fi/ojg1a6cymof6m3ou8dswg/sain-nt-debuelbeme-la-sonrisa.mp3?rlkey=comjjk1le7i4s6hyyhsqlof76&st=yrxkngys&raw=1'},
-      {id:40, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Fallaste a la promesa Sain Nt', music:'https://www.dropbox.com/scl/fi/xgajkjq30u3i2jbi44c52/sain-fallaste-ala-promesa.mp3?rlkey=k4zucjg9krw1lsnxc3joqah2t&st=bojdomp5&raw=1'},
-      {id:39, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Presumen Sain Nt', music:'https://www.dropbox.com/scl/fi/siiecb8sc8d0g2tlkqny8/presumen-sain-nt.mp3?rlkey=zh9tccvb9z6r152sa1ntcz9pf&st=m7wrc7os&raw=1'},
-      {id:38, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Me sorprendi Sain Nt', music:'https://www.dropbox.com/scl/fi/ckvin6873x4slrqixafr5/me-sorprendi.mp3?rlkey=mme0049a91emytq9s4rlbht6i&st=l88cpmx7&raw=1'},
-      {id:37, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', title:'Matame Sain Nt', music:'https://www.dropbox.com/scl/fi/blppw4ekk5yhae4qi8wl0/matame-sain-nt.wav?rlkey=5padz3puhrj6it9i9ry5jdr7z&st=v1qsy88p&raw=1'},
-      {id:36, url:'https://www.dropbox.com/scl/fi/w51t3llqpavnpmxxgus83/el-chiris.png?rlkey=leru6o7n7omsn9b455yqcrf4g&st=5j83qaok&raw=1', category:'Musica', title:'El Chiris J Vazquez IA', music:'https://www.dropbox.com/scl/fi/7gcv8k4ke1mglv3jkya1k/El-Chiris.wav?rlkey=hpgsr66ebcy6tyl6ounf7ii81&st=jh1w26wo&raw=1'},
-      {id:35, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=74eri4wc&raw=1', category:'Musica', title:'Entre tus redes Emsek', music:'https://www.dropbox.com/scl/fi/thmc7o0uftl3hhvig4lc6/Entre_tus_Redes_-msek__HM___462__Casero_Records_MP3_256kbps_128k.mp3?rlkey=6raowpgc6b5j5a0h21qyo6p34&st=5jws1foy&raw=1'},
-      {id:34, url:'https://www.dropbox.com/scl/fi/ce5cvqnqfbmbasgswiz5u/J-V-zquez.jpg?rlkey=r4p0lh5s8bsz65l7omsteqd0j&st=u3e0szkd&raw=1', category:'Musica', title:'Me vuelve loco J Vazquez', music:'https://www.dropbox.com/scl/fi/5ojo4u3dak6gytmkcy605/j-vazquez-me-vuelve-loco-fusa-company.mp3?rlkey=ickcmbzdf3wi1k012e0mygo8e&st=q2zmxnh9&raw=1'},
-      {id:33, url:'https://www.dropbox.com/scl/fi/a3qd0pbwbshf0lyztv3a3/Por-ultima-vez.jpg?rlkey=c12cn6qtjyft9l7ead2ajx9vf&st=zapsju9h&raw=1', category:'Musica', title:'Hello Vercion Kerim Music', music:'https://www.dropbox.com/scl/fi/y8t89m2l4wu6eyhc8wvl1/Hello-Cover-Beyonce-guadalajara.wav?rlkey=1eoejx9anwsb8xg72l7850d8p&st=1oaelag9&raw=1'},
-      {id:32, url:'https://www.dropbox.com/scl/fi/4k7bl5r8616fz8ma4009u/Picsart_26-05-09_16-40-27-811.jpg?rlkey=run3f5roahpmf10zc7fuopziw&st=8xnv6fp5&raw=1', category:'Musica', title:'Envidiosos Adan G x Sain Nt', music:'https://www.dropbox.com/scl/fi/n5kptf0owcnipvg5yntrp/08-Ad-n-G-x-Sain-Nt-ENVIDIOSOS-REMIX-CON-UE-OS-IN-DINERO.mp3?rlkey=1zrohzv4ebl51tac3oeix2x7u&st=myhnmu8k&raw=1'},
-      {id:31, url:'https://www.dropbox.com/scl/fi/kgnxbl0mdp3q2uivbi4et/800x800-7986476-0F948044-9801-4FC9-8EFF36DDC1873148-0-3542185-Teestoyllamando.jpg?rlkey=jki22g8n7mq0b7ufv138n4wsn&st=iw8gk09e&raw=1', category:'Musica', title:'Te estoy llamando', music:'https://www.dropbox.com/scl/fi/rok6qgex9a7qer30xqwvd/TeestoyLlamandolista.wav?rlkey=qwtm9h6cswvdzhxyauww79hd4&st=60pcm99d&raw=1'},
-      {id:30, url:'https://www.dropbox.com/scl/fi/9xqi6k1g5cnbior62dh0l/800x800-7986476-B8AD12F4-560F-4E85-8EE3DD6C45025D0E-0-565367-Picsart260207195632530.jpg?rlkey=zjttay9r0myk8r0h1x2074pnj&st=521n7hvx&raw=1', category:'Musica', title:'Sigo Vivo Aziber', music:'https://www.dropbox.com/scl/fi/d3pjln5vf9ndpey9gqg67/SIgoVivoIazberMp3-1.wav?rlkey=njt48r9cm06ven5h6p476afac&st=4g5krti4&raw=1'},
-      {id:29, url:'https://www.dropbox.com/scl/fi/kk1f1fdpsgx7noxb5lly9/800x800-7986476-70C18BD7-1A24-4B1E-9D524972181DB7D1-0-663215-FBIMG17490012695773000x3000.jpg?rlkey=0exgl54ffel1k27ncua1j7kd2&st=vr0tik1g&raw=1', category:'Musica', title:'Recuerdos Aizber', music:'https://www.dropbox.com/scl/fi/ivi9sc8o5muusrfvbutay/RecuedosAizberKerimMusic.flac?rlkey=yx3b7v98f47r7vzz9wmfrbu8e&st=eaz12kjs&raw=1'},
-      {id:28, url:'https://www.dropbox.com/scl/fi/ufyml25z65fpccmntk0u8/800x800-7986476-31310345-26C0-4D4C-BE84E673A034B972-0-396100-1000023011.jpg?rlkey=0wt2tk5frnl8olkgqrv2pzavg&st=2701x6fs&raw=1', category:'Musica', title:'No eres juego de nintendo J Vazquez', music:'https://www.dropbox.com/scl/fi/b8esp6xyrrgx99ojfghav/NoeresjuegodenintendoJbazquez.wav?rlkey=3bdruu1u6ywo8w11k6mne106a&st=07wqaypb&raw=1'},
-      {id:27, url:'https://www.dropbox.com/scl/fi/ag7fqpeejjz9cii89zp0j/800x800-7986476-AA08955F-14F0-44B5-9A5806FE2B5CF93F-0-1499720-1000026237.jpg?rlkey=zzm139tr5viuw47njuzpd29ds&st=nosfkylb&raw=1', category:'Musica', title:'My corazon en tu alatar Aizber', music:'https://www.dropbox.com/scl/fi/jlocoo87ctkvwua1a8my0/MicorazonentualtarAizberKerimMusic.flac?rlkey=zz0bypimr6ge8gglqs7vgwpa4&st=c0k9pwux&raw=1'},
-      {id:26, url:'https://www.dropbox.com/scl/fi/76ecpaei3j09h886fy314/800x800-7986476-FF4245C9-9198-41D6-8FD5A0EEA619ECCD-0-713007-Picsart250806182628068.jpg?rlkey=ug6nue19ikdth4sqpor6laygt&st=8b6a0ssv&raw=1', category:'Musica', title:'Haora me toca ami J Vazquez Ft Out Mx', music:'https://www.dropbox.com/scl/fi/or5cfdp8v5amsz6yjs7k1/MetocaamiJVazquezxOutMx.flac?rlkey=9jkzytxk2ioh9kf96gnuj0vdq&st=wb9xdjnh&raw=1'},
-      {id:25, url:'https://www.dropbox.com/scl/fi/bv6fo6j2vmnp2esqd4ula/800x800-7986476-700B12B5-E66A-4DC7-B44D0B4ABA4553B2-0-483095-Picsart251220185548595.jpg?rlkey=r6plwuux7kuee6uw307l1isar&st=gkhgd4oa&raw=1', category:'Musica', title:'Lo que nunca exprese J Vazquez', music:'https://www.dropbox.com/scl/fi/bz13mnpi351mj8jpmt73q/J-Vazquez-Lo-que-nunca-exprese.wav?rlkey=zcuwzjc22eom2d3qythgr130y&st=y1deklv8&raw=1'},
-      {id:24, url:'https://www.dropbox.com/scl/fi/xts5le77z60r3k7cfnkv6/800x800-7986476-DA4D5540-E151-42F0-8E9AA054C66F26A0-0-91650-FBIMG1754180896541.jpg?rlkey=kphe4vcw8pktyxwkgm3cl78bb&st=raimy7zq&raw=1', category:'Musica', title:'Cinco AM Tonny Reyes', music:'https://www.dropbox.com/scl/fi/h3t25byzypksnjjqgysui/CincoAmTonnyreyes.flac?rlkey=zpsntr84ozefiuyl8c7go1he0&st=08d0mcha&raw=1'},
-      {id:23, url:'https://www.dropbox.com/scl/fi/kfrpspuowtzrkjvwe2kxa/800x800-7986476-EBBCC76E-8564-423A-9B173657F2C27F7C-0-563472-Picsart250629201208586.jpg?rlkey=qglu4yfiepshx5p119dk647du&st=mw8lfbtl&raw=1', category:'Musica', title:'Beyby J Vazquez', music:'https://www.dropbox.com/scl/fi/vffz16jp4lb35ow738v2y/BeybyJVazquez.flac?rlkey=54fvvt360fd9af0vglxq3xsjf&st=ju3378de&raw=1'},
-      {id:22, url:'https://www.dropbox.com/scl/fi/u451cfrep8ohfcdrepmxq/483488957_122195212382093529_2576876991791910487_n.jpg?rlkey=gnrgw1i2tkspyxg2de03ffma8&st=175922oz&raw=1', category:'Musica', title:'Me estoy mueirdo Clave 462', music:'https://www.dropbox.com/scl/fi/n66wxeygxd8ddchrls1kv/Me-estoy-muriendo-clave-462.wav?rlkey=hfkc487fwb71ziploobu8duqi&st=5nca4wns&raw=1'},
-      {id:21, url:'https://www.dropbox.com/scl/fi/zixsk3wr4r62bb9x6ea1g/Picsart_26-04-25_18-14-14-639.jpg?rlkey=kzujxp5xzvxtp38sbd3y6oz68&st=x25iex9q&raw=1', category:'Musica', title:'Ella mueve el tootoo J Vazquez ft Prii Ramirez', music:'https://www.dropbox.com/scl/fi/vw9p5zadrjyki5by39mmd/TootootooJ_VazquezBarrio_Bajo_M_Oficial.wav?rlkey=mphfjhdb08clx3fnnh2etkr70&st=mhj2asn2&raw=1'},
-      {id:20, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Vuelve Dany Zm', music:'https://www.dropbox.com/scl/fi/5dlej4wkll16uxyz3knwf/vuelve-9-dany-zm.mp3?rlkey=1mw4i576qw1q6xn4wofshg3gz&st=tbpp90qm&raw=1'},
-      {id:19, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Nuestro cuento Dany Zm', music:'https://www.dropbox.com/scl/fi/xmca1v67r0foa02ah0ix5/nuestro-cuento-7-dany-zm.mp3?rlkey=4wdtldt4ch8usesgbsqdkl0o1&st=4xdrusp8&raw=1'},
-      {id:18, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Me dejo solor Dany Zm ft Sain Nt Yezcor Cruz', music:'https://www.dropbox.com/scl/fi/ybuowdfnam5frrjksy570/me-dejo-solo-5-dany-zm.mp3?rlkey=9oiwuxep5v6se4r7af6qlwhb2&st=zbzpdjp2&raw=1'},
-      {id:17, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Lluvia Dany Zm', music:'https://www.dropbox.com/scl/fi/fo85o8m1etbo68m9a46xq/lluvia-8-dany-zm.mp3?rlkey=ywh0y4ezduhd3q7bjvh5orki1&st=n3ykoz9q&raw=1'},
-      {id:16, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Hasta cuendo Dany Zm', music:'https://www.dropbox.com/scl/fi/6588ikrqstte1wzjkreja/hasta-cuando-1-dany-zm.mp3?rlkey=uqpq1cpmnj1e5pnd5ndxwpb47&st=tgxuj89m&raw=1'},
-      {id:15, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Engaño Dany Zm', music:'https://www.dropbox.com/scl/fi/7qvtyhs6smsgnu56z9ch7/en-gano-6-dany-zm.mp3?rlkey=lzu6kbgqicirph9sp4ndhyq90&st=gu0hpw1p&raw=1'},
-      {id:14, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Tu tiempo de acabo Dany Zm', music:'https://www.dropbox.com/scl/fi/ees3i5mgfc50lwtg59hgw/Dany-Zm-Tu-tiempo-se-acavo.mp3?rlkey=kijhvu3rsv6j3zri6dh20wowf&st=3k6i51wu&raw=1'},
-      {id:13, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Especial Dany Zm', music:'https://www.dropbox.com/scl/fi/han7yoy13ncejnz4exj3r/dalex-especial-cover-dany-zm.mp3?rlkey=8pchaqdtz2iq854i8zrhxfriw&st=var5yqcp&raw=1'},
-      {id:12, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Corito sano Dany Zm', music:'https://www.dropbox.com/scl/fi/l4d8dvoahieq4yqf536ol/CORITO-SANO-DANY-ZM-VA-YEZKOR-CRUZ-SAIN-NT-VERSION-T.E.C.mp3?rlkey=wsj8578k3e14hqr74npb3krjb&st=pdov6vmy&raw=1'},
-      {id:11, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Beyby Dany Zm', music:'https://www.dropbox.com/scl/fi/v4remtzyol50e00rvhpen/beyby-4dany-zm.mp3?rlkey=y803hhbgxghxrlgsvpe9w16i9&st=p6m3gs7z&raw=1'},
-      {id:10, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Bailalo Dany Zm', music:'https://www.dropbox.com/scl/fi/ctedqktecjqbqvd2t5uct/bailado-3-dany-zm.mp3?rlkey=l1zrwqrevorjbxjq3u7gi4k3t&st=3kh4wkgz&raw=1'},
-      {id:9, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Modo Avion Dany Zm', music:'https://www.dropbox.com/scl/fi/rq7dnfuqaywgjdo6dp9de/1-Modo-avion-Dany-Zm-El-rencuentro..flac?rlkey=xfv7h1xurdroh0ct3xu71ge9m&st=v1bfhinm&raw=1'},
-      {id:8, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', title:'Ay estare Dany Zm', music:'https://www.dropbox.com/scl/fi/lbohzzgaf7xnw1v7o3ec9/ay-estare-2-dany-zm.mp3?rlkey=41qeo3w154ctk8gvlzl2aa0v1&st=ybnb2zya&raw=1'},
-      {id:6, url:'https://www.dropbox.com/scl/fi/55lnmbdl6wrt1wnpb1j4z/Quiereme-asi.png?rlkey=9knalslivzs7b6r9f3c8um0u7&st=o6wbyer5&raw=1', category:'Musica', title:'Quiere a si Prii Ramirez', music:'https://www.dropbox.com/scl/fi/c9ss4stui4mi1c6ku2w1r/Qui-reme-As.flac?rlkey=7vz44u6mff02f5h7nto5okcr0&st=qnv4scxe&raw=1'},
-      {id:5, url:'https://i.postimg.cc/wMCFZY9H/Picsart-26-02-15-14-39-19-042.jpg', category:'Musica', title:'Dile que tu eres mia Dany Zm', music:'https://www.dropbox.com/scl/fi/qx6o5slgy64yr6fgmg1fr/DanyZmTueresmiaOfical.wav?rlkey=iaxc3giic8tw7fc1ope4t6qwc&st=zr0joz18&raw=1'},
-      {id:4, url:'https://i.postimg.cc/3JGtpNZk/Picsart-26-02-24-14-11-02-954.jpg', category:'Musica', title:'De nada me estreso Placoso de la L', music:'https://www.dropbox.com/scl/fi/86rzw7fafswhle6yl8y9z/Es-el-M-KERIM-MUSIC.wav?rlkey=4m6i3hi98rqgu9iewhpvyitz8&st=78rqjwpx&raw=1'},
-      {id:3, url:'https://i.postimg.cc/RFymvC4R/Picsart-26-02-22-22-13-49-068.jpg', category:'Musica', title:'Andas diciendo Prii Ramirez', music:'https://www.dropbox.com/scl/fi/arf3n114kljfqs1a5rwm0/Andan-diciendo-Prii-Ramirez.wav?rlkey=qeqb9egyjn1n0n4cq9kt2kc5r&st=6s1ck9s6&raw=1'},
-      {id:2, url:'https://i.postimg.cc/tTxkMmxc/Picsart-26-02-07-19-56-32-530.jpg', category:'Musica', title:'Sigo Vivo Aizber', music:'https://www.dropbox.com/scl/fi/0y977tgyjp66og2ze36uh/SIgoVivoIazberMp3.wav?rlkey=6vdswfh8f3wtqa66seeugc480&st=byt5z91w&raw=1'},
-      {id:1, url:'https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg', category:'Musica', title:'Catorce de febrero J Vazquez', music:'https://www.dropbox.com/scl/fi/igoyb7x8feuz6otf67ddt/JBazques14deFrebreroOficial.wav?rlkey=vbgyvxlgyk5t1pl6kojif7w65&st=1ogeqzbh&raw=1'},
-      {id:7, url:'https://i.postimg.cc/MXJXxVL3/Te-estoy-llamando.jpg', category:'Musica', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/97yj1flb0bgaaedaxr9h1/Te_estoy_Llamando_lista.wav?rlkey=cn3oppwsfjv617hhcuy2rcga4&st=ipum1s6a&raw=1'}
+      {id:59, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Todo acabo Emsek', music:'https://www.dropbox.com/scl/fi/8rxh1zmz1jnbw3jnyw30u/Todo-se-Acabo-Emsek.wav?rlkey=gdjt2d5ixehg02f66zrmn2oo4&st=11wubvyf&raw=1'},
+      {id:58, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Perdondame Emsek', music:'https://www.dropbox.com/scl/fi/09x3ro2pgjk5uytus7qnf/perdoname-emsek-video-oficial.mp3?rlkey=w5wnge74deqrg9j5cugdgso93&st=l9jqz3s2&raw=1'},
+      {id:57, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Nada es sencillo Emsek', music:'https://www.dropbox.com/scl/fi/0b08k7lmf6bi3unghwi0o/Nada-es-secillo-Oswaldo.wav?rlkey=00zjb5omwsyc7lpa4epk2dxzx&st=owffemlr&raw=1'},
+      {id:56, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Musa Emsek', music:'https://www.dropbox.com/scl/fi/vyrkq3cz1d32v6cbrml99/Mi-mussa-Emsek-HFcompany-Estudios.wav?rlkey=8mzfyjhjbqasi7cvcynku8e29&st=f6rkh9hu&raw=1'},
+      {id:55, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Los tiempos cambiasn Emsek ft Charles wed', music:'https://www.dropbox.com/scl/fi/scvt36sujqhsk7abj4q9g/Los-tiempos-cambian-Emsek-ft-Charl-s-weed.wav?rlkey=hbvmut3vj4wyx166y6nv53vi9&st=7ytsyfvs&raw=1'},
+      {id:54, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Tus errores Emsek', music:'https://www.dropbox.com/scl/fi/4q3fc1b7dcbm3s0irdriy/Emsek-tus-errores.wav?rlkey=dn1bgzk4im7jwxo5p46osot4h&st=bs9g15gb&raw=1'},
+      {id:53, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'No fue lo mismo Emsek', music:'https://www.dropbox.com/scl/fi/rv1nm22lnovi1phko6ufn/Emsek-No-fue-lo-mismo.wav?rlkey=ojx6h1hpudu8q9v4h0b5ncm77&st=fawt5ksq&raw=1'},
+      {id:52, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'En busca de la bictoria Emsek', music:'https://www.dropbox.com/scl/fi/veoiwn4fh0ikcb6rqn39y/Emsek-len-busca-de-labictoria.wav?rlkey=40y7btf8uvd4bxxpk4uaogiwv&st=fhihmz7c&raw=1'},
+      {id:51, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'El fin de la historia Emsek', music:'https://www.dropbox.com/scl/fi/jk2c7g0fixoaqv5e5ajri/El-fin-de-hiastoria-EMSEK.wav?rlkey=kxgq808oded0cdhcd6woh3tdz&st=vkmutc4j&raw=1'},
+      {id:50, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Donde estan Emsek', music:'https://www.dropbox.com/scl/fi/1cryb2i8f0nrl9e1jrqs6/Donde-estan-Emsek-1.wav?rlkey=2diknqmy040c6nqsmud6gk4y5&st=3i6gcor1&raw=1'},
+      {id:49, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=dqvk5v66&raw=1', category:'Musica', album:'Entre tus redes', title:'Dicen de mi Emsek', music:'https://www.dropbox.com/scl/fi/yhwywjevsxs0b6dx94o9p/DICE3N-DEMI-EMSEK.wav?rlkey=2qrzmoa94dmd6ytnq2jdvdxgw&st=79muug4k&raw=1'},
+      {id:48, url:'https://www.dropbox.com/scl/fi/2rhos68qocadmeqnry26z/Tonny-reyes.jpg?rlkey=rrn5f3bhmqojc7f7qtftskizx&st=i1kgehuz&raw=1', category:'Musica', album:'Único lanzamiento', title:'Linea de Meta Tonny Reyes', music:'https://www.dropbox.com/scl/fi/higcv4yxhf2z1exl4zovy/4-Linea-de-Meta-Tonny-Reyes.flac?rlkey=vkvhv5i73k8q3i25dx3vx9h7k&st=0h3mrbxl&raw=1'},
+      {id:47, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Soy el mismo Sain Nt', music:'https://www.dropbox.com/scl/fi/j6gyofex4ilsg7ufqjynb/soy-el-mismo-sain-nt.mp3?rlkey=7z5hmjvtw6k7ycng1dtsbg8jh&st=xz3o7yai&raw=1'},
+      {id:46, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Mi culpa Sain Nt', music:'https://www.dropbox.com/scl/fi/w32a11405ox96obylj3yw/Sain-Nt-Mi-Culpa-Video-Oficial.mp3?rlkey=kebnf2oetl34p4ayog4r75ssx&st=xsntmuco&raw=1'},
+      {id:45, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Eres Sain Nt', music:'https://www.dropbox.com/scl/fi/rmxtxpsgh49u3eskxgnzx/sain-nt-heres.mp3?rlkey=bv6mtagzb2xxomq31myux706e&st=r90wlvvo&raw=1'},
+      {id:44, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Dicen Sain Nt', music:'https://www.dropbox.com/scl/fi/olkvysubz3soqc91onk3g/sain-nt-dicen.mp3?rlkey=l22zxk15yhha0foujp3x57dkt&st=09uwkg66&raw=1'},
+      {id:43, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Diabla Sain Nt', music:'https://www.dropbox.com/scl/fi/oxi6rp0eo55ipvudq0i01/sain-nt-diabla.mp3?rlkey=t9ehha82pjsvl8gvwk21fegde&st=pxxmobd6&raw=1'},
+      {id:42, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Chanveale Sain Nt', music:'https://www.dropbox.com/scl/fi/6fzs4cb946l5u5w98tp76/sain-nt-chanveale.mp3?rlkey=pp0i29n0ymcajrfunho7tcm4j&st=19zhfget&raw=1'},
+      {id:41, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Devuelveme la sonrisa Sain Nt', music:'https://www.dropbox.com/scl/fi/ojg1a6cymof6m3ou8dswg/sain-nt-debuelbeme-la-sonrisa.mp3?rlkey=comjjk1le7i4s6hyyhsqlof76&st=yrxkngys&raw=1'},
+      {id:40, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Fallaste a la promesa Sain Nt', music:'https://www.dropbox.com/scl/fi/xgajkjq30u3i2jbi44c52/sain-fallaste-ala-promesa.mp3?rlkey=k4zucjg9krw1lsnxc3joqah2t&st=bojdomp5&raw=1'},
+      {id:39, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Presumen Sain Nt', music:'https://www.dropbox.com/scl/fi/siiecb8sc8d0g2tlkqny8/presumen-sain-nt.mp3?rlkey=zh9tccvb9z6r152sa1ntcz9pf&st=m7wrc7os&raw=1'},
+      {id:38, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Me sorprendi Sain Nt', music:'https://www.dropbox.com/scl/fi/ckvin6873x4slrqixafr5/me-sorprendi.mp3?rlkey=mme0049a91emytq9s4rlbht6i&st=l88cpmx7&raw=1'},
+      {id:37, url:'https://www.dropbox.com/scl/fi/03xkk59tt006j58mfzu9z/Sainnt.jpg?rlkey=ur5e89j3yi5xc7vgr0znvq0xu&st=kzvk9fyv&raw=1', category:'Musica', album:'Sigo a qui', title:'Matame Sain Nt', music:'https://www.dropbox.com/scl/fi/blppw4ekk5yhae4qi8wl0/matame-sain-nt.wav?rlkey=5padz3puhrj6it9i9ry5jdr7z&st=v1qsy88p&raw=1'},
+      {id:36, url:'https://www.dropbox.com/scl/fi/w51t3llqpavnpmxxgus83/el-chiris.png?rlkey=leru6o7n7omsn9b455yqcrf4g&st=5j83qaok&raw=1', category:'Musica', album:'Único lanzamiento', title:'El Chiris J Vazquez IA', music:'https://www.dropbox.com/scl/fi/7gcv8k4ke1mglv3jkya1k/El-Chiris.wav?rlkey=hpgsr66ebcy6tyl6ounf7ii81&st=jh1w26wo&raw=1'},
+      {id:35, url:'https://www.dropbox.com/scl/fi/hu6726a9yx9z9c5w2ns0w/Emsek.jpg?rlkey=llo70vmyjg4u9jfhnq6g9tvr8&st=74eri4wc&raw=1', category:'Musica', album:'Entre tus redes', title:'Entre tus redes Emsek', music:'https://www.dropbox.com/scl/fi/thmc7o0uftl3hhvig4lc6/Entre_tus_Redes_-msek__HM___462__Casero_Records_MP3_256kbps_128k.mp3?rlkey=6raowpgc6b5j5a0h21qyo6p34&st=5jws1foy&raw=1'},
+      {id:34, url:'https://www.dropbox.com/scl/fi/ce5cvqnqfbmbasgswiz5u/J-V-zquez.jpg?rlkey=r4p0lh5s8bsz65l7omsteqd0j&st=u3e0szkd&raw=1', category:'Musica', album:'2019', title:'Me vuelve loco J Vazquez', music:'https://www.dropbox.com/scl/fi/5ojo4u3dak6gytmkcy605/j-vazquez-me-vuelve-loco-fusa-company.mp3?rlkey=ickcmbzdf3wi1k012e0mygo8e&st=q2zmxnh9&raw=1'},
+      {id:33, url:'https://www.dropbox.com/scl/fi/a3qd0pbwbshf0lyztv3a3/Por-ultima-vez.jpg?rlkey=c12cn6qtjyft9l7ead2ajx9vf&st=zapsju9h&raw=1', category:'Musica', album:'Único lanzamiento', title:'Hello Vercion Kerim Music', music:'https://www.dropbox.com/scl/fi/y8t89m2l4wu6eyhc8wvl1/Hello-Cover-Beyonce-guadalajara.wav?rlkey=1eoejx9anwsb8xg72l7850d8p&st=1oaelag9&raw=1'},
+      {id:32, url:'https://www.dropbox.com/scl/fi/4k7bl5r8616fz8ma4009u/Picsart_26-05-09_16-40-27-811.jpg?rlkey=run3f5roahpmf10zc7fuopziw&st=8xnv6fp5&raw=1', category:'Musica', album:'Único lanzamiento', title:'Envidiosos Adan G x Sain Nt', music:'https://www.dropbox.com/scl/fi/n5kptf0owcnipvg5yntrp/08-Ad-n-G-x-Sain-Nt-ENVIDIOSOS-REMIX-CON-UE-OS-IN-DINERO.mp3?rlkey=1zrohzv4ebl51tac3oeix2x7u&st=myhnmu8k&raw=1'},
+      {id:31, url:'https://www.dropbox.com/scl/fi/kgnxbl0mdp3q2uivbi4et/800x800-7986476-0F948044-9801-4FC9-8EFF36DDC1873148-0-3542185-Teestoyllamando.jpg?rlkey=jki22g8n7mq0b7ufv138n4wsn&st=iw8gk09e&raw=1', category:'Musica', album:'Único lanzamiento', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/rok6qgex9a7qer30xqwvd/TeestoyLlamandolista.wav?rlkey=qwtm9h6cswvdzhxyauww79hd4&st=60pcm99d&raw=1'},
+      {id:30, url:'https://www.dropbox.com/scl/fi/9xqi6k1g5cnbior62dh0l/800x800-7986476-B8AD12F4-560F-4E85-8EE3DD6C45025D0E-0-565367-Picsart260207195632530.jpg?rlkey=zjttay9r0myk8r0h1x2074pnj&st=521n7hvx&raw=1', category:'Musica', album:'Único lanzamiento', title:'Sigo Vivo Aziber', music:'https://www.dropbox.com/scl/fi/d3pjln5vf9ndpey9gqg67/SIgoVivoIazberMp3-1.wav?rlkey=njt48r9cm06ven5h6p476afac&st=4g5krti4&raw=1'},
+      {id:29, url:'https://www.dropbox.com/scl/fi/kk1f1fdpsgx7noxb5lly9/800x800-7986476-70C18BD7-1A24-4B1E-9D524972181DB7D1-0-663215-FBIMG17490012695773000x3000.jpg?rlkey=0exgl54ffel1k27ncua1j7kd2&st=vr0tik1g&raw=1', category:'Musica', album:'Único lanzamiento', title:'Recuerdos Aizber', music:'https://www.dropbox.com/scl/fi/ivi9sc8o5muusrfvbutay/RecuedosAizberKerimMusic.flac?rlkey=yx3b7v98f47r7vzz9wmfrbu8e&st=eaz12kjs&raw=1'},
+      {id:28, url:'https://www.dropbox.com/scl/fi/ufyml25z65fpccmntk0u8/800x800-7986476-31310345-26C0-4D4C-BE84E673A034B972-0-396100-1000023011.jpg?rlkey=0wt2tk5frnl8olkgqrv2pzavg&st=2701x6fs&raw=1', category:'Musica', album:'Único lanzamiento', title:'No eres juego de nintendo J Vazquez', music:'https://www.dropbox.com/scl/fi/b8esp6xyrrgx99ojfghav/NoeresjuegodenintendoJbazquez.wav?rlkey=3bdruu1u6ywo8w11k6mne106a&st=07wqaypb&raw=1'},
+      {id:27, url:'https://www.dropbox.com/scl/fi/ag7fqpeejjz9cii89zp0j/800x800-7986476-AA08955F-14F0-44B5-9A5806FE2B5CF93F-0-1499720-1000026237.jpg?rlkey=zzm139tr5viuw47njuzpd29ds&st=nosfkylb&raw=1', category:'Musica', album:'Único lanzamiento', title:'My corazon en tu alatar Aizber', music:'https://www.dropbox.com/scl/fi/jlocoo87ctkvwua1a8my0/MicorazonentualtarAizberKerimMusic.flac?rlkey=zz0bypimr6ge8gglqs7vgwpa4&st=c0k9pwux&raw=1'},
+      {id:26, url:'https://www.dropbox.com/scl/fi/76ecpaei3j09h886fy314/800x800-7986476-FF4245C9-9198-41D6-8FD5A0EEA619ECCD-0-713007-Picsart250806182628068.jpg?rlkey=ug6nue19ikdth4sqpor6laygt&st=8b6a0ssv&raw=1', category:'Musica', album:'2019', title:'Haora me toca ami J Vazquez Ft Out Mx', music:'https://www.dropbox.com/scl/fi/or5cfdp8v5amsz6yjs7k1/MetocaamiJVazquezxOutMx.flac?rlkey=9jkzytxk2ioh9kf96gnuj0vdq&st=wb9xdjnh&raw=1'},
+      {id:25, url:'https://www.dropbox.com/scl/fi/bv6fo6j2vmnp2esqd4ula/800x800-7986476-700B12B5-E66A-4DC7-B44D0B4ABA4553B2-0-483095-Picsart251220185548595.jpg?rlkey=r6plwuux7kuee6uw307l1isar&st=gkhgd4oa&raw=1', category:'Musica',album:'2019', title:'Lo que nunca exprese J Vazquez', music:'https://www.dropbox.com/scl/fi/bz13mnpi351mj8jpmt73q/J-Vazquez-Lo-que-nunca-exprese.wav?rlkey=zcuwzjc22eom2d3qythgr130y&st=y1deklv8&raw=1'},
+      {id:24, url:'https://www.dropbox.com/scl/fi/xts5le77z60r3k7cfnkv6/800x800-7986476-DA4D5540-E151-42F0-8E9AA054C66F26A0-0-91650-FBIMG1754180896541.jpg?rlkey=kphe4vcw8pktyxwkgm3cl78bb&st=raimy7zq&raw=1', category:'Musica', album:'Único lanzamiento', title:'Cinco AM Tonny Reyes', music:'https://www.dropbox.com/scl/fi/h3t25byzypksnjjqgysui/CincoAmTonnyreyes.flac?rlkey=zpsntr84ozefiuyl8c7go1he0&st=08d0mcha&raw=1'},
+      {id:23, url:'https://www.dropbox.com/scl/fi/kfrpspuowtzrkjvwe2kxa/800x800-7986476-EBBCC76E-8564-423A-9B173657F2C27F7C-0-563472-Picsart250629201208586.jpg?rlkey=qglu4yfiepshx5p119dk647du&st=mw8lfbtl&raw=1', category:'Musica', album:'2019', title:'Beyby J Vazquez', music:'https://www.dropbox.com/scl/fi/vffz16jp4lb35ow738v2y/BeybyJVazquez.flac?rlkey=54fvvt360fd9af0vglxq3xsjf&st=ju3378de&raw=1'},
+      {id:22, url:'https://www.dropbox.com/scl/fi/u451cfrep8ohfcdrepmxq/483488957_122195212382093529_2576876991791910487_n.jpg?rlkey=gnrgw1i2tkspyxg2de03ffma8&st=175922oz&raw=1', category:'Musica', album:'Único lanzamiento', title:'Me estoy mueirdo Clave 462', music:'https://www.dropbox.com/scl/fi/n66wxeygxd8ddchrls1kv/Me-estoy-muriendo-clave-462.wav?rlkey=hfkc487fwb71ziploobu8duqi&st=5nca4wns&raw=1'},
+      {id:21, url:'https://www.dropbox.com/scl/fi/zixsk3wr4r62bb9x6ea1g/Picsart_26-04-25_18-14-14-639.jpg?rlkey=kzujxp5xzvxtp38sbd3y6oz68&st=x25iex9q&raw=1', category:'Musica', album:'2019', title:'Ella mueve el tootoo J Vazquez ft Prii Ramirez', music:'https://www.dropbox.com/scl/fi/vw9p5zadrjyki5by39mmd/TootootooJ_VazquezBarrio_Bajo_M_Oficial.wav?rlkey=mphfjhdb08clx3fnnh2etkr70&st=mhj2asn2&raw=1'},
+      {id:20, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Vuelve Dany Zm', music:'https://www.dropbox.com/scl/fi/5dlej4wkll16uxyz3knwf/vuelve-9-dany-zm.mp3?rlkey=1mw4i576qw1q6xn4wofshg3gz&st=tbpp90qm&raw=1'},
+      {id:19, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Nuestro cuento Dany Zm', music:'https://www.dropbox.com/scl/fi/xmca1v67r0foa02ah0ix5/nuestro-cuento-7-dany-zm.mp3?rlkey=4wdtldt4ch8usesgbsqdkl0o1&st=4xdrusp8&raw=1'},
+      {id:18, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Me dejo solor Dany Zm', music:'https://www.dropbox.com/scl/fi/ybuowdfnam5frrjksy570/me-dejo-solo-5-dany-zm.mp3?rlkey=9oiwuxep5v6se4r7af6qlwhb2&st=zbzpdjp2&raw=1'},
+      {id:17, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Lluvia Dany Zm', music:'https://www.dropbox.com/scl/fi/fo85o8m1etbo68m9a46xq/lluvia-8-dany-zm.mp3?rlkey=ywh0y4ezduhd3q7bjvh5orki1&st=n3ykoz9q&raw=1'},
+      {id:16, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Hasta cuendo Dany Zm', music:'https://www.dropbox.com/scl/fi/6588ikrqstte1wzjkreja/hasta-cuando-1-dany-zm.mp3?rlkey=uqpq1cpmnj1e5pnd5ndxwpb47&st=tgxuj89m&raw=1'},
+      {id:15, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Engaño Dany Zm', music:'https://www.dropbox.com/scl/fi/7qvtyhs6smsgnu56z9ch7/en-gano-6-dany-zm.mp3?rlkey=lzu6kbgqicirph9sp4ndhyq90&st=gu0hpw1p&raw=1'},
+      {id:14, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Tu tiempo de acabo Dany Zm', music:'https://www.dropbox.com/scl/fi/ees3i5mgfc50lwtg59hgw/Dany-Zm-Tu-tiempo-se-acavo.mp3?rlkey=kijhvu3rsv6j3zri6dh20wowf&st=3k6i51wu&raw=1'},
+      {id:13, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Especial Dany Zm', music:'https://www.dropbox.com/scl/fi/han7yoy13ncejnz4exj3r/dalex-especial-cover-dany-zm.mp3?rlkey=8pchaqdtz2iq854i8zrhxfriw&st=var5yqcp&raw=1'},
+      {id:12, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Corito sano Dany Zm', music:'https://www.dropbox.com/scl/fi/l4d8dvoahieq4yqf536ol/CORITO-SANO-DANY-ZM-VA-YEZKOR-CRUZ-SAIN-NT-VERSION-T.E.C.mp3?rlkey=wsj8578k3e14hqr74npb3krjb&st=pdov6vmy&raw=1'},
+      {id:11, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Beyby Dany Zm', music:'https://www.dropbox.com/scl/fi/v4remtzyol50e00rvhpen/beyby-4dany-zm.mp3?rlkey=y803hhbgxghxrlgsvpe9w16i9&st=p6m3gs7z&raw=1'},
+      {id:10, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Bailalo Dany Zm', music:'https://www.dropbox.com/scl/fi/ctedqktecjqbqvd2t5uct/bailado-3-dany-zm.mp3?rlkey=l1zrwqrevorjbxjq3u7gi4k3t&st=3kh4wkgz&raw=1'},
+      {id:9, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Modo Avion Dany Zm', music:'https://www.dropbox.com/scl/fi/rq7dnfuqaywgjdo6dp9de/1-Modo-avion-Dany-Zm-El-rencuentro..flac?rlkey=xfv7h1xurdroh0ct3xu71ge9m&st=v1bfhinm&raw=1'},
+      {id:8, url:'https://www.dropbox.com/scl/fi/xg2e8wg59t1tos2dhn5ji/img.png?rlkey=zl56z2a68tu96n0nxycrz485f&st=79kjdiww&raw=1', category:'Musica', album:'Construyendo el barco', title:'Ay estare Dany Zm', music:'https://www.dropbox.com/scl/fi/lbohzzgaf7xnw1v7o3ec9/ay-estare-2-dany-zm.mp3?rlkey=41qeo3w154ctk8gvlzl2aa0v1&st=ybnb2zya&raw=1'},
+      {id:6, url:'https://www.dropbox.com/scl/fi/55lnmbdl6wrt1wnpb1j4z/Quiereme-asi.png?rlkey=9knalslivzs7b6r9f3c8um0u7&st=o6wbyer5&raw=1', category:'Musica', album:'Único lanzamiento', title:'Quiere a si Prii Ramirez', music:'https://www.dropbox.com/scl/fi/c9ss4stui4mi1c6ku2w1r/Qui-reme-As.flac?rlkey=7vz44u6mff02f5h7nto5okcr0&st=qnv4scxe&raw=1'},
+      {id:5, url:'https://i.postimg.cc/wMCFZY9H/Picsart-26-02-15-14-39-19-042.jpg', category:'Musica', album:'Único lanzamiento', title:'Dile que tu eres mia Dany Zm', music:'https://www.dropbox.com/scl/fi/qx6o5slgy64yr6fgmg1fr/DanyZmTueresmiaOfical.wav?rlkey=iaxc3giic8tw7fc1ope4t6qwc&st=zr0joz18&raw=1'},
+      {id:4, url:'https://i.postimg.cc/3JGtpNZk/Picsart-26-02-24-14-11-02-954.jpg', category:'Musica', album:'Único lanzamiento', title:'De nada me estreso Placoso de la L', music:'https://www.dropbox.com/scl/fi/86rzw7fafswhle6yl8y9z/Es-el-M-KERIM-MUSIC.wav?rlkey=4m6i3hi98rqgu9iewhpvyitz8&st=78rqjwpx&raw=1'},
+      {id:3, url:'https://i.postimg.cc/RFymvC4R/Picsart-26-02-22-22-13-49-068.jpg', category:'Musica', album:'Único lanzamiento', title:'Andas diciendo Prii Ramirez', music:'https://www.dropbox.com/scl/fi/arf3n114kljfqs1a5rwm0/Andan-diciendo-Prii-Ramirez.wav?rlkey=qeqb9egyjn1n0n4cq9kt2kc5r&st=6s1ck9s6&raw=1'},
+      {id:2, url:'https://i.postimg.cc/tTxkMmxc/Picsart-26-02-07-19-56-32-530.jpg', category:'Musica', album:'Único lanzamiento', title:'Sigo Vivo Aizber', music:'https://www.dropbox.com/scl/fi/0y977tgyjp66og2ze36uh/SIgoVivoIazberMp3.wav?rlkey=6vdswfh8f3wtqa66seeugc480&st=byt5z91w&raw=1'},
+      {id:1, url:'https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg', category:'Musica', album:'2019', title:'Catorce de febrero J Vazquez', music:'https://www.dropbox.com/scl/fi/igoyb7x8feuz6otf67ddt/JBazques14deFrebreroOficial.wav?rlkey=vbgyvxlgyk5t1pl6kojif7w65&st=1ogeqzbh&raw=1'},
+      {id:7, url:'https://i.postimg.cc/MXJXxVL3/Te-estoy-llamando.jpg', category:'Musica', album:'2019', title:'Te estoy llamando J Vazquez', music:'https://www.dropbox.com/scl/fi/97yj1flb0bgaaedaxr9h1/Te_estoy_Llamando_lista.wav?rlkey=cn3oppwsfjv617hhcuy2rcga4&st=ipum1s6a&raw=1'}
     ];
 
-    // Mezcla inicial (orden aleatorio)
+    // Mezcla inicial
     function shuffleArrayFn(arr) {
       const a = [...arr];
       for (let i = a.length - 1; i > 0; i--) {
@@ -375,7 +392,7 @@
     }
     let masterSongs = shuffleArrayFn(originalSongs);
 
-    // Estado
+    // Estado global
     let favSet = new Set(), playCount = new Map(), artistPlayCount = new Map(), favOrder = [];
     let listeningArtists = {};
     const LISTENING_DURATION_DAYS = 15;
@@ -514,6 +531,12 @@
     let isPlaylistsMode = false;
     let suggestionsHidden = false;
 
+    // Nuevo estado para navegación de álbumes
+    let currentView = 'home'; // 'home' | 'artist' | 'album'
+    let currentArtist = null;
+    let currentAlbumName = null;
+    let currentAlbumSongs = [];
+
     // DOM
     const contentContainer = document.getElementById('contentContainer');
     const suggestionsContainer = document.getElementById('suggestionsContainer');
@@ -547,6 +570,8 @@
     const toggleSuggestionsBtnElem = document.getElementById('toggleSuggestionsBtn');
     const artistCoverBg = document.getElementById('artistCoverBackground');
     const filterButtons = document.getElementById('filterButtons');
+    const homeBtn = document.querySelector('[data-view="home"]');
+    const likesBtn = document.querySelector('[data-view="likes"]');
 
     const mattePalette = ['#0a0a1a','#0d0d22','#0f0f28','#111130','#0e0e26','#0c0c20','#131338','#080818'];
     function getRandomMatteColor(){ return mattePalette[Math.floor(Math.random() * mattePalette.length)]; }
@@ -556,7 +581,6 @@
 
     function shuffleArray(arr) { const a = [...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-    // Función de toggle shuffle mejorada con notificación
     function toggleShuffle() {
       shuffleActive = !shuffleActive;
       if (shuffleActive) {
@@ -592,6 +616,9 @@
     }
 
     function getActiveListForQueue() {
+      if(currentView === 'album' && currentAlbumSongs.length) {
+        return currentAlbumSongs;
+      }
       if(isPlaylistsMode) {
         let base = getFavSongs();
         if(currentSearch.trim() !== '') base = base.filter(s => s.title.toLowerCase().includes(currentSearch.toLowerCase()) || (s.artist && s.artist.toLowerCase().includes(currentSearch.toLowerCase())));
@@ -654,16 +681,20 @@
       renderTopArtists();
       if(customQueue) {
         currentPlayQueue = customQueue;
+        // Si se pasa una cola personalizada, la usamos tal cual, pero respetamos shuffle?
+        // Para álbum, queremos orden fijo, así que ignoramos shuffle.
+        // Pero si shuffle está activo, podríamos desactivarlo temporalmente o mantenerlo.
+        // Lo más limpio es que el álbum se reproduzca en orden y el shuffle se aplique solo si el usuario lo activa después.
+        // Si shuffle está activo, lo desactivamos para el álbum completo.
         if(shuffleActive) {
-          originalQueue = [...customQueue];
-          const currentSongId = song.id;
-          let queueWithoutCurrent = customQueue.filter(s => s.id !== currentSongId);
-          let shuffledWithoutCurrent = shuffleArray(queueWithoutCurrent);
-          currentPlayQueue = [song, ...shuffledWithoutCurrent];
-          currentQueueIndex = 0;
-        } else {
-          currentQueueIndex = currentPlayQueue.findIndex(s => s.id === song.id);
+          shuffleActive = false;
+          shuffleBtnPlayer.classList.remove('active');
+          showToast('🔀 Modo Aleatorio desactivado (álbum completo)');
         }
+        currentQueueIndex = 0;
+        // Asegurar que la cola tenga las canciones en el orden dado
+        // Podría haber duplicados, pero no debería.
+        currentPlayQueue = customQueue;
       } else {
         updateQueueAndMode();
         let idx = currentPlayQueue.findIndex(s => s.id === song.id);
@@ -693,7 +724,7 @@
     function togglePlayPause(){ isPlaying ? audio.pause() : audio.play(); }
 
     function renderSuggestions() {
-      if(isPlaylistsMode || currentSearch.trim() !== '') { suggestionsContainer.innerHTML = ''; return; }
+      if(isPlaylistsMode || currentSearch.trim() !== '' || currentView === 'artist' || currentView === 'album') { suggestionsContainer.innerHTML = ''; return; }
       const least = getLeastPlayedSuggestions(6);
       if(least.length === 0) { suggestionsContainer.innerHTML = ''; return; }
       let html = `<div class="suggestions-horizontal">`;
@@ -714,7 +745,7 @@
     }
 
     function updateCounterVisibility() {
-      if(isPlaylistsMode || currentSearch.trim() !== '') counterWrapper.classList.add('hidden-counter');
+      if(isPlaylistsMode || currentSearch.trim() !== '' || currentView === 'artist' || currentView === 'album') counterWrapper.classList.add('hidden-counter');
       else counterWrapper.classList.remove('hidden-counter');
     }
 
@@ -778,9 +809,212 @@
       });
     }
 
+    // ---------- NUEVAS FUNCIONES PARA ÁLBUMES ----------
+    function renderArtistProfile() {
+      if(!currentArtist) {
+        renderContentFallback();
+        return;
+      }
+      const songs = masterSongs.filter(s => {
+        const artist = extractArtistFromTitle(s.title);
+        return artist.toLowerCase() === currentArtist.toLowerCase();
+      });
+      if(songs.length === 0) {
+        contentContainer.innerHTML = '<div class="no-results">No se encontraron canciones para este artista</div>';
+        return;
+      }
+      // Agrupar por álbum
+      const albumsMap = new Map();
+      const singles = [];
+      songs.forEach(song => {
+        if (song.album === 'Único lanzamiento') {
+          singles.push(song);
+        } else {
+          if (!albumsMap.has(song.album)) albumsMap.set(song.album, []);
+          albumsMap.get(song.album).push(song);
+        }
+      });
+
+      // Construir HTML
+      let html = '';
+      // Perfil del artista
+      const listeners = artistListeners[currentArtist] !== undefined ? artistListeners[currentArtist] : 0;
+      const listenersText = listeners === 1 ? 'oyente mensual' : 'oyentes mensuales';
+      const extraInfo = artistExtraInfo[currentArtist] || '🎤 Apoya a este artista convirtiéndote en oyente.';
+      const isListening = isListeningToArtist(currentArtist);
+      const btnText = isListening ? '🔇 Dejar de escuchar' : '🎧 Oyente +';
+      const btnClass = isListening ? 'artist-whatsapp-btn listening' : 'artist-whatsapp-btn';
+      html += `
+        <div class="artist-profile-result">
+          <div class="artist-name-large">${escapeHtml(currentArtist)}</div>
+          <div class="artist-listeners">${listeners} ${listenersText}</div>
+          <button class="${btnClass}" data-artist="${escapeHtml(currentArtist)}">${btnText}</button>
+          ${isListening ? `<div class="days-remaining">⏳ ${getRemainingDays(currentArtist)} día${getRemainingDays(currentArtist) !== 1 ? 's' : ''} restante${getRemainingDays(currentArtist) !== 1 ? 's' : ''}</div>` : ''}
+          <div class="artist-info-extra">${escapeHtml(extraInfo)}</div>
+        </div>
+      `;
+
+      // Álbumes (grid)
+      if (albumsMap.size > 0) {
+        html += `<div style="margin:1.5rem 0 1rem 0;font-weight:600;color:#c0cfff;font-size:1rem;">Álbumes</div>`;
+        html += `<div class="gallery-grid">`;
+        for (let [albumName, albumSongs] of albumsMap) {
+          const cover = albumSongs[0].url;
+          html += `<div class="album-card" data-album="${escapeHtml(albumName)}" data-songs='${JSON.stringify(albumSongs.map(s => s.id))}'>
+            <img src="${cover}" loading="lazy">
+            <div class="album-title">${escapeHtml(albumName)}</div>
+            <div class="album-badge">${albumSongs.length} canción${albumSongs.length !== 1 ? 'es' : ''}</div>
+          </div>`;
+        }
+        html += `</div>`;
+      }
+
+      // Sencillos (individuales)
+      if (singles.length > 0) {
+        html += `<div style="margin:1.5rem 0 1rem 0;font-weight:600;color:#c0cfff;font-size:1rem;">Sencillos</div>`;
+        html += `<div class="gallery-grid">`;
+        singles.forEach(song => {
+          const marker = isFav(song.id) ? ' ❤️' : '';
+          html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${marker}</div></div>`;
+        });
+        html += `</div>`;
+      }
+
+      contentContainer.innerHTML = html;
+
+      // Eventos para tarjetas de álbum
+      document.querySelectorAll('.album-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const albumName = card.getAttribute('data-album');
+          const ids = JSON.parse(card.getAttribute('data-songs'));
+          const albumSongs = ids.map(id => masterSongs.find(s => s.id === id)).filter(Boolean);
+          if (albumSongs.length) {
+            showAlbumView(albumName, albumSongs);
+          }
+        });
+      });
+
+      // Eventos para sencillos
+      document.querySelectorAll('.image-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = parseInt(card.dataset.id);
+          const found = masterSongs.find(s => s.id === id);
+          if(found) { 
+            // Al reproducir un sencillo desde el perfil, establecer cola normal (no la del álbum)
+            updateQueueAndMode();
+            playSong(found);
+          }
+        });
+      });
+
+      // Botón de artista
+      document.querySelectorAll('.artist-whatsapp-btn').forEach(btn => {
+        const name = btn.getAttribute('data-artist');
+        if(name) {
+          updateArtistButtonUI(btn, name);
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleArtistButtonClick(name, btn);
+          });
+        }
+      });
+
+      updateArtistBackground(songs[0]?.url || null);
+    }
+
+    function showAlbumView(albumName, songs) {
+      currentView = 'album';
+      currentAlbumName = albumName;
+      currentAlbumSongs = songs;
+      renderAlbumView();
+    }
+
+    function renderAlbumView() {
+      if (!currentAlbumName || !currentAlbumSongs.length) {
+        goBackToArtist();
+        return;
+      }
+      let html = `<button class="back-button" id="backToArtistBtn">← Volver al artista</button>`;
+      html += `<div class="album-view-header"><div class="album-view-title">${escapeHtml(currentAlbumName)}</div>
+        <button class="play-album-btn" id="playAlbumFullBtn">▶ Escuchar álbum completo</button>
+      </div>`;
+      html += `<div class="album-track-list">`;
+      currentAlbumSongs.forEach((song, index) => {
+        const marker = isFav(song.id) ? ' ❤️' : '';
+        html += `<div class="album-track-item" data-id="${song.id}">
+          <img src="${song.url}" loading="lazy">
+          <div class="album-track-info">
+            <div class="album-track-title">${escapeHtml(song.title)}${marker}</div>
+            <div class="album-track-sub">${song.category}</div>
+          </div>
+          <div class="album-track-play-icon">▶</div>
+        </div>`;
+      });
+      html += `</div>`;
+      contentContainer.innerHTML = html;
+
+      // Volver
+      document.getElementById('backToArtistBtn').addEventListener('click', goBackToArtist);
+
+      // Escuchar álbum completo
+      document.getElementById('playAlbumFullBtn').addEventListener('click', () => {
+        if (currentAlbumSongs.length) {
+          playSong(currentAlbumSongs[0], currentAlbumSongs);
+        }
+      });
+
+      // Reproducir canción individual (manteniendo cola del álbum)
+      document.querySelectorAll('.album-track-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const id = parseInt(item.dataset.id);
+          const song = currentAlbumSongs.find(s => s.id === id);
+          if (song) {
+            playSong(song, currentAlbumSongs);
+          }
+        });
+      });
+
+      updateArtistBackground(currentAlbumSongs[0]?.url || null);
+    }
+
+    function goBackToArtist() {
+      if (currentArtist) {
+        currentView = 'artist';
+        currentAlbumName = null;
+        currentAlbumSongs = [];
+        renderArtistProfile();
+      } else {
+        // Fallback a home
+        currentView = 'home';
+        renderContentFallback();
+      }
+    }
+
+    function renderContentFallback() {
+      currentView = 'home';
+      currentArtist = null;
+      currentAlbumName = null;
+      currentAlbumSongs = [];
+      renderContent();
+    }
+
+    // ---------- FUNCIÓN PRINCIPAL renderContent ----------
     function renderContent() {
       updateCounterVisibility();
       renderTopArtists();
+
+      // Si estamos en vista de álbum, renderizar álbum
+      if (currentView === 'album') {
+        renderAlbumView();
+        return;
+      }
+      // Si estamos en vista de artista, renderizar perfil
+      if (currentView === 'artist' && currentArtist) {
+        renderArtistProfile();
+        return;
+      }
+
+      // Modo normal (home o likes)
       const items = getActiveListForQueue();
       const isSearching = currentSearch.trim() !== '';
       if(isSearching) filterButtons.classList.add('hidden');
@@ -798,9 +1032,10 @@
         return;
       }
 
+      // Si hay búsqueda y coincide exactamente con un artista, mostramos perfil
       if(isSearching) {
         const searchLower = currentSearch.toLowerCase();
-        let foundArtist = null, foundSongs = [];
+        let foundArtist = null;
         const artistSet = new Set();
         items.forEach(song => {
           const artist = extractArtistFromTitle(song.title);
@@ -811,63 +1046,24 @@
         if(artistSet.size > 0) {
           for(let a of artistSet) { if(a.toLowerCase() === searchLower) { foundArtist = a; break; } }
           if(!foundArtist) foundArtist = artistSet.values().next().value;
-          foundSongs = items.filter(song => extractArtistFromTitle(song.title) === foundArtist);
         }
-        if(!foundArtist || foundSongs.length === 0) {
-          let html = `<div class="gallery-grid list-view">`;
-          items.forEach(song => {
-            const marker = isFav(song.id) ? ' ❤️' : '';
-            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#6a8abf;"> · ${song.category}${marker}</span></div></div>`;
-          });
-          html += `</div>`;
-          contentContainer.innerHTML = html;
-        } else {
-          const sorted = foundSongs.sort((a,b) => b.id - a.id);
-          const lastSong = sorted[0];
-          updateArtistBackground(lastSong.url);
-          const listeners = artistListeners[foundArtist] !== undefined ? artistListeners[foundArtist] : 0;
-          const listenersText = listeners === 1 ? 'oyente mensual' : 'oyentes mensuales';
-          const extraInfo = artistExtraInfo[foundArtist] || '🎤 Apoya a este artista convirtiéndote en oyente.';
-          const isListening = isListeningToArtist(foundArtist);
-          const btnText = isListening ? '🔇 Dejar de escuchar' : '🎧 Oyente +';
-          const btnClass = isListening ? 'artist-whatsapp-btn listening' : 'artist-whatsapp-btn';
-          let html = `
-            <div class="artist-profile-result">
-              <div class="artist-name-large">${escapeHtml(foundArtist)}</div>
-              <div class="artist-listeners">${listeners} ${listenersText}</div>
-              <button class="${btnClass}" data-artist="${escapeHtml(foundArtist)}">${btnText}</button>
-              ${isListening ? `<div class="days-remaining">⏳ ${getRemainingDays(foundArtist)} día${getRemainingDays(foundArtist) !== 1 ? 's' : ''} restante${getRemainingDays(foundArtist) !== 1 ? 's' : ''}</div>` : ''}
-              <div class="artist-info-extra">${escapeHtml(extraInfo)}</div>
-            </div>
-          `;
-          html += `<div class="gallery-grid list-view">`;
-          foundSongs.forEach(song => {
-            const marker = isFav(song.id) ? ' ❤️' : '';
-            html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}<span style="font-size:0.7rem; color:#6a8abf;"> · ${song.category}${marker}</span></div></div>`;
-          });
-          html += `</div>`;
-          contentContainer.innerHTML = html;
-
-          document.querySelectorAll('.artist-whatsapp-btn').forEach(btn => {
-            const name = btn.getAttribute('data-artist');
-            if(name) {
-              updateArtistButtonUI(btn, name);
-              btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                handleArtistButtonClick(name, btn);
-              });
-            }
-          });
+        if(foundArtist) {
+          // Cambiar a vista de artista
+          currentView = 'artist';
+          currentArtist = foundArtist;
+          renderArtistProfile();
+          return;
         }
-      } else {
-        let html = `<div class="gallery-grid">`;
-        items.forEach(song => {
-          const marker = isFav(song.id) ? ' ❤️' : '';
-          html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${isPlaylistsMode ? ' ❤️' : ''}</div></div>`;
-        });
-        html += `</div>`;
-        contentContainer.innerHTML = html;
       }
+
+      // Si no es perfil de artista, mostrar lista normal
+      let html = `<div class="gallery-grid">`;
+      items.forEach(song => {
+        const marker = isFav(song.id) ? ' ❤️' : '';
+        html += `<div class="image-card" data-id="${song.id}"><img src="${song.url}" loading="lazy"><div class="card-title">${escapeHtml(song.title)}${isPlaylistsMode ? ' ❤️' : ''}</div></div>`;
+      });
+      html += `</div>`;
+      contentContainer.innerHTML = html;
 
       document.querySelectorAll('.image-card').forEach(card => {
         card.addEventListener('click', () => {
@@ -877,22 +1073,23 @@
         });
       });
       triggerBackgroundRefresh();
-      // Re-sincronizar botones de artista después de renderizar
-      setTimeout(updateAllArtistButtons, 50);
     }
 
-    function escapeHtml(str){ return str ? str.replace(/[&<>]/g, m => ({'&':'&','<':'<','>':'>'}[m] || m)) : ''; }
+    function escapeHtml(str){ return str ? str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m] || m)) : ''; }
 
     function updateSortChipsVisibility() { sortChipsContainer.style.display = isPlaylistsMode ? 'flex' : 'none'; }
     function setSortMode(mode) { playlistsSortMode = mode; localStorage.setItem('kerim_playlists_sort_mode', mode); renderContent(); updateQueueAndMode(); document.querySelectorAll('.chip-sort').forEach(c => c.classList.remove('active')); const active = document.querySelector(`.chip-sort[data-sort="${mode}"]`); if(active) active.classList.add('active'); }
     function initChipsSortEvents() { document.querySelectorAll('.chip-sort').forEach(chip => { chip.addEventListener('click', (e) => { e.stopPropagation(); setSortMode(chip.getAttribute('data-sort')); }); }); const active = document.querySelector(`.chip-sort[data-sort="${playlistsSortMode}"]`); if(active) active.classList.add('active'); else document.querySelector('.chip-sort[data-sort="default"]')?.classList.add('active'); }
 
-    const homeBtn = document.querySelector('[data-view="home"]');
-    const likesBtn = document.querySelector('[data-view="likes"]');
+    // Eventos de filtros
     homeBtn.addEventListener('click', () => {
       homeBtn.classList.add('active'); likesBtn.classList.remove('active');
       isPlaylistsMode = false;
       currentSearch = ''; searchInput.value = '';
+      currentView = 'home';
+      currentArtist = null;
+      currentAlbumName = null;
+      currentAlbumSongs = [];
       filterButtons.classList.remove('hidden');
       updateSortChipsVisibility();
       renderContent(); renderSuggestions(); updateQueueAndMode();
@@ -901,6 +1098,10 @@
       likesBtn.classList.add('active'); homeBtn.classList.remove('active');
       isPlaylistsMode = true;
       currentSearch = ''; searchInput.value = '';
+      currentView = 'home';
+      currentArtist = null;
+      currentAlbumName = null;
+      currentAlbumSongs = [];
       filterButtons.classList.remove('hidden');
       updateSortChipsVisibility();
       renderContent(); renderSuggestions(); updateQueueAndMode();
@@ -910,6 +1111,11 @@
       currentSearch = searchInput.value.trim();
       if(currentSearch !== '') filterButtons.classList.add('hidden');
       else filterButtons.classList.remove('hidden');
+      // Reiniciar vista a home para que la búsqueda pueda detectar artistas
+      currentView = 'home';
+      currentArtist = null;
+      currentAlbumName = null;
+      currentAlbumSongs = [];
       renderContent(); renderSuggestions(); updateQueueAndMode();
     }
     searchButton.addEventListener('click', performSearch);
@@ -999,6 +1205,7 @@
     // Inicialización
     changeBackgroundRandomly();
     isPlaylistsMode = false; currentSearch = '';
+    currentView = 'home';
     updateSortChipsVisibility();
     initChipsSortEvents();
     renderContent(); renderSuggestions(); updateQueueAndMode(); renderTopArtists();
@@ -1006,13 +1213,6 @@
     audio.volume = 0.9;
 
     // Sincronizar botones de artista después de cualquier render
-    const origRender = renderContent;
-    renderContent = function() {
-      origRender.call(this);
-      setTimeout(updateAllArtistButtons, 100);
-    };
-    // Reemplazar para que se use en adelante
-    // (Ya está definida arriba, pero aseguramos que se ejecute después)
     setTimeout(updateAllArtistButtons, 200);
   })();
 </script>
