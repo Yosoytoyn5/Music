@@ -19,23 +19,22 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: #0b0b0b; /* Fondo negro sólido */
+      background: #0b0b0b;
       color: #f0f0f0;
       padding: 2rem 1rem;
     }
 
-    /* ===== TARJETAS (estilo moderno: negro + azul rey) ===== */
     .card {
-      background: #121212;          /* Negro elegante */
+      background: #121212;
       backdrop-filter: blur(4px);
       border-radius: 32px;
       padding: 2rem 1.8rem 2.2rem;
       box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.9);
-      border: 1px solid #1e2a47;    /* Azul rey muy oscuro */
+      border: 1px solid #1e2a47;
       display: flex;
       flex-direction: column;
       transition: all 0.25s ease;
-      color: #e8edf5;              /* Texto claro con tono azulado */
+      color: #e8edf5;
       flex: 1 1 280px;
       max-width: 340px;
     }
@@ -43,19 +42,19 @@
     .card:hover {
       transform: translateY(-8px);
       box-shadow: 0 28px 50px -14px rgba(0, 40, 104, 0.5);
-      border-color: #2a4a8f;        /* Azul rey más brillante al hover */
+      border-color: #2a4a8f;
     }
 
     .card .precio {
-      color: #b8d0ff;              /* Azul rey claro para precio */
+      color: #b8d0ff;
     }
 
     .card ul li i {
-      color: #3b6bc4;              /* Azul rey vibrante para iconos */
+      color: #3b6bc4;
     }
 
     .card .btn-plan {
-      background: #0a1a3a;          /* Azul rey profundo */
+      background: #0a1a3a;
       color: white;
       border: 1px solid #1f3a7a;
     }
@@ -72,7 +71,6 @@
       border: 1px solid #2a4a8f;
     }
 
-    /* Tarjeta destacada (más énfasis en azul rey) */
     .card.destacado {
       border: 2px solid #3b6bc4;
       box-shadow: 0 20px 40px -10px rgba(30, 80, 200, 0.25);
@@ -85,7 +83,6 @@
       border-color: #4a7dff;
     }
 
-    /* ===== LEYENDA SUPERIOR ===== */
     .leyenda {
       text-align: center;
       margin-bottom: 2.5rem;
@@ -114,7 +111,6 @@
       opacity: 0.9;
     }
 
-    /* ===== CARRUSEL (scroll horizontal) ===== */
     .packages-grid {
       display: flex;
       flex-wrap: nowrap;
@@ -173,7 +169,7 @@
       font-size: 1.6rem;
       font-weight: 600;
       letter-spacing: -0.5px;
-      color: #c8ddff;             /* Azul muy claro */
+      color: #c8ddff;
     }
 
     .badge-gratis {
@@ -244,7 +240,6 @@
       transform: scale(0.98);
     }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 700px) {
       .packages-grid {
         gap: 1rem;
@@ -303,7 +298,6 @@
 </head>
 <body>
 
-  <!-- LEYENDA CENTRADA -->
   <div class="leyenda">
     <i class="fas fa-check-circle"></i>
     Si ya tiene un plan, elige el <span>correcto</span>
@@ -311,60 +305,63 @@
 
   <div class="packages-grid">
 
-    <!-- PAQUETE 1: GRATIS -->
+    <!-- PLAN GRATIS -->
     <div class="card">
       <div class="card-header">
-        <h3>Gratis</h3>
+        <h3>Kerim Music+ Gratis</h3>
         <span class="badge-gratis"><i class="fas fa-gem" style="margin-right: 5px;"></i> Starter</span>
       </div>
       <div class="precio">$0 <small>MXN</small></div>
       <ul>
-        <li><i class="fas fa-bars"></i> Menú con diferentes opciones</li>
-        <li><i class="fas fa-music"></i> Música del estudio Demo</li>
-        <li><i class="fas fa-calendar-check"></i> Agenda cita al estudio</li>
-        <li><i class="fas fa-clock"></i> Horarios del estudio</li>
-        <li><i class="fas fa-newspaper"></i> Noticias del estudio</li>
+        <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
+        <li><i class="fas fa-user-slash"></i> Sin registro</li>
+        <li><i class="fas fa-music"></i> Toda la música</li>
+        <li><i class="fas fa-ad"></i> Anuncios</li>
+        <li><i class="fas fa-star"></i> No puedes guardar en favoritos</li>
+        <li><i class="fas fa-compact-disc"></i> No puedes escuchar el álbum del artista</li>
       </ul>
-      <a href="menugratis.html" style="text-decoration: none; display: block;">
+      <a href="musicakerimmusicgratis.html" style="text-decoration: none; display: block;">
         <button class="btn-plan"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
       </a>
     </div>
 
-    <!-- PAQUETE 2: PLUS $199 (destacado) -->
+    <!-- PLAN PLUS (INTERMEDIO) - DESTACADO -->
     <div class="card destacado">
       <div class="card-header">
-        <h3>Plus</h3>
+        <h3>Kerim Music+ Plus</h3>
         <span class="badge-gratis" style="background: #0f224a; color: #b8d0ff; border-color: #3b6bc4;">Popular</span>
       </div>
-      <div class="precio">$199 <small>MXN</small></div>
+      <div class="precio">$70 <small>MXN / mes</small></div>
       <ul>
-        <li><i class="fas fa-bars"></i> Menú con diferentes opciones</li>
-        <li><i class="fas fa-music"></i> Música del estudio sin anuncios</li>
-        <li><i class="fas fa-calendar-check"></i> Agenda cita al estudio con descuento 13.27% en producción</li>
-        <li><i class="fas fa-headphones"></i> Crear Beats</li>
-        <li><i class="fas fa-clock"></i> Horarios del estudio</li>
-        <li><i class="fas fa-newspaper"></i> Noticias del estudio</li>
+        <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
+        <li><i class="fas fa-user-check"></i> Con registro</li>
+        <li><i class="fas fa-music"></i> Toda la música</li>
+        <li><i class="fas fa-ban"></i> Sin anuncios</li>
+        <li><i class="fas fa-heart"></i> Guardar en favoritos</li>
+        <li><i class="fas fa-compact-disc"></i> Escuchar álbumes</li>
+        <li><i class="fas fa-sync-alt"></i> Actualizaciones</li>
       </ul>
       <a href="inisiodececionplus.html" style="text-decoration: none; display: block;">
         <button class="btn-plan"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
       </a>
     </div>
 
-    <!-- PAQUETE 3: Kerim Music + $700 -->
+    <!-- PLAN PREMIUM (MÁS CARO) -->
     <div class="card">
       <div class="card-header">
-        <h3>Kerim Music +</h3>
+        <h3>Kerim Music+</h3>
         <span class="badge-gratis" style="background: #0f1f3a; color: #b8d0ff; border-color: #2a4a8f;">Pro</span>
       </div>
-      <div class="precio">$700 <small>MXN</small></div>
+      <div class="precio">$120 <small>MXN / mes</small></div>
       <ul>
-        <li><i class="fas fa-bars"></i> Menú con diferentes opciones</li>
-        <li><i class="fas fa-music"></i> Música del estudio sin anuncios</li>
-        <li><i class="fas fa-calendar-check"></i> Agenda cita al estudio para grabar tus 2 temas directo</li>
-        <li><i class="fas fa-headphones"></i> Crear Beats</li>
-        <li><i class="fas fa-clock"></i> Horarios del estudio</li>
-        <li><i class="fas fa-newspaper"></i> Noticias del estudio</li>
-        <li><i class="fas fa-microphone-alt"></i> 2 temas grabado profesional</li>
+        <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
+        <li><i class="fas fa-user-check"></i> Con registro</li>
+        <li><i class="fas fa-music"></i> Toda la música</li>
+        <li><i class="fas fa-ban"></i> Sin anuncios</li>
+        <li><i class="fas fa-heart"></i> Guardar en favoritos</li>
+        <li><i class="fas fa-compact-disc"></i> Escuchar álbumes</li>
+        <li><i class="fas fa-download"></i> Próximamente descargas</li>
+        <li><i class="fas fa-sync-alt"></i> Actualizaciones</li>
       </ul>
       <button class="btn-plan"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
     </div>
