@@ -148,6 +148,37 @@
       letter-spacing: 1px;
       color: #2b6df6;
     }
+    /* BOTÓN MEJORAR PLAN */
+    .upgrade-banner {
+      display: flex;
+      justify-content: center;
+      margin: 0.5rem auto 1.5rem auto;
+    }
+    .upgrade-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, #1a4fd6, #2b6df6);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.7rem 2rem;
+      border-radius: 500px;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 30px rgba(43, 109, 246, 0.25);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .upgrade-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 50px rgba(43, 109, 246, 0.4);
+      background: linear-gradient(135deg, #2b6df6, #1a4fd6);
+    }
+    .upgrade-btn:active {
+      transform: scale(0.96);
+    }
     .top-artists-section {
       margin-bottom: 2rem;
       padding: 0;
@@ -936,17 +967,22 @@
       </a>
     </div>
   </div>
-  
+
+  <!-- NUEVO BOTÓN MEJORAR PLAN -->
+  <div class="upgrade-banner">
+    <a href="inisiodececionplus.html" class="upgrade-btn"> Mejorar plan</a>
+  </div>
+
   <div class="top-artists-section" id="topArtistsSection">
     <div class="artists-horizontal" id="artistsContainer"></div>
   </div>
-  
+
   <div id="sortChipsContainer" class="sort-chips-container" style="display: none;">
     <button class="chip-sort" data-sort="default">Por defecto</button>
     <button class="chip-sort" data-sort="lastFirst">Más recientes</button>
     <button class="chip-sort" data-sort="firstFirst">Más antiguas</button>
   </div>
-  
+
   <div class="portada-fija">
     <div class="portada-track" id="portadaTrack">
       <div class="portada-item">
