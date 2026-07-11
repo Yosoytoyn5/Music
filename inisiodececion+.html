@@ -225,83 +225,6 @@
             transform: scale(0.96);
         }
 
-        /* BOTÓN MEJORAR PLAN - FLOTANTE CIRCULAR */
-        .mejorar-plan-flotante {
-            position: fixed;
-            bottom: 32px;
-            right: 32px;
-            z-index: 100;
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #1a4bc0, #0b1f5a);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: #ffffff;
-            border: 2px solid rgba(80, 150, 255, 0.4);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            -webkit-tap-highlight-color: transparent;
-            box-shadow: 0 8px 32px rgba(0, 40, 180, 0.5), 0 0 0 1px rgba(100, 160, 255, 0.1) inset;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
-            font-size: 28px;
-            font-weight: 700;
-            text-decoration: none;
-            padding: 0;
-            line-height: 1;
-            text-align: center;
-        }
-
-        .mejorar-plan-flotante::after {
-            content: "⬆";
-            display: block;
-            font-size: 32px;
-            line-height: 1;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
-        }
-
-        .mejorar-plan-flotante .tooltip-text {
-            position: absolute;
-            bottom: 86px;
-            right: 50%;
-            transform: translateX(50%);
-            background: rgba(0, 10, 30, 0.85);
-            backdrop-filter: blur(8px);
-            color: #b0ccff;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            white-space: nowrap;
-            border: 1px solid rgba(60, 130, 255, 0.2);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .mejorar-plan-flotante:hover .tooltip-text,
-        .mejorar-plan-flotante:focus .tooltip-text {
-            opacity: 1;
-        }
-
-        .mejorar-plan-flotante:hover {
-            transform: scale(1.1) rotate(3deg);
-            background: radial-gradient(circle at 30% 30%, #2a5fd0, #0f2f7a);
-            border-color: rgba(130, 180, 255, 0.7);
-            box-shadow: 0 12px 48px rgba(0, 60, 220, 0.6);
-        }
-
-        .mejorar-plan-flotante:active {
-            transform: scale(0.92);
-        }
-
         /* MODAL */
         .modal-overlay {
             position: fixed;
@@ -433,21 +356,6 @@
                 padding: 16px 20px;
                 font-size: 0.95rem;
             }
-            .mejorar-plan-flotante {
-                width: 60px;
-                height: 60px;
-                bottom: 22px;
-                right: 22px;
-                font-size: 24px;
-            }
-            .mejorar-plan-flotante::after {
-                font-size: 26px;
-            }
-            .mejorar-plan-flotante .tooltip-text {
-                font-size: 0.6rem;
-                bottom: 74px;
-                padding: 4px 12px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -473,22 +381,6 @@
             button {
                 padding: 14px 18px;
                 font-size: 0.9rem;
-            }
-            .mejorar-plan-flotante {
-                width: 52px;
-                height: 52px;
-                bottom: 18px;
-                right: 18px;
-                font-size: 20px;
-                border-width: 1.5px;
-            }
-            .mejorar-plan-flotante::after {
-                font-size: 22px;
-            }
-            .mejorar-plan-flotante .tooltip-text {
-                font-size: 0.5rem;
-                bottom: 66px;
-                padding: 3px 10px;
             }
         }
 
@@ -530,19 +422,6 @@
             button {
                 flex: 1;
                 min-width: 100px;
-            }
-            .mejorar-plan-flotante {
-                width: 46px;
-                height: 46px;
-                bottom: 16px;
-                right: 16px;
-                font-size: 18px;
-            }
-            .mejorar-plan-flotante::after {
-                font-size: 20px;
-            }
-            .mejorar-plan-flotante .tooltip-text {
-                display: none;
             }
         }
     </style>
@@ -590,7 +469,6 @@
             var input = document.getElementById('textInput');
             var enviarBtn = document.getElementById('submitBtn');
             var registrarBtn = document.getElementById('registrarBtn');
-            var mejorarPlanBtn = document.getElementById('mejorarPlanBtn');
             
             var modalOverlay = document.getElementById('customModal');
             var modalMessageText = document.getElementById('modalMessageText');
@@ -650,7 +528,6 @@
                 // Usuario válido
                 sessionStorage.setItem("textoEnviado", texto);
                 mainContainer.style.display = 'none';
-                mejorarPlanBtn.style.display = 'none';
                 window.location.href = "musicakerimmusicplus.html";
             }
 
@@ -659,14 +536,9 @@
                 window.location.href = "registrorapidodewhatsapplus.html";
             }
 
-            function irAMejorarPlan() {
-                window.location.href = "index.html";
-            }
-
             // --- EVENTOS ---
             enviarBtn.addEventListener('click', verificarYRedirigir);
             registrarBtn.addEventListener('click', irARegistro);
-            mejorarPlanBtn.addEventListener('click', irAMejorarPlan);
             
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
