@@ -148,7 +148,6 @@
       letter-spacing: 1px;
       color: #2b6df6;
     }
-    /* BOTÓN MEJORAR PLAN */
     .upgrade-banner {
       display: flex;
       justify-content: center;
@@ -591,8 +590,32 @@
       overflow: hidden;
       box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 60px rgba(43,109,246,0.08);
       border: 1px solid #1a2a5e;
+      background: #0a0e1a;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
-    .player-cover img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+    .player-cover img { 
+      width: 100%; 
+      aspect-ratio: 1/1; 
+      object-fit: cover; 
+      display: block; 
+    }
+    .player-cover .video-wrapper {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .player-cover .video-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
     .song-details {
       text-align: center;
       margin-bottom: 1rem;
@@ -819,7 +842,7 @@
       cursor: pointer;
     }
     .mini-player.show { transform: translateY(0); }
-    .mini-cover { width: 48px; height: 48px; border-radius: 4px; overflow: hidden; flex-shrink: 0; border: 1px solid #1a2a5e; }
+    .mini-cover { width: 48px; height: 48px; border-radius: 4px; overflow: hidden; flex-shrink: 0; border: 1px solid #1a2a5e; background: #0a0e1a; }
     .mini-cover img { width: 100%; height: 100%; object-fit: cover; }
     .mini-info { flex: 1; min-width: 0; }
     .mini-title { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #e8ecf4; }
@@ -968,7 +991,6 @@
     </div>
   </div>
 
-  <!-- NUEVO BOTÓN MEJORAR PLAN -->
   <div class="upgrade-banner">
     <a href="index.html" class="upgrade-btn"> Mejorar plan</a>
   </div>
@@ -1015,7 +1037,10 @@
 <div class="fullscreen-player" id="fullscreenPlayer">
   <div class="close-player" id="closePlayerBtn">✕</div>
   <div class="player-card">
-    <div class="player-cover"><img id="fullCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg" alt="cover"></div>
+    <div class="player-cover" id="playerCover">
+      <img id="fullCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg" alt="cover">
+      <div id="videoContainer" style="display:none; width:100%; aspect-ratio:16/9; background:#000;"></div>
+    </div>
     <div class="song-details">
       <h2 id="fullSongTitle">Kerim Music</h2>
       <div class="song-category" id="fullSongCategory"></div>
@@ -1044,7 +1069,7 @@
 </div>
 
 <div class="mini-player" id="miniPlayer">
-  <div class="mini-cover"><img id="miniCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg"></div>
+  <div class="mini-cover" id="miniCoverContainer"><img id="miniCover" src="https://i.postimg.cc/XNP1xdB2/IMG-20260207-WA0000.jpg"></div>
   <div class="mini-info"><div class="mini-title" id="miniTitle">Selecciona</div></div>
   <div class="mini-controls">
     <button class="mini-btn" id="miniPrevBtn">⏮</button>
@@ -1064,7 +1089,8 @@
       { id: 'ad5', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 5', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/ymz00x4bk0arik8vapgnd/11-de-abril-de-2026.mp3?rlkey=hafgkwkgt6tgyrryodqz2c6fy&st=p5vsj82t&raw=1', isAd: true },
       { id: 'ad1', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 1', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/z3fbqqzthhvvqt9275lc7/2-tema-grabados_1783188240865.mp3?rlkey=7v6ha18uxps052z43rty0d5jr&st=sam7gv97&raw=1', isAd: true },
       { id: 'ad2', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 2', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/xgl19r2bd49n5cdup93f4/Escucha-sin-anusios_1783188103278.mp3?rlkey=00usrx9c68td9pkqw6o2x1qct&st=4ck7wlz8&raw=1', isAd: true },
-      { id: 'ad3', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 3', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/c57mxtk8nsgp5nbizxbvx/Suscriocion.-Anuncio_1783187878802.mp3?rlkey=jqcxfpzuqdg1l1gb62iz6oa93&st=dow06n0b&raw=1', isAd: true },
+      { id: 'ad3', url: '', title: 'Anuncio 3', category: 'ANUNCIO', music: '', video: 'https://www.dropbox.com/scl/fi/5hvqucrjyjotpjge1wpei/AQPEGQdoqPKVT4eHsCxScmq2Pgjwlze7l6aPYix_phWROLbabx1WiKmXH3GA8eDVa8AyecSArdrF9I_wbvUT5XaZ9cJVWSAHpGXci6nOD_T-Eg.mp4?rlkey=29tg1m9o3zgvlrgz1bskg7dzj&st=pmeqma9m&raw=1', isAd: true },
+      { id: 'ad6', url: '', title: 'Anuncio 6', category: 'ANUNCIO', music: '', video: 'https://www.dropbox.com/scl/fi/n4nhc00dzenwsoj0t0mud/El-placoso-de-la-L.mp4?rlkey=tde69aczhy3rhxit16xyu3ewx&st=sf47qwl2&raw=1', isAd: true },
       { id: 'ad4', url: 'https://www.dropbox.com/scl/fi/zstw4ykjmjh3ljzejuwk5/Anuncio.png?rlkey=pumuamhvcw40nas5biyyrizvo&st=ku13lu66&raw=1', title: 'Anuncio 4', category: 'ANUNCIO', music: 'https://www.dropbox.com/scl/fi/vl4d6mwau9frvxmjm6wwn/Baner.mp3?rlkey=z8jezojlzlyt0i3qp16jrvid9&st=tdb7ne0h&raw=1', isAd: true }
     ];
     
@@ -1075,6 +1101,8 @@
     let adPlaylist = [];
     let currentAdIndex = 0;
     let adCallback = null;
+    let videoElement = null; // Para controlar el video
+    let isVideoAd = false; // Para saber si el anuncio actual es de video
     
     // ==================== CANCIONES ====================
     const originalSongs = [
@@ -1299,6 +1327,8 @@
     const fullPlayer = document.getElementById('fullscreenPlayer');
     const miniPlayerDiv = document.getElementById('miniPlayer');
     const fullCover = document.getElementById('fullCover');
+    const videoContainer = document.getElementById('videoContainer');
+    const playerCover = document.getElementById('playerCover');
     const fullSongTitle = document.getElementById('fullSongTitle');
     const fullSongCategory = document.getElementById('fullSongCategory');
     const fullPlayPause = document.getElementById('fullPlayPauseBtn');
@@ -1430,6 +1460,83 @@
       if(currentPlayQueue.length && !currentSong) currentSong = currentPlayQueue[0]; 
     }
     
+    // ==================== FUNCIÓN PARA MOSTRAR VIDEO EN EL REPRODUCTOR ====================
+    function showVideoInPlayer(videoHtml) {
+      // Ocultar imagen y mostrar contenedor de video
+      fullCover.style.display = 'none';
+      videoContainer.style.display = 'block';
+      videoContainer.innerHTML = videoHtml;
+      
+      // Asegurar que el contenedor tenga el tamaño adecuado
+      videoContainer.style.width = '100%';
+      videoContainer.style.aspectRatio = '16/9';
+      videoContainer.style.background = '#000';
+      
+      // Obtener referencia al elemento de video o iframe
+      const videoEl = videoContainer.querySelector('video');
+      const iframeEl = videoContainer.querySelector('iframe');
+      
+      if (videoEl) {
+        videoElement = videoEl;
+        isVideoAd = true;
+        // Escuchar el evento 'ended' del video
+        videoEl.addEventListener('ended', onVideoAdEnd);
+        // Intentar reproducir automáticamente
+        videoEl.play().catch(e => console.log('Error al reproducir video:', e));
+        // Si el video tiene audio, ocultar los controles de audio
+        fullPlayPause.style.display = 'none';
+        miniPlayPause.style.display = 'none';
+        // Ocultar la barra de progreso
+        if (progressArea) progressArea.style.display = 'none';
+      } else if (iframeEl) {
+        // Para iframes (YouTube, Vimeo), no podemos controlar el final fácilmente
+        // Usaremos un temporizador con la duración del video (estimada)
+        isVideoAd = true;
+        fullPlayPause.style.display = 'none';
+        miniPlayPause.style.display = 'none';
+        if (progressArea) progressArea.style.display = 'none';
+        // Para YouTube, estimar duración de 30 segundos
+        const adDuration = 30000; // 30 segundos
+        if (window._adTimer) clearTimeout(window._adTimer);
+        window._adTimer = setTimeout(() => {
+          onVideoAdEnd();
+        }, adDuration);
+      } else {
+        isVideoAd = false;
+      }
+      
+      // Ocultar la barra de progreso en todos los casos
+      if (progressArea) progressArea.style.display = 'none';
+      
+      console.log('🎬 Video mostrado en el reproductor');
+    }
+    
+    function hideVideoFromPlayer() {
+      // Ocultar contenedor de video y mostrar imagen
+      videoContainer.style.display = 'none';
+      videoContainer.innerHTML = '';
+      fullCover.style.display = 'block';
+      
+      // Restaurar la barra de progreso
+      if (progressArea) progressArea.style.display = 'block';
+      
+      // Restaurar botones de reproducción
+      fullPlayPause.style.display = 'flex';
+      miniPlayPause.style.display = 'flex';
+      
+      // Limpiar referencias al video
+      if (videoElement) {
+        videoElement.removeEventListener('ended', onVideoAdEnd);
+        videoElement = null;
+      }
+      isVideoAd = false;
+      
+      if (window._adTimer) {
+        clearTimeout(window._adTimer);
+        window._adTimer = null;
+      }
+    }
+    
     // ==================== ANUNCIOS ====================
     function playAds(callback) {
       if (ads.length === 0 || isAdPlaying) {
@@ -1461,32 +1568,115 @@
         category: 'ANUNCIO',
         title: `${ad.title} (${currentAdIndex + 1}/${adPlaylist.length})`,
         music: ad.music,
+        video: ad.video,
         isAd: true
       };
       currentSong = adSong;
-      fullCover.src = adSong.url;
+      
+      // Mostrar imagen o video según corresponda
+      if (ad.video) {
+        // Crear un elemento de video para reproducir el anuncio
+        let videoHtml = '';
+        // Si es un enlace de Dropbox, convertirlo para que se pueda reproducir
+        if (ad.video.includes('dropbox.com')) {
+          const videoUrl = ad.video;
+          videoHtml = `<video controls style="width:100%;height:100%;background:#000;object-fit:contain;">
+                        <source src="${videoUrl}" type="video/mp4">
+                        Tu navegador no soporta reproducción de video.
+                       </video>`;
+        } else if (ad.video.includes('youtube.com') || ad.video.includes('youtu.be')) {
+          const videoId = ad.video.includes('youtu.be') ? ad.video.split('/').pop() : ad.video.split('v=')[1]?.split('&')[0];
+          if (videoId) {
+            videoHtml = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+          }
+        } else if (ad.video.includes('vimeo.com')) {
+          const videoId = ad.video.split('/').pop();
+          if (videoId) {
+            videoHtml = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+          }
+        } else {
+          videoHtml = `<video controls style="width:100%;height:100%;background:#000;object-fit:contain;">
+                        <source src="${ad.video}" type="video/mp4">
+                        Tu navegador no soporta reproducción de video.
+                       </video>`;
+        }
+        
+        if (videoHtml) {
+          showVideoInPlayer(videoHtml);
+        } else {
+          hideVideoFromPlayer();
+          fullCover.src = adSong.url;
+        }
+      } else {
+        hideVideoFromPlayer();
+        fullCover.src = adSong.url;
+        // Para anuncios sin video, la barra de progreso se oculta igual
+        if (progressArea) progressArea.style.display = 'none';
+      }
+      
       fullSongTitle.innerText = adSong.title;
       fullSongCategory.innerHTML = `ANUNCIO <span class="ad-badge">AD ${currentAdIndex + 1}/${adPlaylist.length}</span>`;
       miniCover.src = adSong.url;
       miniTitle.innerText = adSong.title;
       
-      if (progressArea) progressArea.style.display = 'none';
-      
-      if (adSong.music) {
+      if (adSong.music && !ad.video) {
+        // Solo audio - reproducir con el elemento audio
         audio.src = adSong.music;
-        audio.play().catch(e => console.log);
+        audio.play().catch(e => console.log('Error al reproducir audio del anuncio:', e));
         isPlaying = true;
+        audio.removeEventListener('ended', onAdEnd);
+        audio.addEventListener('ended', onAdEnd);
+        // Ocultar botones de reproducción de video si estaban visibles
+        fullPlayPause.style.display = 'flex';
+        miniPlayPause.style.display = 'flex';
+      } else if (ad.video) {
+        // Video - el video se reproduce con su propio audio
+        // Pausar el audio
+        audio.pause();
+        isPlaying = false;
+        // Ocultar botones de reproducción de audio
+        fullPlayPause.style.display = 'none';
+        miniPlayPause.style.display = 'none';
+        // El evento 'ended' del video manejará el cambio
+      } else {
+        // Anuncio sin audio ni video (solo imagen)
+        audio.pause();
+        isPlaying = false;
+        // Auto-avanzar después de 5 segundos
+        if (window._adTimer) clearTimeout(window._adTimer);
+        window._adTimer = setTimeout(() => {
+          onAdEnd();
+        }, 5000);
       }
+      
       fullPlayer.classList.add('show');
       miniPlayerDiv.classList.add('show');
       updatePlayPauseIcon();
       triggerBackgroundRefresh();
-      audio.removeEventListener('ended', onAdEnd);
-      audio.addEventListener('ended', onAdEnd);
+    }
+    
+    function onVideoAdEnd() {
+      // El video terminó
+      if (window._adTimer) {
+        clearTimeout(window._adTimer);
+        window._adTimer = null;
+      }
+      // Avanzar al siguiente anuncio
+      onAdEnd();
     }
     
     function onAdEnd() {
       audio.removeEventListener('ended', onAdEnd);
+      if (window._adTimer) {
+        clearTimeout(window._adTimer);
+        window._adTimer = null;
+      }
+      // Limpiar el video si estaba mostrándose
+      if (videoElement) {
+        videoElement.removeEventListener('ended', onVideoAdEnd);
+        videoElement = null;
+      }
+      hideVideoFromPlayer();
       currentAdIndex++;
       playNextAd();
     }
@@ -1497,6 +1687,13 @@
       fullNext.classList.remove('hidden-nav');
       miniPrev.classList.remove('hidden-nav');
       miniNext.classList.remove('hidden-nav');
+      
+      // Ocultar video si estaba visible y restaurar UI
+      hideVideoFromPlayer();
+      
+      // Restaurar controles de reproducción
+      fullPlayPause.style.display = 'flex';
+      miniPlayPause.style.display = 'flex';
       
       if (progressArea) progressArea.style.display = 'block';
       
@@ -1546,6 +1743,9 @@
       if (isAdPlaying) return;
       currentSong = song;
       
+      // Asegurar que se muestre la imagen (ocultar video si estaba visible)
+      hideVideoFromPlayer();
+      
       if (progressArea) progressArea.style.display = 'block';
       
       if (!song.isAd) {
@@ -1573,7 +1773,7 @@
       }
       if (song.music) {
         audio.src = song.music;
-        audio.play().catch(e => console.log);
+        audio.play().catch(e => console.log('Error al reproducir:', e));
         isPlaying = true;
       } else {
         audio.pause();
@@ -1588,6 +1788,7 @@
     }
     
     function updateUIWithSong(song){ 
+      hideVideoFromPlayer();
       fullCover.src = song.url; 
       fullSongTitle.innerText = song.title; 
       if (!song.isAd) {
@@ -1617,7 +1818,19 @@
       }
     }
     
-    function updatePlayPauseIcon(){ const icon = isPlaying ? '⏸' : '▶'; fullPlayPause.innerText = icon; miniPlayPause.innerText = icon; }
+    function updatePlayPauseIcon(){ 
+      if (isVideoAd) {
+        // Durante anuncios de video, no mostramos el icono de play/pause
+        fullPlayPause.style.display = 'none';
+        miniPlayPause.style.display = 'none';
+        return;
+      }
+      fullPlayPause.style.display = 'flex';
+      miniPlayPause.style.display = 'flex';
+      const icon = isPlaying ? '⏸' : '▶'; 
+      fullPlayPause.innerText = icon; 
+      miniPlayPause.innerText = icon; 
+    }
     
     function nextTrack(){ 
       if (isAdPlaying) return;
@@ -1636,7 +1849,17 @@
     }
     
     function togglePlayPause(){ 
-      if (isAdPlaying) return;
+      if (isAdPlaying) {
+        // Si es un anuncio de video, intentar pausar/reproducir el video
+        if (isVideoAd && videoElement) {
+          if (videoElement.paused) {
+            videoElement.play();
+          } else {
+            videoElement.pause();
+          }
+        }
+        return;
+      }
       isPlaying ? audio.pause() : audio.play(); 
     }
     
@@ -1848,7 +2071,7 @@
     
     // ==================== AUDIO EVENTOS ====================
     audio.addEventListener('timeupdate',()=>{ 
-      if(audio.duration && isFinite(audio.duration)){ 
+      if(audio.duration && isFinite(audio.duration) && !audio.paused){ 
         let p = (audio.currentTime/audio.duration)*100; 
         progressFill.style.width = `${p}%`; 
         miniProgressFill.style.width = `${p}%`; 
@@ -1929,6 +2152,7 @@
     
     console.log('🎵 Kerim Music+ iniciado correctamente');
     console.log('🔀 Modo Aleatorio: haz clic en 🔀 para activarlo/desactivarlo');
+    console.log('📺 Los anuncios con video se reproducirán en el reproductor');
     
   })();
 </script>
