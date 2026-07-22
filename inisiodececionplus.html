@@ -602,36 +602,23 @@
             var modalCloseBtn = document.getElementById('modalCloseBtn');
 
             // --- LISTA DE USUARIOS VÁLIDOS (exactos) ---
-            var USUARIOS_VALIDOS = ["Marco", ""];
+            var USUARIOS_VALIDOS = ["Marco"];
 
-            // --- FUNCIÓN QUE VERIFICA SI EL USUARIO ESTÁ GUARDADO Y REDIRIGE ---
-            function verificarYRedirigir() {
-                var texto = input.value.trim();
-                
-                if (texto === "") {
-                    mostrarModalInvalido("");
-                    return;
+            // --- CLAVE PARA SESSION STORAGE ---
+            var SESSION_KEY = "kerim_user";
+
+            // --- FUNCIÓN PARA VERIFICAR SI HAY SESIÓN ACTIVA ---
+            function verificarSesionActiva() {
+                var usuarioGuardado = sessionStorage.getItem(SESSION_KEY);
+                if (usuarioGuardado) {
+                    // Si existe un usuario en sesión, redirigir automáticamente
+                    window.location.href = "musicakerimmusicplus.html";
+                    return true;
                 }
-                
-                var esValido = false;
-                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
-                    if (USUARIOS_VALIDOS[i] === texto) {
-                        esValido = true;
-                        break;
-                    }
-                }
-                
-                if (!esValido) {
-                    mostrarModalInvalido(texto);
-                    return;
-                }
-                
-                // --- USUARIO VÁLIDO: guardamos en sessionStorage y redirigimos ---
-                sessionStorage.setItem("usuarioAutenticado", texto);
-                window.location.href = "musicakerimmusicplus.html";
+                return false;
             }
 
-            // --- MOSTRAR MODAL DE ACCESO DENEGADO ---
+            // --- FUNCIONES ---
             function mostrarModalInvalido(usuarioIngresado) {
                 if (usuarioIngresado === "") {
                     modalMessageText.innerHTML = "No has ingresado ningún nombre.<br>Por favor, ingresa un usuario.";
@@ -657,7 +644,34 @@
                 document.body.style.overflow = '';
             }
 
-            // --- NAVEGACIÓN A REGISTRO Y MEJORAR PLAN ---
+            // --- FUNCIÓN PRINCIPAL DE VERIFICACIÓN Y REDIRECCIÓN ---
+            function verificarYRedirigir() {
+                var texto = input.value.trim();
+                
+                if (texto === "") {
+                    mostrarModalInvalido("");
+                    return;
+                }
+                
+                var esValido = false;
+                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
+                    if (USUARIOS_VALIDOS[i] === texto) {
+                        esValido = true;
+                        break;
+                    }
+                }
+                
+                if (!esValido) {
+                    mostrarModalInvalido(texto);
+                    return;
+                }
+                
+                // Usuario válido: guardar en sessionStorage y redirigir
+                sessionStorage.setItem(SESSION_KEY, texto);
+                window.location.href = "musicakerimmusicplus.html";
+            }
+
+            // --- NAVEGACIÓN ---
             function irARegistro() {
                 window.location.href = "registrorapidodewhatsapplus.html";
             }
@@ -666,7 +680,13 @@
                 window.location.href = "index.html";
             }
 
-            // --- EVENTOS ---
+            // --- EJECUCIÓN PRINCIPAL: VERIFICAR SESIÓN PRIMERO ---
+            // Si hay sesión activa, se redirige y no se ejecuta el resto
+            if (verificarSesionActiva()) {
+                return; // Detiene la ejecución
+            }
+
+            // --- EVENTOS (solo se ejecutan si no hay redirección) ---
             enviarBtn.addEventListener('click', verificarYRedirigir);
             registrarBtn.addEventListener('click', irARegistro);
             mejorarPlanBtn.addEventListener('click', irAMejorarPlan);
@@ -704,31 +724,8 @@
                 }
             });
 
-            // --- AL CARGAR LA PÁGINA: si ya hay usuario autenticado en sessionStorage, redirigir automáticamente ---
-            // Esto permite que al volver a entrar (incluso si cierras y abres la pestaña) se salte directamente a musicakerimmusicplus.html
-            var usuarioGuardado = sessionStorage.getItem("usuarioAutenticado");
-            if (usuarioGuardado) {
-                // Verificamos que el usuario guardado sea válido (por seguridad)
-                var esValido = false;
-                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
-                    if (USUARIOS_VALIDOS[i] === usuarioGuardado) {
-                        esValido = true;
-                        break;
-                    }
-                }
-                if (esValido) {
-                    window.location.href = "musicakerimmusicplus.html";
-                } else {
-                    // Si el usuario guardado ya no es válido, lo eliminamos para que pueda intentar de nuevo
-                    sessionStorage.removeItem("usuarioAutenticado");
-                }
-            }
-
-            // --- Animación de entrada ---
+            // Animación de entrada
             mainContainer.classList.add('visible');
-
-            // --- Si el input tiene el valor de sessionStorage (por si acaso) ---
-            // No lo rellenamos automáticamente por seguridad, pero podemos dejar el campo vacío.
 
         })();
     </script>
