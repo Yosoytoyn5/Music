@@ -602,11 +602,23 @@
             var modalCloseBtn = document.getElementById('modalCloseBtn');
 
             // --- LISTA DE USUARIOS VÁLIDOS (exactos) ---
-            var USUARIOS_VALIDOS = ["Marco", ""];
+            // "Marco" es el único usuario válido para este ejemplo.
+            var USUARIOS_VALIDOS = ["Marco"];
 
-            // --- FUNCIONES ---
+            // --- FUNCIÓN PARA VERIFICAR SI EL USUARIO ES VÁLIDO ---
+            function esUsuarioValido(nombre) {
+                if (!nombre) return false;
+                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
+                    if (USUARIOS_VALIDOS[i] === nombre) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // --- FUNCIONES PARA EL MODAL ---
             function mostrarModalInvalido(usuarioIngresado) {
-                if (usuarioIngresado === "") {
+                if (!usuarioIngresado) {
                     modalMessageText.innerHTML = "No has ingresado ningún nombre.<br>Por favor, ingresa un usuario.";
                 } else {
                     modalMessageText.innerHTML = "“" + escapeHtml(usuarioIngresado) + "” no está autorizado.<br>Verifica tu usuario o regístrate.";
@@ -639,23 +651,13 @@
                     return;
                 }
                 
-                var esValido = false;
-                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
-                    if (USUARIOS_VALIDOS[i] === texto) {
-                        esValido = true;
-                        break;
-                    }
-                }
-                
-                if (!esValido) {
+                if (!esUsuarioValido(texto)) {
                     mostrarModalInvalido(texto);
                     return;
                 }
                 
-                // Usuario válido
+                // Usuario válido: guardar en sessionStorage y redirigir
                 sessionStorage.setItem("textoEnviado", texto);
-                mainContainer.style.display = 'none';
-                mejorarPlanBtn.style.display = 'none';
                 window.location.href = "musicakerimmusicplus.html";
             }
 
@@ -667,6 +669,19 @@
             function irAMejorarPlan() {
                 window.location.href = "index.html";
             }
+
+            // --- VERIFICAR SESIÓN AL CARGAR LA PÁGINA ---
+            window.addEventListener('load', function() {
+                // Si hay un usuario guardado en sessionStorage y es válido, redirigir.
+                var usuarioGuardado = sessionStorage.getItem("textoEnviado");
+                if (usuarioGuardado && esUsuarioValido(usuarioGuardado)) {
+                    window.location.href = "musicakerimmusicplus.html";
+                    return; // Salir para no ejecutar el resto
+                }
+                
+                // Si no hay sesión, mostrar la página con animación
+                mainContainer.classList.add('visible');
+            });
 
             // --- EVENTOS ---
             enviarBtn.addEventListener('click', verificarYRedirigir);
@@ -705,9 +720,6 @@
                     e.preventDefault();
                 }
             });
-
-            // Animación de entrada
-            mainContainer.classList.add('visible');
 
         })();
     </script>
