@@ -590,6 +590,11 @@
         (function(){
             "use strict";
 
+            // --- CONSTANTES ---
+            const SESSION_KEY = 'kerim_music_session';
+            const USER_KEY = 'kerim_music_user';
+            const USUARIOS_VALIDOS = ["Marco", ""];
+
             // --- ELEMENTOS DOM ---
             var mainContainer = document.getElementById('mainContainer');
             var input = document.getElementById('textInput');
@@ -601,24 +606,107 @@
             var modalMessageText = document.getElementById('modalMessageText');
             var modalCloseBtn = document.getElementById('modalCloseBtn');
 
-            // --- LISTA DE USUARIOS VÁLIDOS (exactos) ---
-            var USUARIOS_VALIDOS = ["Marco"];
-
-            // --- CLAVE PARA SESSION STORAGE ---
-            var SESSION_KEY = "kerim_user";
-
-            // --- FUNCIÓN PARA VERIFICAR SI HAY SESIÓN ACTIVA ---
-            function verificarSesionActiva() {
-                var usuarioGuardado = sessionStorage.getItem(SESSION_KEY);
-                if (usuarioGuardado) {
-                    // Si existe un usuario en sesión, redirigir automáticamente
-                    window.location.href = "musicakerimmusicplus.html";
+            // --- FUNCIONES DE SESIÓN ---
+            function iniciarSesion(usuario) {
+                try {
+                    localStorage.setItem(SESSION_KEY, 'true');
+                    localStorage.setItem(USER_KEY, usuario);
                     return true;
+                } catch (e) {
+                    console.error('Error al guardar sesión:', e);
+                    return false;
                 }
-                return false;
             }
 
-            // --- FUNCIONES ---
+            function cerrarSesion() {
+                try {
+                    localStorage.removeItem(SESSION_KEY);
+                    localStorage.removeItem(USER_KEY);
+                    return true;
+                } catch (e) {
+                    console.error('Error al cerrar sesión:', e);
+                    return false;
+                }
+            }
+
+            function verificarSesion() {
+                try {
+                    var sessionActive = localStorage.getItem(SESSION_KEY) === 'true';
+                    var usuario = localStorage.getItem(USER_KEY);
+                    
+                    if (sessionActive && usuario) {
+                        // Verificar que el usuario almacenado sea válido
+                        for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
+                            if (USUARIOS_VALIDOS[i] === usuario) {
+                                return { activa: true, usuario: usuario };
+                            }
+                        }
+                        // Si el usuario no es válido, limpiar sesión corrupta
+                        cerrarSesion();
+                        return { activa: false, usuario: null };
+                    }
+                    return { activa: false, usuario: null };
+                } catch (e) {
+                    console.error('Error al verificar sesión:', e);
+                    return { activa: false, usuario: null };
+                }
+            }
+
+            // --- FUNCIONES DE NAVEGACIÓN ---
+            function redirigirAPrincipal() {
+                window.location.href = "musicakerimmusicplus.html";
+            }
+
+            function irARegistro() {
+                window.location.href = "registrorapidodewhatsapplus.html";
+            }
+
+            function irAMejorarPlan() {
+                window.location.href = "index.html";
+            }
+
+            // --- FUNCIÓN PRINCIPAL DE VERIFICACIÓN Y REDIRECCIÓN ---
+            function verificarYRedirigir() {
+                var texto = input.value.trim();
+                
+                if (texto === "") {
+                    mostrarModalInvalido("");
+                    return;
+                }
+                
+                var esValido = false;
+                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
+                    if (USUARIOS_VALIDOS[i] === texto) {
+                        esValido = true;
+                        break;
+                    }
+                }
+                
+                if (!esValido) {
+                    mostrarModalInvalido(texto);
+                    return;
+                }
+                
+                // Usuario válido - iniciar sesión persistente
+                if (iniciarSesion(texto)) {
+                    // Guardar en sessionStorage como respaldo (para compatibilidad)
+                    sessionStorage.setItem("textoEnviado", texto);
+                    
+                    // Ocultar elementos antes de redirigir
+                    mainContainer.style.display = 'none';
+                    mejorarPlanBtn.style.display = 'none';
+                    
+                    // Redirigir
+                    redirigirAPrincipal();
+                } else {
+                    // Si falla el guardado, mostrar error
+                    modalMessageText.innerHTML = "Error al guardar la sesión. Por favor, intenta de nuevo.";
+                    modalOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            // --- FUNCIONES MODAL ---
             function mostrarModalInvalido(usuarioIngresado) {
                 if (usuarioIngresado === "") {
                     modalMessageText.innerHTML = "No has ingresado ningún nombre.<br>Por favor, ingresa un usuario.";
@@ -644,49 +732,29 @@
                 document.body.style.overflow = '';
             }
 
-            // --- FUNCIÓN PRINCIPAL DE VERIFICACIÓN Y REDIRECCIÓN ---
-            function verificarYRedirigir() {
-                var texto = input.value.trim();
+            // --- VERIFICAR SESIÓN AL INICIAR ---
+            function verificarSesionAlIniciar() {
+                var resultado = verificarSesion();
                 
-                if (texto === "") {
-                    mostrarModalInvalido("");
-                    return;
+                if (resultado.activa && resultado.usuario) {
+                    // Sesión activa - redirigir automáticamente
+                    console.log('Sesión activa para usuario:', resultado.usuario);
+                    
+                    // Actualizar sessionStorage para compatibilidad
+                    sessionStorage.setItem("textoEnviado", resultado.usuario);
+                    
+                    // Redirigir inmediatamente
+                    redirigirAPrincipal();
+                    return true;
                 }
                 
-                var esValido = false;
-                for (var i = 0; i < USUARIOS_VALIDOS.length; i++) {
-                    if (USUARIOS_VALIDOS[i] === texto) {
-                        esValido = true;
-                        break;
-                    }
-                }
-                
-                if (!esValido) {
-                    mostrarModalInvalido(texto);
-                    return;
-                }
-                
-                // Usuario válido: guardar en sessionStorage y redirigir
-                sessionStorage.setItem(SESSION_KEY, texto);
-                window.location.href = "musicakerimmusicplus.html";
+                // No hay sesión activa - mostrar la pantalla de login
+                console.log('No hay sesión activa - mostrando login');
+                mainContainer.classList.add('visible');
+                return false;
             }
 
-            // --- NAVEGACIÓN ---
-            function irARegistro() {
-                window.location.href = "registrorapidodewhatsapplus.html";
-            }
-
-            function irAMejorarPlan() {
-                window.location.href = "index.html";
-            }
-
-            // --- EJECUCIÓN PRINCIPAL: VERIFICAR SESIÓN PRIMERO ---
-            // Si hay sesión activa, se redirige y no se ejecuta el resto
-            if (verificarSesionActiva()) {
-                return; // Detiene la ejecución
-            }
-
-            // --- EVENTOS (solo se ejecutan si no hay redirección) ---
+            // --- EVENTOS ---
             enviarBtn.addEventListener('click', verificarYRedirigir);
             registrarBtn.addEventListener('click', irARegistro);
             mejorarPlanBtn.addEventListener('click', irAMejorarPlan);
@@ -724,8 +792,26 @@
                 }
             });
 
-            // Animación de entrada
-            mainContainer.classList.add('visible');
+            // --- INICIALIZACIÓN ---
+            // Verificar sesión al cargar la página
+            var sesionActiva = verificarSesionAlIniciar();
+            
+            // Si no hay sesión activa, mostrar la animación de entrada
+            if (!sesionActiva) {
+                // La clase 'visible' se añade en verificarSesionAlIniciar
+                // Solo añadir si no se ha redirigido
+                setTimeout(function() {
+                    if (mainContainer.classList.contains('visible') === false) {
+                        mainContainer.classList.add('visible');
+                    }
+                }, 100);
+            }
+
+            // LIMPIEZA DE SESIÓN AL CERRAR (opcional, solo para desarrollo)
+            // Si quieres que la sesión se cierre al cerrar la pestaña, descomenta:
+            // window.addEventListener('beforeunload', function() {
+            //     cerrarSesion();
+            // });
 
         })();
     </script>
