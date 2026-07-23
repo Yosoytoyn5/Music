@@ -120,6 +120,24 @@
       transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
+    /* Cuando hay un plan seleccionado, deshabilitar el scroll */
+    .packages-grid.scroll-disabled {
+      overflow-x: hidden !important;
+      scroll-behavior: auto !important;
+      -webkit-overflow-scrolling: auto !important;
+      scroll-snap-type: none !important;
+      pointer-events: none;
+    }
+
+    .packages-grid.scroll-disabled .card {
+      pointer-events: none;
+    }
+
+    .packages-grid.scroll-disabled .card .btn-plan,
+    .packages-grid.scroll-disabled .card .btn-mejorar {
+      pointer-events: auto;
+    }
+
     .packages-grid::-webkit-scrollbar {
       height: 6px;
     }
@@ -448,6 +466,10 @@
         margin: 0;
         max-width: 0;
       }
+      /* En escritorio no necesitamos deshabilitar scroll porque ya no hay scroll horizontal */
+      .packages-grid.scroll-disabled {
+        overflow-x: visible !important;
+      }
     }
 
     @media (min-width: 701px) {
@@ -548,6 +570,9 @@
       function centerCardInView(card) {
         if (!card) return;
         
+        // En escritorio no es necesario centrar porque ya se muestran todos
+        if (window.innerWidth >= 701) return;
+        
         const gridRect = grid.getBoundingClientRect();
         const cardRect = card.getBoundingClientRect();
         
@@ -559,6 +584,17 @@
           left: scrollLeft,
           behavior: 'smooth'
         });
+      }
+
+      // Función para habilitar/deshabilitar el scroll del grid
+      function setGridScrollEnabled(enabled) {
+        if (enabled) {
+          grid.classList.remove('scroll-disabled');
+          grid.style.overflowX = 'auto';
+        } else {
+          grid.classList.add('scroll-disabled');
+          grid.style.overflowX = 'hidden';
+        }
       }
 
       // Función para guardar el plan seleccionado en localStorage
@@ -609,6 +645,8 @@
         });
         selectedPlan = null;
         saveSelectedPlan(null);
+        // Habilitar scroll nuevamente
+        setGridScrollEnabled(true);
       }
 
       // función para seleccionar un plan
@@ -684,6 +722,11 @@
         // Guardar en localStorage
         saveSelectedPlan(selectedCard.dataset.plan);
 
+        // Deshabilitar scroll del grid (solo en móvil)
+        if (window.innerWidth < 701) {
+          setGridScrollEnabled(false);
+        }
+
         // Centrar el plan seleccionado después de un breve delay para que la animación termine
         setTimeout(() => {
           centerCardInView(selectedCard);
@@ -734,6 +777,12 @@
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           if (selectedPlan) {
+            // En escritorio, habilitar scroll; en móvil, deshabilitarlo
+            if (window.innerWidth >= 701) {
+              setGridScrollEnabled(true);
+            } else {
+              setGridScrollEnabled(false);
+            }
             centerCardInView(selectedPlan);
           }
         }, 300);
