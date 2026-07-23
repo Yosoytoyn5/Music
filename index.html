@@ -26,7 +26,6 @@
       overflow-x: hidden;
     }
 
-    /* efecto de luz dinámico de fondo */
     body::before {
       content: '';
       position: fixed;
@@ -89,7 +88,6 @@
       opacity: 0.9;
     }
 
-    /* contenedor principal con glassmorphism sutil */
     .packages-wrapper {
       position: relative;
       z-index: 2;
@@ -149,7 +147,6 @@
       box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.7);
     }
 
-    /* estado oculto con animación suave */
     .packages-grid .card.hidden-plan {
       opacity: 0;
       transform: scale(0.92) translateY(10px);
@@ -167,13 +164,6 @@
       opacity: 1;
       transform: scale(1) translateY(0);
       max-height: 700px;
-    }
-
-    .packages-grid .card:first-child {
-      margin-left: calc(50% - 150px);
-    }
-    .packages-grid .card:last-child {
-      margin-right: calc(50% - 150px);
     }
 
     .card {
@@ -236,7 +226,6 @@
       border-color: #4a7dff;
     }
 
-    /* PLAN SELECCIONADO: borde luminoso, elevación, sombra */
     .card.plan-seleccionado {
       border: 2px solid #6a9aff;
       box-shadow: 0 0 30px rgba(60, 120, 255, 0.35), 0 20px 40px -6px rgba(0, 20, 80, 0.7);
@@ -393,7 +382,6 @@
       box-shadow: 0 0 18px rgba(50, 100, 255, 0.15);
     }
 
-    /* responsive */
     @media (max-width: 700px) {
       .packages-wrapper {
         padding: 1.2rem 0.5rem;
@@ -462,7 +450,6 @@
       }
     }
 
-    /* ajuste de estado oculto en escritorio */
     @media (min-width: 701px) {
       .packages-grid .card.hidden-plan {
         flex: 0 0 0;
@@ -555,7 +542,6 @@
       const grid = document.getElementById('packagesGrid');
       const cards = Array.from(grid.querySelectorAll('.card'));
       let selectedPlan = null;
-      let isScrolling = false;
 
       // Función para centrar un elemento en el contenedor
       function centerCardInView(card) {
@@ -626,8 +612,8 @@
 
       // función para seleccionar un plan
       function selectPlan(selectedCard) {
+        // Si ya está seleccionado, solo centrar y salir
         if (selectedPlan === selectedCard) {
-          // si ya está seleccionado, centrar y salir
           centerCardInView(selectedCard);
           return;
         }
@@ -664,7 +650,6 @@
           // mantener el href, pero si es premium no tiene, se asigna
           const link = btn.closest('a');
           if (!link && selectedCard.dataset.plan === 'premium') {
-            // si no tiene link, se puede asignar uno genérico (ejemplo)
             btn.parentElement.href = '#';
           }
         }
@@ -701,7 +686,7 @@
         // Centrar el plan seleccionado después de un breve delay para que la animación termine
         setTimeout(() => {
           centerCardInView(selectedCard);
-        }, 400);
+        }, 450);
       }
 
       // Función para restaurar el plan guardado al cargar la página
@@ -713,7 +698,7 @@
             // Esperar a que la página termine de renderizar para aplicar la selección
             setTimeout(() => {
               selectPlan(targetCard);
-            }, 150);
+            }, 200);
             return true;
           }
         }
@@ -725,7 +710,7 @@
         const btn = card.querySelector('.select-plan');
         if (btn) {
           btn.addEventListener('click', function(e) {
-            // si ya está seleccionado y es "Entrar", centrar y permitir navegación
+            // Si ya está seleccionado, centrar y permitir navegación
             if (card.classList.contains('plan-seleccionado')) {
               centerCardInView(card);
               return;
@@ -742,22 +727,15 @@
         resetPackages();
       }
 
-      // Ajuste: si el usuario hace scroll manual, no interferir
-      grid.addEventListener('scroll', function() {
-        isScrolling = true;
-        clearTimeout(grid.scrollTimeout);
-        grid.scrollTimeout = setTimeout(() => {
-          isScrolling = false;
-        }, 100);
-      });
-
       // Re-centrar si la ventana cambia de tamaño y hay un plan seleccionado
+      let resizeTimeout;
       window.addEventListener('resize', function() {
-        if (selectedPlan) {
-          setTimeout(() => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          if (selectedPlan) {
             centerCardInView(selectedPlan);
-          }, 300);
-        }
+          }
+        }, 300);
       });
 
     })();
