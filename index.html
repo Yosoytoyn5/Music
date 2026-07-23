@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Kerim Music+ · Planes Premium</title>
+  <title>Kerim Music · Paquetes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* RESET + BASE */
     * {
       margin: 0;
       padding: 0;
@@ -20,60 +19,45 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: #0b0b1a;
-      background: radial-gradient(circle at 20% 30%, #141432, #070712 80%);
+      background: radial-gradient(circle at 20% 30%, #0a1220, #03070f 90%);
       color: #f0f0f0;
       padding: 2rem 1rem;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* FONDO DINÁMICO: partículas / formas geométricas sutiles */
+    /* efecto de luz dinámico de fondo */
     body::before {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 15% 25%, rgba(60, 80, 200, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 80% 70%, rgba(140, 60, 220, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(30, 144, 255, 0.08) 0%, transparent 40%);
+      top: -20%;
+      left: -10%;
+      width: 70%;
+      height: 80%;
+      background: radial-gradient(circle, rgba(30, 80, 200, 0.08) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
-      animation: fondoMovimiento 28s ease-in-out infinite alternate;
+      animation: glowPulse 12s infinite alternate ease-in-out;
     }
 
-    @keyframes fondoMovimiento {
-      0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
-      100% { transform: scale(1.4) rotate(6deg); opacity: 1; }
-    }
-
-    /* partículas flotantes (simuladas con pseudo) */
     body::after {
       content: '';
       position: fixed;
-      inset: 0;
-      background-image: 
-        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.08), transparent),
-        radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.06), transparent),
-        radial-gradient(3px 3px at 70% 20%, rgba(255,255,255,0.10), transparent),
-        radial-gradient(2px 2px at 90% 80%, rgba(255,255,255,0.05), transparent),
-        radial-gradient(4px 4px at 10% 90%, rgba(255,255,255,0.07), transparent);
-      background-size: 200px 200px;
-      background-repeat: repeat;
+      bottom: -10%;
+      right: -10%;
+      width: 60%;
+      height: 70%;
+      background: radial-gradient(circle, rgba(70, 130, 255, 0.06) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
-      animation: partículas 45s linear infinite alternate;
+      animation: glowPulse 15s infinite alternate-reverse ease-in-out;
     }
 
-    @keyframes partículas {
-      0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-      100% { transform: translate(30px, 20px) scale(1.2); opacity: 0.9; }
+    @keyframes glowPulse {
+      0% { opacity: 0.4; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.2); }
     }
 
-    /* LEYENDA */
     .leyenda {
       text-align: center;
       margin-bottom: 2.5rem;
@@ -82,136 +66,213 @@
       letter-spacing: 0.3px;
       color: #b0caf5;
       opacity: 0.9;
-      border-bottom: 2px solid rgba(60, 100, 200, 0.3);
+      border-bottom: 2px solid rgba(26, 42, 74, 0.6);
       padding-bottom: 0.75rem;
       width: 100%;
       max-width: 700px;
-      backdrop-filter: blur(2px);
       position: relative;
       z-index: 2;
+      backdrop-filter: blur(2px);
     }
 
     .leyenda span {
       font-weight: 600;
-      background: linear-gradient(135deg, #5a8aff, #a07aff);
+      background: linear-gradient(135deg, #3b6bc4, #6a9aff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .leyenda i {
-      color: #5a8aff;
+      color: #3b6bc4;
       margin-right: 8px;
       opacity: 0.9;
     }
 
-    /* GRID DE PAQUETES */
-    .packages-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      max-width: 1300px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0.5rem 0.2rem 1.5rem;
+    /* contenedor principal con glassmorphism sutil */
+    .packages-wrapper {
       position: relative;
       z-index: 2;
-      transition: all 0.4s ease;
+      background: rgba(8, 16, 30, 0.4);
+      backdrop-filter: blur(4px);
+      border-radius: 48px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(60, 100, 200, 0.15);
+      width: 100%;
+      max-width: 1300px;
+      transition: all 0.3s ease;
     }
 
-    /* TARJETA GLASSMORPHISM */
+    .packages-grid {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: visible;
+      gap: 2rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0.5rem 0.2rem 1.5rem 0.2rem;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 50%;
+      scrollbar-width: thin;
+      scrollbar-color: #1f3a7a transparent;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .packages-grid::-webkit-scrollbar {
+      height: 6px;
+    }
+    .packages-grid::-webkit-scrollbar-track {
+      background: #0a0f1a;
+      border-radius: 12px;
+    }
+    .packages-grid::-webkit-scrollbar-thumb {
+      background: #1f3a7a;
+      border-radius: 12px;
+    }
+    .packages-grid::-webkit-scrollbar-thumb:hover {
+      background: #3b6bc4;
+    }
+
+    .packages-grid .card {
+      flex: 0 0 280px;
+      max-width: 320px;
+      scroll-snap-align: center;
+      margin: 0 10px;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      background: rgba(18, 22, 40, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(40, 70, 140, 0.25);
+      box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.7);
+    }
+
+    /* estado oculto con animación suave */
+    .packages-grid .card.hidden-plan {
+      opacity: 0;
+      transform: scale(0.92) translateY(10px);
+      pointer-events: none;
+      max-height: 0;
+      padding: 0 1.8rem;
+      margin: 0;
+      overflow: hidden;
+      flex: 0 0 0;
+      border: 0;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .packages-grid .card:not(.hidden-plan) {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      max-height: 700px;
+    }
+
+    .packages-grid .card:first-child {
+      margin-left: calc(50% - 150px);
+    }
+    .packages-grid .card:last-child {
+      margin-right: calc(50% - 150px);
+    }
+
     .card {
-      background: rgba(18, 25, 45, 0.55);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: #121212;
+      backdrop-filter: blur(4px);
       border-radius: 32px;
       padding: 2rem 1.8rem 2.2rem;
-      box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(80, 130, 255, 0.2);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.9);
+      border: 1px solid #1e2a47;
       display: flex;
       flex-direction: column;
-      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: all 0.3s ease;
+      color: #e8edf5;
       flex: 1 1 280px;
       max-width: 340px;
-      min-width: 260px;
-      opacity: 1;
-      transform: scale(1);
-      will-change: transform, opacity, box-shadow;
       position: relative;
-      overflow: hidden;
-    }
-
-    /* Efecto de luz en la tarjeta */
-    .card::before {
-      content: '';
-      position: absolute;
-      top: -30%;
-      left: -30%;
-      width: 160%;
-      height: 160%;
-      background: radial-gradient(circle at 30% 30%, rgba(70, 130, 255, 0.05), transparent 70%);
-      pointer-events: none;
-      transition: all 0.6s ease;
-    }
-
-    .card:hover::before {
-      transform: scale(1.2);
-      opacity: 0.6;
     }
 
     .card:hover {
       transform: translateY(-8px);
-      border-color: rgba(80, 140, 255, 0.4);
-      box-shadow: 0 28px 50px -14px rgba(20, 60, 200, 0.35), 0 0 30px rgba(50, 100, 255, 0.08);
+      box-shadow: 0 28px 50px -14px rgba(0, 40, 104, 0.5);
+      border-color: #2a4a8f;
     }
 
-    /* PLAN SELECCIONADO: resplandor y escala */
-    .card.seleccionado {
-      transform: scale(1.04);
+    .card .precio {
+      color: #b8d0ff;
+    }
+
+    .card ul li i {
+      color: #3b6bc4;
+    }
+
+    .card .btn-plan {
+      background: #0a1a3a;
+      color: white;
+      border: 1px solid #1f3a7a;
+    }
+
+    .card .btn-plan:hover {
+      background: #1f3f7a;
       border-color: #4a7dff;
-      box-shadow: 0 0 40px rgba(60, 120, 255, 0.25), 0 20px 50px -10px rgba(0, 40, 140, 0.6);
-      background: rgba(20, 35, 70, 0.7);
-      backdrop-filter: blur(16px);
-      flex: 1 1 320px;
-      max-width: 380px;
-      min-width: 280px;
-      margin: 0 auto;
-      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 0 0 12px rgba(46, 106, 255, 0.3);
     }
 
-    .card.seleccionado .badge-actual {
-      display: inline-block !important;
+    .card .badge-gratis {
+      background: #1a2744;
+      color: #b0ccff;
+      border: 1px solid #2a4a8f;
     }
 
-    .card .badge-actual {
-      display: none;
-      background: linear-gradient(135deg, #f5b042, #f7d44a);
-      color: #0b0b1a;
+    .card.destacado {
+      border: 2px solid #3b6bc4;
+      box-shadow: 0 20px 40px -10px rgba(30, 80, 200, 0.25);
+      background: #101b30;
+    }
+
+    .card.destacado .badge-gratis {
+      background: #0a1a3a;
+      color: #b8d0ff;
+      border-color: #4a7dff;
+    }
+
+    /* PLAN SELECCIONADO: borde luminoso, elevación, sombra */
+    .card.plan-seleccionado {
+      border: 2px solid #6a9aff;
+      box-shadow: 0 0 30px rgba(60, 120, 255, 0.35), 0 20px 40px -6px rgba(0, 20, 80, 0.7);
+      transform: scale(1.02) translateY(-6px);
+      background: rgba(16, 28, 55, 0.85);
+      backdrop-filter: blur(12px);
+      transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .card.plan-seleccionado .badge-actual {
+      background: #1f4a8a;
+      color: white;
+      border: 1px solid #6a9aff;
       padding: 4px 14px;
-      border-radius: 60px;
+      border-radius: 40px;
+      font-size: 0.7rem;
       font-weight: 700;
-      font-size: 0.75rem;
-      letter-spacing: 0.4px;
-      box-shadow: 0 0 20px rgba(245, 180, 60, 0.3);
-      border: 1px solid rgba(255, 215, 0, 0.3);
-      margin-left: 8px;
-      white-space: nowrap;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 12px rgba(60, 120, 255, 0.3);
     }
 
-    /* ocultar planes no seleccionados */
-    .packages-grid .card.oculto {
-      display: none !important;
+    .badge-actual i {
+      font-size: 0.6rem;
     }
 
-    /* header de tarjeta */
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.2rem;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
 
     .card-header h3 {
@@ -219,10 +280,6 @@
       font-weight: 600;
       letter-spacing: -0.5px;
       color: #c8ddff;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
     }
 
     .badge-gratis {
@@ -232,9 +289,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      background: rgba(20, 40, 80, 0.6);
-      border: 1px solid rgba(80, 140, 255, 0.2);
-      color: #b0ccff;
+      white-space: nowrap;
     }
 
     .precio {
@@ -242,7 +297,6 @@
       font-weight: 700;
       margin: 0.4rem 0 1rem 0;
       letter-spacing: -0.02em;
-      color: #d0e5ff;
     }
 
     .precio small {
@@ -264,14 +318,14 @@
       align-items: center;
       gap: 10px;
       font-size: 0.95rem;
-      border-bottom: 1px solid rgba(60, 100, 200, 0.12);
+      border-bottom: 1px solid rgba(60, 100, 200, 0.15);
       color: #d0dff5;
     }
 
     .card ul li i {
       width: 20px;
       font-size: 1rem;
-      color: #5a8aff;
+      color: #3b6bc4;
     }
 
     .btn-plan {
@@ -285,88 +339,83 @@
       font-size: 1rem;
       width: 100%;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: 1px solid rgba(80, 140, 255, 0.2);
-      background: rgba(10, 25, 60, 0.7);
+      transition: 0.25s ease;
+      border: 1px solid transparent;
+      background: #0a1a3a;
       color: white;
-      backdrop-filter: blur(4px);
-      letter-spacing: 0.3px;
-    }
-
-    .btn-plan:hover {
-      background: rgba(30, 70, 160, 0.8);
-      border-color: #4a7dff;
-      transform: scale(0.97);
-      box-shadow: 0 0 20px rgba(50, 120, 255, 0.2);
+      border-color: #1f3a7a;
     }
 
     .btn-plan i {
       font-size: 0.9rem;
     }
 
-    /* Botón secundario "Mejorar plan" */
+    .btn-plan:hover {
+      transform: scale(0.98);
+      background: #1f3f7a;
+      border-color: #4a7dff;
+      box-shadow: 0 0 12px rgba(46, 106, 255, 0.3);
+    }
+
+    .btn-plan.entrar-btn {
+      background: #1a4a8a;
+      border-color: #4a7dff;
+      box-shadow: 0 0 16px rgba(46, 106, 255, 0.25);
+    }
+
+    .btn-plan.entrar-btn:hover {
+      background: #2a5aaa;
+    }
+
     .btn-mejorar {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 18px;
+      margin-top: 12px;
+      background: transparent;
+      border: 1px solid rgba(100, 160, 255, 0.3);
+      color: #aac2ff;
+      padding: 12px;
       border-radius: 60px;
       font-weight: 500;
       font-size: 0.95rem;
       width: 100%;
       cursor: pointer;
-      transition: all 0.25s ease;
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      background: rgba(30, 30, 60, 0.4);
+      transition: 0.25s ease;
       backdrop-filter: blur(4px);
-      color: #f0e8d0;
-      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .btn-mejorar:hover {
-      background: rgba(60, 50, 30, 0.5);
-      border-color: #f5b042;
-      transform: scale(0.97);
-      box-shadow: 0 0 20px rgba(245, 180, 60, 0.1);
-    }
-
-    /* contenedor de acciones en plan seleccionado */
-    .acciones-seleccionado {
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .card.seleccionado .acciones-seleccionado {
-      display: flex !important;
-    }
-
-    .card.seleccionado .btn-elegir {
-      display: none !important;
+      background: rgba(40, 80, 180, 0.25);
+      border-color: #6a9aff;
+      color: white;
+      box-shadow: 0 0 18px rgba(50, 100, 255, 0.15);
     }
 
     /* responsive */
     @media (max-width: 700px) {
+      .packages-wrapper {
+        padding: 1.2rem 0.5rem;
+        border-radius: 28px;
+      }
       .packages-grid {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.8rem;
-        padding: 0.5rem 0.2rem;
+        gap: 1rem;
+        padding: 0.3rem 0.2rem 1.2rem 0.2rem;
+        scroll-padding: 0 45%;
       }
-      .card {
-        flex: 0 0 auto;
-        width: 100%;
-        max-width: 360px;
-        min-width: unset;
-        padding: 1.6rem 1.2rem 1.8rem;
+      .packages-grid .card {
+        flex: 0 0 85%;
+        max-width: 280px;
+        min-width: 220px;
+        padding: 1.5rem 1.2rem 1.6rem;
+        margin: 0 5px;
       }
-      .card.seleccionado {
-        transform: scale(1.02);
-        max-width: 380px;
-        flex: 0 0 auto;
-        margin: 0 auto;
+      .packages-grid .card:first-child {
+        margin-left: calc(50% - 140px);
+      }
+      .packages-grid .card:last-child {
+        margin-right: calc(50% - 140px);
       }
       .leyenda {
         font-size: 1rem;
@@ -379,235 +428,303 @@
       .precio {
         font-size: 1.8rem;
       }
-      .card .badge-actual {
-        font-size: 0.65rem;
-        padding: 3px 10px;
+      .card.plan-seleccionado {
+        transform: scale(1.01) translateY(-4px);
       }
     }
 
-    @media (min-width: 701px) and (max-width: 1100px) {
+    @media (min-width: 701px) {
       .packages-grid {
-        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow-x: visible;
+        scroll-snap-type: none;
+        gap: 2rem;
+        padding: 0.5rem 0;
       }
-      .card {
-        flex: 1 1 240px;
-        max-width: 300px;
+      .packages-grid .card {
+        flex: 1 1 280px;
+        max-width: 340px;
+        margin: 0;
+        scroll-snap-align: none;
+      }
+      .packages-grid .card:first-child {
+        margin-left: 0;
+      }
+      .packages-grid .card:last-child {
+        margin-right: 0;
+      }
+      .packages-grid .card.hidden-plan {
+        flex: 0 0 0;
+        padding: 0;
+        margin: 0;
+        max-width: 0;
       }
     }
 
-    /* animación fade para mostrar/ocultar */
-    .card.fade-enter {
-      animation: fadeEntrada 0.5s ease forwards;
-    }
-
-    @keyframes fadeEntrada {
-      0% { opacity: 0; transform: translateY(18px) scale(0.96); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    /* transición de escala al seleccionar */
-    .card.seleccionado {
-      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    .card.oculto {
-      transition: opacity 0.3s ease, transform 0.3s ease;
+    /* ajuste de estado oculto en escritorio */
+    @media (min-width: 701px) {
+      .packages-grid .card.hidden-plan {
+        flex: 0 0 0;
+        padding: 0 0;
+        margin: 0;
+        max-width: 0;
+        min-width: 0;
+        border: 0;
+        overflow: hidden;
+        transform: scale(0.8);
+      }
     }
   </style>
 </head>
 <body>
+
   <div class="leyenda">
     <i class="fas fa-check-circle"></i>
     Si ya tiene un plan, elige el <span>correcto</span>
   </div>
 
-  <div class="packages-grid" id="packagesGrid">
-    <!-- PLAN GRATIS -->
-    <div class="card" data-plan="gratis" data-precio="0">
-      <div class="card-header">
-        <h3>Kerim Music+ Gratis <span class="badge-actual">⭐ Plan actual</span></h3>
-        <span class="badge-gratis"><i class="fas fa-gem" style="margin-right: 5px;"></i> Starter</span>
-      </div>
-      <div class="precio">$0 <small>MXN</small></div>
-      <ul>
-        <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
-        <li><i class="fas fa-user-slash"></i> Sin registro</li>
-        <li><i class="fas fa-music"></i> Toda la música</li>
-        <li><i class="fas fa-ad"></i> Anuncios</li>
-        <li><i class="fas fa-star"></i> No puedes guardar en favoritos</li>
-        <li><i class="fas fa-compact-disc"></i> No puedes escuchar el álbum del artista</li>
-      </ul>
-      <button class="btn-plan btn-elegir" data-plan="gratis"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
-      <div class="acciones-seleccionado">
-        <button class="btn-plan" style="background: #1a3a6a; border-color: #4a7dff;"><i class="fas fa-sign-in-alt"></i> Entrar</button>
-        <button class="btn-mejorar"><i class="fas fa-arrow-up"></i> Mejorar el plan</button>
-      </div>
-    </div>
+  <div class="packages-wrapper">
+    <div class="packages-grid" id="packagesGrid">
 
-    <!-- PLAN PLUS (INTERMEDIO) - DESTACADO -->
-    <div class="card destacado" data-plan="plus" data-precio="70">
-      <div class="card-header">
-        <h3>Kerim Music+ Plus <span class="badge-actual">⭐ Plan actual</span></h3>
-        <span class="badge-gratis" style="background: rgba(20, 40, 90, 0.8); color: #b8d0ff; border-color: #3b6bc4;">Popular</span>
+      <!-- PLAN GRATIS -->
+      <div class="card" data-plan="gratis">
+        <div class="card-header">
+          <h3>Kerim Music+ Gratis</h3>
+          <span class="badge-gratis"><i class="fas fa-gem" style="margin-right: 5px;"></i> Starter</span>
+        </div>
+        <div class="precio">$0 <small>MXN</small></div>
+        <ul>
+          <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
+          <li><i class="fas fa-user-slash"></i> Sin registro</li>
+          <li><i class="fas fa-music"></i> Toda la música</li>
+          <li><i class="fas fa-ad"></i> Anuncios</li>
+          <li><i class="fas fa-star"></i> No puedes guardar en favoritos</li>
+          <li><i class="fas fa-compact-disc"></i> No puedes escuchar el álbum del artista</li>
+        </ul>
+        <a href="musicakerimmusicgratis.html" style="text-decoration: none; display: block;">
+          <button class="btn-plan select-plan"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
+        </a>
       </div>
-      <div class="precio">$70 <small>MXN / mes</small></div>
-      <ul>
-        <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
-        <li><i class="fas fa-user-check"></i> Con registro</li>
-        <li><i class="fas fa-music"></i> Toda la música</li>
-        <li><i class="fas fa-ban"></i> Sin anuncios</li>
-        <li><i class="fas fa-heart"></i> Guardar en favoritos</li>
-        <li><i class="fas fa-compact-disc"></i> Escuchar álbumes</li>
-        <li><i class="fas fa-sync-alt"></i> Actualizaciones</li>
-      </ul>
-      <button class="btn-plan btn-elegir" data-plan="plus"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
-      <div class="acciones-seleccionado">
-        <button class="btn-plan" style="background: #1a3a6a; border-color: #4a7dff;"><i class="fas fa-sign-in-alt"></i> Entrar</button>
-        <button class="btn-mejorar"><i class="fas fa-arrow-up"></i> Mejorar el plan</button>
-      </div>
-    </div>
 
-    <!-- PLAN PREMIUM -->
-    <div class="card" data-plan="premium" data-precio="120">
-      <div class="card-header">
-        <h3>Kerim Music+ <span class="badge-actual">⭐ Plan actual</span></h3>
-        <span class="badge-gratis" style="background: rgba(20, 30, 60, 0.8); color: #b8d0ff; border-color: #2a4a8f;">Pro</span>
+      <!-- PLAN PLUS (INTERMEDIO) - DESTACADO -->
+      <div class="card destacado" data-plan="plus">
+        <div class="card-header">
+          <h3>Kerim Music+ Plus</h3>
+          <span class="badge-gratis" style="background: #0f224a; color: #b8d0ff; border-color: #3b6bc4;">Popular</span>
+        </div>
+        <div class="precio">$70 <small>MXN / mes</small></div>
+        <ul>
+          <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
+          <li><i class="fas fa-user-check"></i> Con registro</li>
+          <li><i class="fas fa-music"></i> Toda la música</li>
+          <li><i class="fas fa-ban"></i> Sin anuncios</li>
+          <li><i class="fas fa-heart"></i> Guardar en favoritos</li>
+          <li><i class="fas fa-compact-disc"></i> Escuchar álbumes</li>
+          <li><i class="fas fa-sync-alt"></i> Actualizaciones</li>
+        </ul>
+        <a href="inisiodececionplus.html" style="text-decoration: none; display: block;">
+          <button class="btn-plan select-plan"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
+        </a>
       </div>
-      <div class="precio">$120 <small>MXN / mes</small></div>
-      <ul>
-        <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
-        <li><i class="fas fa-user-check"></i> Con registro</li>
-        <li><i class="fas fa-music"></i> Toda la música</li>
-        <li><i class="fas fa-ban"></i> Sin anuncios</li>
-        <li><i class="fas fa-heart"></i> Guardar en favoritos</li>
-        <li><i class="fas fa-compact-disc"></i> Escuchar álbumes</li>
-        <li><i class="fas fa-podcast"></i> Podcasts</li>
-        <li><i class="fas fa-sync-alt"></i> Actualizaciones</li>
-      </ul>
-      <button class="btn-plan btn-elegir" data-plan="premium"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
-      <div class="acciones-seleccionado">
-        <button class="btn-plan" style="background: #1a3a6a; border-color: #4a7dff;"><i class="fas fa-sign-in-alt"></i> Entrar</button>
-        <button class="btn-mejorar"><i class="fas fa-arrow-up"></i> Mejorar el plan</button>
+
+      <!-- PLAN PREMIUM (MÁS CARO) -->
+      <div class="card" data-plan="premium">
+        <div class="card-header">
+          <h3>Kerim Music+</h3>
+          <span class="badge-gratis" style="background: #0f1f3a; color: #b8d0ff; border-color: #2a4a8f;">Pro</span>
+        </div>
+        <div class="precio">$120 <small>MXN / mes</small></div>
+        <ul>
+          <li><i class="fas fa-mobile-alt"></i> No apagues el móvil para reproducción fluida sin corte</li>
+          <li><i class="fas fa-user-check"></i> Con registro</li>
+          <li><i class="fas fa-music"></i> Toda la música</li>
+          <li><i class="fas fa-ban"></i> Sin anuncios</li>
+          <li><i class="fas fa-heart"></i> Guardar en favoritos</li>
+          <li><i class="fas fa-compact-disc"></i> Escuchar álbumes</li>
+          <li><i class="fas fa-podcast"></i> Podcasts</li>
+          <li><i class="fas fa-sync-alt"></i> Actualizaciones</li>
+        </ul>
+        <button class="btn-plan select-plan"><i class="fas fa-arrow-right"></i> Elegir Plan</button>
       </div>
     </div>
   </div>
 
   <script>
     (function() {
-      // ---- estado ----
-      let planSeleccionado = null; // 'gratis', 'plus', 'premium'
       const grid = document.getElementById('packagesGrid');
-      const cards = document.querySelectorAll('.card');
-      const btnElegir = document.querySelectorAll('.btn-elegir');
-      const btnMejorar = document.querySelectorAll('.btn-mejorar');
+      const cards = Array.from(grid.querySelectorAll('.card'));
+      let selectedPlan = null;
 
-      // ---- funciones auxiliares ----
-      function ocultarTodos() {
-        cards.forEach(c => {
-          c.classList.add('oculto');
-          c.classList.remove('seleccionado');
-        });
+      // Función para guardar el plan seleccionado en localStorage
+      function saveSelectedPlan(planId) {
+        if (planId) {
+          localStorage.setItem('selectedPlan', planId);
+        } else {
+          localStorage.removeItem('selectedPlan');
+        }
       }
 
-      function mostrarTodos() {
-        cards.forEach(c => {
-          c.classList.remove('oculto', 'seleccionado');
-          c.style.display = 'flex'; // aseguramos
-          // añadir animación fade
-          c.classList.remove('fade-enter');
-          // forzar reflow
-          void c.offsetWidth;
-          c.classList.add('fade-enter');
-        });
-        planSeleccionado = null;
-        localStorage.removeItem('kerimPlanActual');
+      // Función para obtener el plan guardado
+      function getSavedPlan() {
+        return localStorage.getItem('selectedPlan');
       }
 
-      function seleccionarPlan(planId) {
-        if (!planId) return;
-        // ocultar todos
-        ocultarTodos();
-        // buscar la tarjeta con data-plan
-        let targetCard = null;
-        cards.forEach(c => {
-          if (c.dataset.plan === planId) {
-            targetCard = c;
+      // función para resetear todos los paquetes (mostrar todos)
+      function resetPackages() {
+        cards.forEach(card => {
+          card.classList.remove('hidden-plan', 'plan-seleccionado');
+          // restaurar badge
+          const badge = card.querySelector('.badge-gratis');
+          if (badge && badge.classList.contains('badge-actual')) {
+            badge.classList.remove('badge-actual');
+            if (badge.dataset.originalText) {
+              badge.innerHTML = badge.dataset.originalText;
+            }
           }
+          // restaurar botón
+          const btn = card.querySelector('.select-plan');
+          if (btn) {
+            btn.innerHTML = '<i class="fas fa-arrow-right"></i> Elegir Plan';
+            btn.classList.remove('entrar-btn');
+            // restaurar href si existe
+            const link = btn.closest('a');
+            if (link) {
+              if (card.dataset.plan === 'gratis') link.href = 'musicakerimmusicgratis.html';
+              else if (card.dataset.plan === 'plus') link.href = 'inisiodececionplus.html';
+              // premium no tiene href original, se deja
+            }
+          }
+          // quitar botón mejorar si existe (se agrega dinámicamente)
+          const mejorarBtn = card.querySelector('.btn-mejorar');
+          if (mejorarBtn) mejorarBtn.remove();
+          // restaurar color de borde y sombra original
+          card.style.borderColor = '';
+          card.style.boxShadow = '';
         });
-        if (!targetCard) {
-          // si no existe, mostrar todos
-          mostrarTodos();
+        selectedPlan = null;
+        saveSelectedPlan(null);
+      }
+
+      // función para seleccionar un plan
+      function selectPlan(selectedCard) {
+        if (selectedPlan === selectedCard) {
+          // si ya está seleccionado, no hacer nada
           return;
         }
 
-        // mostrar solo la seleccionada
-        targetCard.classList.remove('oculto');
-        targetCard.classList.add('seleccionado');
-        targetCard.style.display = 'flex';
-        
-        // animación fade para la seleccionada
-        targetCard.classList.remove('fade-enter');
-        void targetCard.offsetWidth;
-        targetCard.classList.add('fade-enter');
+        // resetear todos primero (limpia estados previos)
+        resetPackages();
 
-        // guardar en localStorage
-        localStorage.setItem('kerimPlanActual', planId);
-        planSeleccionado = planId;
+        // ocultar todos menos el seleccionado
+        cards.forEach(card => {
+          if (card !== selectedCard) {
+            card.classList.add('hidden-plan');
+          }
+        });
+
+        // marcar como seleccionado
+        selectedCard.classList.add('plan-seleccionado');
+
+        // actualizar badge: agregar "Plan actual"
+        const badge = selectedCard.querySelector('.badge-gratis');
+        if (badge) {
+          // guardar contenido original si no lo hemos hecho
+          if (!badge.dataset.originalText) {
+            badge.dataset.originalText = badge.innerHTML;
+          }
+          badge.innerHTML = '<i class="fas fa-check-circle"></i> Plan actual';
+          badge.classList.add('badge-actual');
+        }
+
+        // cambiar botón a "Entrar"
+        const btn = selectedCard.querySelector('.select-plan');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+          btn.classList.add('entrar-btn');
+          // mantener el href, pero si es premium no tiene, se asigna
+          const link = btn.closest('a');
+          if (!link && selectedCard.dataset.plan === 'premium') {
+            // si no tiene link, se puede asignar uno genérico (ejemplo)
+            btn.parentElement.href = '#';
+          }
+        }
+
+        // agregar botón "Mejorar el plan" (si no existe)
+        let mejorarBtn = selectedCard.querySelector('.btn-mejorar');
+        if (!mejorarBtn) {
+          mejorarBtn = document.createElement('button');
+          mejorarBtn.className = 'btn-mejorar';
+          mejorarBtn.innerHTML = '<i class="fas fa-arrow-up"></i> Mejorar el plan';
+          // insertar después del botón de entrada
+          const btnContainer = selectedCard.querySelector('.btn-plan')?.closest('a') || selectedCard.querySelector('.btn-plan');
+          if (btnContainer) {
+            btnContainer.parentNode.insertBefore(mejorarBtn, btnContainer.nextSibling);
+          } else {
+            selectedCard.appendChild(mejorarBtn);
+          }
+        }
+
+        // Evento del botón mejorar: resetear todo
+        mejorarBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          resetPackages();
+          // forzar reflow para animación
+          grid.style.transition = 'none';
+          grid.offsetHeight;
+          grid.style.transition = '';
+        });
+
+        selectedPlan = selectedCard;
+        // Guardar en localStorage
+        saveSelectedPlan(selectedCard.dataset.plan);
       }
 
-      // ---- restaurar desde localStorage ----
-      function restaurarPlan() {
-        const guardado = localStorage.getItem('kerimPlanActual');
-        if (guardado) {
-          // verificar que exista
-          let existe = false;
-          cards.forEach(c => {
-            if (c.dataset.plan === guardado) existe = true;
-          });
-          if (existe) {
-            seleccionarPlan(guardado);
+      // Función para restaurar el plan guardado al cargar la página
+      function restoreSavedPlan() {
+        const savedPlanId = getSavedPlan();
+        if (savedPlanId) {
+          const targetCard = cards.find(card => card.dataset.plan === savedPlanId);
+          if (targetCard) {
+            // Esperar a que la página termine de renderizar para aplicar la selección
+            setTimeout(() => {
+              selectPlan(targetCard);
+            }, 100);
             return true;
-          } else {
-            localStorage.removeItem('kerimPlanActual');
           }
         }
         return false;
       }
 
-      // ---- eventos ----
-      // Elegir plan
-      btnElegir.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const plan = this.dataset.plan;
-          if (plan) {
-            seleccionarPlan(plan);
-          }
-        });
+      // asignar evento a cada botón "Elegir Plan"
+      cards.forEach(card => {
+        const btn = card.querySelector('.select-plan');
+        if (btn) {
+          btn.addEventListener('click', function(e) {
+            // si ya está seleccionado y es "Entrar", no hacer nada (dejar que el href funcione)
+            if (card.classList.contains('plan-seleccionado')) {
+              // si es "Entrar", permitir navegación
+              return;
+            }
+            e.preventDefault(); // prevenir navegación
+            selectPlan(card);
+          });
+        }
       });
 
-      // Mejorar plan (mostrar todos)
-      btnMejorar.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          mostrarTodos();
-        });
-      });
-
-      // ---- inicializar ----
-      // si hay plan guardado, restaurar; sino mostrar todos
-      const restaurado = restaurarPlan();
-      if (!restaurado) {
-        // mostrar todos con animación
-        mostrarTodos();
-        // pero no seleccionar ninguno
-        planSeleccionado = null;
-        cards.forEach(c => c.classList.remove('seleccionado'));
+      // Inicial: restaurar plan guardado o mostrar todos
+      const restored = restoreSavedPlan();
+      if (!restored) {
+        resetPackages();
       }
 
-      // Exponer funciones para consola (debug)
-      window.__kerim = { seleccionarPlan, mostrarTodos, planSeleccionado };
+      // Ajuste extra para que en móvil no se pierda el scroll
+      window.addEventListener('resize', function() {
+        // no se requiere acción extra
+      });
+
     })();
   </script>
+
 </body>
 </html>
